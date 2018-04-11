@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="../css/mui.min.css" />
+		<link rel="stylesheet" href="../css/mint-ui-style.css" />
+		<link rel="stylesheet" href="../js/component/indexList-style.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">联系人</h1>
+			<a class="mui-icon mui-icon-plusempty mui-pull-right"></a>
+		</header>
+		<div class="mui-content">
+			<div id="app">
+				<form>
+				<mt-search
+				  v-model="value"
+				  cancel-text="取消"
+				  placeholder="搜索" @keyup.native.enter="search(value)">
+				</mt-search>
+				</form>
+				<mt-index-list>
+					<mt-index-section v-for="item in contactsData" :index="item.ufirst">
+						<mt-cell v-for="obj in item.dataArr" :title="obj.displayName" v-tap="{methods: toTel , obj : obj}"></mt-cell>
+					</mt-index-section>
+				</mt-index-list>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+	<script type="text/javascript" src="../js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="../js/vue-tap.js"></script>
+	<script type="text/javascript" src="../js/mint-ui.min.js"></script>
+	<script type="text/javascript" src="../js/ChinesePY.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script>
+		(function(_, w, u) {
+			var self = null;
+			App({
+				el: '#app',
+				data: {
+					arrContacts: [],
+					arrUfirst: [],
+					contactsData: [],
+					value:'',
+					popupVisible:true
+				},
+				plusReady: {
+					init: function() {
+						self = this;
+						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
+							addressbook.find(["displayName", "phoneNumbers"], function(contacts) {
+								for(var i = 0, len = contacts.length; i < len; i++) {
+									contact = {};
+									contact.displayName = contacts[i].displayName;
+									contact.wordsCode = Pinyin.getWordsCode(contacts[i].displayName);
+									contact.ufirst = Pinyin._ucfirstName(contact.wordsCode);
+									contact.phoneNumber = contacts[i].phoneNumbers[0].value;
+									self.arrContacts.push(contact);
+									self.arrUfirst.push(contact.ufirst); //存放首字母
+									self.arrUfirst.sort();
+								}
+								self.arrUfirst = self.unique(self.arrUfirst);
+								var obj = {},
+									contactsDataTmp = [];
+								self.arrUfirst.forEach(function(item, index) {
+									obj = {
+										ufirst: "A",
+										dataArr: []
+									};
+									self.arrContacts.forEach(function(o, i) {
+										if(item == o.ufirst) {
+											obj.ufirst = item;
+											obj.dataArr.push(o)
+										}
+									})
+									contactsDataTmp.push(obj);
+								})
+								self.contactsData = contactsDataTmp; //赋值
+								console.log("contacts====" + JSON.stringify(self.contactsData));
+							}, function() {
+								mui.toast("获取电话簿失败 ");
+							}, {
+								multiple: true
+							});
+						}, function(e) {
+							mui.toast("获取电话簿失败 " + e.message);
+						});
+					}
+				},
+				methods: {
+					search: function(value) {
+						var filterResult = self.filterResult(value);
+					},
+					toTel: function(param) {
+						var obj = param.obj;
+						plus.device.dial('' + obj.phoneNumber.replace(/\s/g, ""), true);
+					},
+					unique: function(arr) {
+						var tmp = new Array();
+						for(var i in arr) {
+							//该元素在tmp内部不存在才允许追加
+							if(tmp.indexOf(arr[i]) == -1) {
+								tmp.push(arr[i]);
+							}
+						}
+						return tmp;
+					},
+					filterResult:function(value){
+						var searchRegex = new RegExp(value, 'i');
+				        var arr=[];
+				        self.contactsData.forEach(function(item,index){
+				        	if(searchRegex.test(item.ufirst)){
+				        		arr = arr.concat(item.dataArr);
+				        	}else{
+				        		item.dataArr.forEach(function(obj,i){
+				        			if(searchRegex.test(obj.phoneNumber) || searchRegex.test(obj.displayName) || searchRegex.test(obj.wordsCode)){
+				        				arr = arr.concat(item.dataArr);
+				        			}
+				        		})
+				        	}
+				        })
+				        return arr;
+					}
+				},
+				domReady: function() {
+					_.init();
+				}
+			})
+		})(mui, window, util)
+	</script>
+
+</html>

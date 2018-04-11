@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/mui.indexedlist.css" />
+		<style>
+			html,
+			body {
+				height: 100%;
+				overflow: hidden;
+			}
+			.mui-bar {
+				-webkit-box-shadow: none;
+				box-shadow: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">联系人</h1>
+		</header>
+		<div id="app" class="mui-content">
+			<div class="mui-indexed-list">
+				<div class="mui-indexed-list-search mui-input-row mui-search">
+					<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索机场">
+				</div>
+				<div class="mui-indexed-list-bar">
+					<a v-for="item in arrUfirst">{{item}}</a>
+				</div>
+				<div class="mui-indexed-list-alert"></div>
+				<div class="mui-indexed-list-inner">
+					<div class="mui-indexed-list-empty-alert">没有数据</div>
+					<ul class="mui-table-view">
+						<li data-group="A" class="mui-table-view-divider mui-indexed-list-group">A</li>
+						<li data-value="AKU" data-tags="AKeSu" class="mui-table-view-cell mui-indexed-list-item">阿克苏机场</li>
+						<li data-value="BPL" data-tags="ALaShanKou" class="mui-table-view-cell mui-indexed-list-item">阿拉山口机场</li>
+						<li data-value="AAT" data-tags="ALeTai" class="mui-table-view-cell mui-indexed-list-item">阿勒泰机场</li>
+						<li data-value="NGQ" data-tags="ALiKunSha" class="mui-table-view-cell mui-indexed-list-item">阿里昆莎机场</li>
+						<li data-value="AQG" data-tags="AnQingTianZhuShan" class="mui-table-view-cell mui-indexed-list-item">安庆天柱山机场</li>
+						<li data-value="MFM" data-tags="AoMenGuoJi" class="mui-table-view-cell mui-indexed-list-item">澳门国际机场</li>
+						<li data-group="B" class="mui-table-view-divider mui-indexed-list-group">B</li>
+						<li data-value="BSD" data-tags="BaoShan" class="mui-table-view-cell mui-indexed-list-item">保山机场</li>
+						<li data-value="BAV" data-tags="BaoTou" class="mui-table-view-cell mui-indexed-list-item">包头机场</li>
+						<li data-value="BHY" data-tags="BeiHaiFuCheng" class="mui-table-view-cell mui-indexed-list-item">北海福成机场</li>
+						<li data-value="NAY" data-tags="BeiJingNanYuan" class="mui-table-view-cell mui-indexed-list-item">北京南苑机场</li>
+						<li data-value="PEK" data-tags="BeiJingShouDuGuoJi" class="mui-table-view-cell mui-indexed-list-item">北京首都国际机场</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+	<script type="text/javascript" src="../js/mui.indexedlist.js" ></script>
+	<script type="text/javascript" src="../js/ChinesePY.js"></script>
+	<script type="text/javascript" src="../js/common.js" ></script>
+	<script type="text/javascript">
+		(function(_, doc, u, w) {
+			_.init();
+			var contact = {};
+			var app = new Vue({
+				el: "#app",
+				data: {
+					arrContacts:[],
+					arrUfirst:[]
+				},
+				mounted: function() {
+				},
+				methods: {
+					
+				}
+			});
+			
+			
+			
+			mui.plusReady(function() { 
+				// 扩展API加载完毕，现在可以正常调用扩展API
+				plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
+					addressbook.find(["displayName", "phoneNumbers"], function(contacts) {
+						
+						for(var i = 0, len = contacts.length; i < len; i++) {
+							contact = {};
+							contact.displayName = contacts[i].displayName;
+							contact.wordsCode = Pinyin.getWordsCode(contacts[i].displayName);
+							contact.ufirst = Pinyin._ucfirstName(contact.wordsCode);
+							contact.phoneNumber = contacts[i].phoneNumbers[0].value;
+							app.arrContacts.push(contact);
+							app.arrUfirst.push(contact.ufirst);//存放首字母
+							app.arrUfirst.sort();
+							
+							
+//							var li = document.getElementById("mode").cloneNode(true);
+//							li.innerHTML = contacts[i].displayName + "<br/>手机：" + (contacts[i].phoneNumbers.length == 0 ? "" : contacts[i].phoneNumbers[0].value);
+//							document.getElementById("listArea").appendChild(li);
+						}
+						console.log("contacts===="  +  JSON.stringify(app.arrContacts));  
+					}, function() {
+						mui.toast("获取电话簿失败 ");
+					}, {
+						multiple: true
+					});
+				}, function(e) {
+					mui.toast("获取电话簿失败 " + e.message);
+				});
+			});
+
+		})(mui, document, util, window)
+	</script>
+
+</html>
