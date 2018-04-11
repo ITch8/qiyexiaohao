@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>发送短信</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新短信</h1>
+		</header>
+		<div id="app" class="mui-content">
+		    
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+	<script type="text/javascript" src="../js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="../js/vue-tap.js"></script>
+	<script type="text/javascript" src="../js/mint-ui.min.js"></script>
+	<script type="text/javascript">
+		(function(_, w, u) {
+			App({
+				el: '#app',
+				data: {
+				},
+				plusReady: {
+					init: function() {
+						self = this;
+					}
+				},
+				methods: {
+					sendMsg:function(toArr,msgBody){
+						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
+						msg.to = ['18611497504', '15811140520'];
+						msg.body = 'This is HTML5 Plus example test message';
+						plus.messaging.sendMessage( msg );
+					}
+				},
+				domReady: function() {
+					_.init();
+				}
+			})
+		})(mui, window, util)
+	</script>
+
+</html>

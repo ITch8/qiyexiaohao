@@ -11,19 +11,14 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
-			<h1 class="mui-title">联系人</h1>
-			<a class="mui-icon mui-icon-plusempty mui-pull-right"></a>
-		</header>
-		<div class="mui-content">
-			<div id="app">
-				<form>
-				<mt-search
-				  v-model="value"
-				  cancel-text="取消"
-				  placeholder="搜索" @keyup.native.enter="search(value)">
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<h1 class="mui-title">联系人</h1>
+				<a class="mui-icon mui-icon-plusempty mui-pull-right" @tap="toAddContact"></a>
+			</header>
+			<div class="mui-content">
+				<mt-search v-model="value" cancel-text="取消" placeholder="搜索" @keyup.native.enter="search(value)">
 				</mt-search>
-				</form>
 				<mt-index-list>
 					<mt-index-section v-for="item in contactsData" :index="item.ufirst">
 						<mt-cell v-for="obj in item.dataArr" :title="obj.displayName" v-tap="{methods: toTel , obj : obj}"></mt-cell>
@@ -48,18 +43,19 @@
 					arrContacts: [],
 					arrUfirst: [],
 					contactsData: [],
-					value:'',
-					popupVisible:true
+					value: '',
+					popupVisible: true
 				},
 				plusReady: {
 					init: function() {
 						self = this;
 						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
 							addressbook.find(["displayName", "phoneNumbers"], function(contacts) {
+								console.log('contacts1===' + JSON.stringify(contacts));
 								for(var i = 0, len = contacts.length; i < len; i++) {
 									contact = {};
 									contact.displayName = contacts[i].displayName;
-									contact.wordsCode = Pinyin.getWordsCode(contacts[i].displayName);
+									contact.wordsCode = Pinyin.getWordsCode(contacts[i].displayName || '');
 									contact.ufirst = Pinyin._ucfirstName(contact.wordsCode);
 									contact.phoneNumber = contacts[i].phoneNumbers[0].value;
 									self.arrContacts.push(contact);
@@ -102,6 +98,9 @@
 						var obj = param.obj;
 						plus.device.dial('' + obj.phoneNumber.replace(/\s/g, ""), true);
 					},
+					toAddContact: function() {
+						w.openView('addContact.html')
+					},
 					unique: function(arr) {
 						var tmp = new Array();
 						for(var i in arr) {
@@ -112,21 +111,21 @@
 						}
 						return tmp;
 					},
-					filterResult:function(value){
+					filterResult: function(value) {
 						var searchRegex = new RegExp(value, 'i');
-				        var arr=[];
-				        self.contactsData.forEach(function(item,index){
-				        	if(searchRegex.test(item.ufirst)){
-				        		arr = arr.concat(item.dataArr);
-				        	}else{
-				        		item.dataArr.forEach(function(obj,i){
-				        			if(searchRegex.test(obj.phoneNumber) || searchRegex.test(obj.displayName) || searchRegex.test(obj.wordsCode)){
-				        				arr = arr.concat(item.dataArr);
-				        			}
-				        		})
-				        	}
-				        })
-				        return arr;
+						var arr = [];
+						self.contactsData.forEach(function(item, index) {
+							if(searchRegex.test(item.ufirst)) {
+								arr = arr.concat(item.dataArr);
+							} else {
+								item.dataArr.forEach(function(obj, i) {
+									if(searchRegex.test(obj.phoneNumber) || searchRegex.test(obj.displayName) || searchRegex.test(obj.wordsCode)) {
+										arr = arr.concat(item.dataArr);
+									}
+								})
+							}
+						})
+						return arr;
 					}
 				},
 				domReady: function() {

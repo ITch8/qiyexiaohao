@@ -140,7 +140,7 @@
 						}, {
 							"tag": "font",
 							"id": "indexText",
-							"text": "首页",
+							"text": "通话",
 							"position": {
 								"top": "23px",
 								"left": "0",
@@ -198,7 +198,7 @@
 						}, {
 							"tag": "font",
 							"id": "contactText",
-							"text": "通讯录",
+							"text": "联系人",
 							"position": {
 								"top": "24px",
 								"left": "55%",
@@ -227,7 +227,7 @@
 						}, {
 							"tag": "font",
 							"id": "newwindowText",
-							"text": "新窗口",
+							"text": "我的",
 							"position": {
 								"top": "24px",
 								"left": "75%",
@@ -390,7 +390,8 @@
 					"html/new-webview.html",
 					"html/contact.html",
 					"html/contact_vue.html",
-					"html/contact_mint.html"
+					"html/contact_mint.html",
+					"html/my.html"
 				],
 				"priority": 0
 			},
@@ -455,7 +456,8 @@
 			"html/contact_mint.html": {
 				"resources": [],
 				"refer": [
-					"html/contact_mint.html"
+					"html/contact_mint.html",
+					"html/addContact.html"
 				],
 				"priority": 0
 			}

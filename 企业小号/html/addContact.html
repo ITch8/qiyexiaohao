@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加联系人</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新增联系人</h1>
+		</header>
+		<div id="app" class="mui-content">
+		    <button @tap="addContact">添加</button>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+	<script type="text/javascript" src="../js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="../js/mint-ui.min.js"></script>
+	<script type="text/javascript" src="../js/common.js" ></script>
+	<script type="text/javascript">
+		(function(_, w, u) {
+			App({
+				el: '#app',
+				data: {
+				},
+				plusReady: {
+					init: function() {
+						self = this;
+					}
+				},
+				methods: {
+					addContact:function(givenName,phoneNumbers){//往通讯录添加新联系人
+						plus.contacts.getAddressBook( plus.contacts.ADDRESSBOOK_PHONE, function( addressbook ) {
+							// 向通讯录中添加联系人
+							var contact = addressbook.create();
+							contact.name = {givenName:"王安"};
+							contact.phoneNumbers = [{type:"手机",value:"88888888",preferred:true}];
+							contact.save();
+							
+							//TODO 更新联系人列表
+						}, function ( e ) {
+							alert( "Get address book failed: " + e.message );
+						} );
+					}
+				},
+				domReady: function() {
+					_.init();
+				}
+			})
+		})(mui, window, util)
+	</script>
+
+</html>
