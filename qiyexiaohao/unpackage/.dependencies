@@ -1,1 +1,47 @@
-null
+{
+  "sendMsg.html": {
+    "href": "sendMsg.html",
+    "resources": [
+      "js/common.js"
+    ],
+    "priority": 0
+  },
+  "msg.html": {
+    "href": "msg.html",
+    "resources": [
+      "js/mui.min.js",
+      "js/vue.min.js",
+      "js/mint-ui.min.js",
+      "js/vue-html5plus.js",
+      "js/common.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "css/mint-ui-style.css"
+    ],
+    "refer": [
+      "sendMsg.html"
+    ],
+    "priority": 0
+  },
+  "main.html": {
+    "href": "main.html",
+    "resources": [
+      "js/vue.min.js",
+      "js/mint-ui.min.js",
+      "js/vue-html5plus.js",
+      "js/common.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "css/mint-ui-style.css"
+    ],
+    "priority": 3
+  },
+  "index.html": {
+    "href": "index.html",
+    "resources": [],
+    "refer": [
+      "msg.html"
+    ],
+    "priority": 0
+  }
+}
