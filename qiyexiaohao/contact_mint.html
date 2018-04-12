@@ -5,9 +5,9 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link rel="stylesheet" href="../css/mui.min.css" />
-		<link rel="stylesheet" href="../css/mint-ui-style.css" />
-		<link rel="stylesheet" href="../js/component/indexList-style.css" />
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" href="css/mint-ui-style.css" />
+		<link rel="stylesheet" href="js/component/indexList-style.css" />
 	</head>
 
 	<body>
@@ -17,8 +17,9 @@
 				<a class="mui-icon mui-icon-plusempty mui-pull-right" @tap="toAddContact"></a>
 			</header>
 			<div class="mui-content">
-				<mt-search v-model="value" cancel-text="取消" placeholder="搜索" @keyup.native.enter="search(value)">
-				</mt-search>
+				<form class="mui-input-group" @submit.prevent="search">
+					<mt-search v-model="value" cancel-text="取消" placeholder="搜索"></mt-search>
+				</form>
 				<mt-index-list>
 					<mt-index-section v-for="item in contactsData" :index="item.ufirst">
 						<mt-cell v-for="obj in item.dataArr" :title="obj.displayName" v-tap="{methods: toTel , obj : obj}"></mt-cell>
@@ -27,13 +28,13 @@
 			</div>
 		</div>
 	</body>
-	<script src="../js/mui.min.js"></script>
-	<script type="text/javascript" src="../js/vue.min.js"></script>
-	<script type="text/javascript" src="../js/vue-html5plus.js"></script>
-	<script type="text/javascript" src="../js/vue-tap.js"></script>
-	<script type="text/javascript" src="../js/mint-ui.min.js"></script>
-	<script type="text/javascript" src="../js/ChinesePY.js"></script>
-	<script type="text/javascript" src="../js/common.js"></script>
+	<script src="js/mui.min.js"></script>
+	<script type="text/javascript" src="js/vue.min.js"></script>
+	<script type="text/javascript" src="js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="js/vue-tap.js"></script>
+	<script type="text/javascript" src="js/mint-ui.min.js"></script>
+	<script type="text/javascript" src="js/ChinesePY.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
 	<script>
 		(function(_, w, u) {
 			var self = null;
@@ -91,8 +92,9 @@
 					}
 				},
 				methods: {
-					search: function(value) {
-						var filterResult = self.filterResult(value);
+					search: function() {
+						var filterResult = self.filterResult(self.value);
+						console.log(self.value);
 					},
 					toTel: function(param) {
 						var obj = param.obj;

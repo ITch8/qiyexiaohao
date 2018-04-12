@@ -1243,7 +1243,7 @@ input[type=submit]:enabled:active {
 	padding-right: 10px;
 	padding-left: 10px;
 	border-bottom: 0;
-	background-color: #f7f7f7;
+	background-color: #fff;
 	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .85);
 	box-shadow: 0 0 1px rgba(0, 0, 0, .85);
 	-webkit-backface-visibility: hidden;
@@ -2177,10 +2177,6 @@ input[type=submit]:enabled:active {
 	right: 35px
 }
 
-.mui-content>.mui-table-view:first-child {
-	margin-top: 15px
-}
-
 .mui-table-view-cell.mui-collapse .mui-table-view .mui-table-view-cell:last-child:after,
 .mui-table-view-cell.mui-collapse .mui-table-view:after,
 .mui-table-view-cell.mui-collapse .mui-table-view:before {
@@ -2316,8 +2312,6 @@ input[type=submit]:enabled:active {
 .mui-grid-view.mui-grid-9 {
 	margin: 0;
 	padding: 0;
-	border-top: 1px solid #eee;
-	border-left: 1px solid #eee;
 	background-color: #f2f2f2
 }
 
@@ -2336,8 +2330,6 @@ input[type=submit]:enabled:active {
 	margin: 0;
 	padding: 11px 15px;
 	vertical-align: top;
-	border-right: 1px solid #eee;
-	border-bottom: 1px solid #eee
 }
 
 .mui-grid-view.mui-grid-9 .mui-table-view-cell.mui-active {
@@ -2355,11 +2347,6 @@ input[type=submit]:enabled:active {
 
 .mui-grid-view.mui-grid-9 .mui-media {
 	color: #797979
-}
-
-.mui-grid-view.mui-grid-9 .mui-media .mui-icon {
-	font-size: 2.4em;
-	position: relative
 }
 
 .mui-slider-cell {
@@ -2435,8 +2422,20 @@ input[type=number]::-webkit-outer-spin-button {
 	margin: 0;
 	-webkit-appearance: none
 }
-
-/*input[type=search] {
+input[type=color], input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week], select, textarea {
+    line-height: 21px;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    -webkit-user-select: text;
+    border: 1px solid rgba(0, 0, 0, .2);
+    border-radius: 3px;
+    outline: 0;
+    background-color: #fff;
+    -webkit-appearance: none;
+}
+input[type=search] {
 	font-size: 16px;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
@@ -2445,7 +2444,7 @@ input[type=number]::-webkit-outer-spin-button {
 	border: 0;
 	border-radius: 6px;
 	background-color: rgba(0, 0, 0, .1)
-}*/
+}
 
 input[type=search]:focus {
 	text-align: left
@@ -3089,19 +3088,13 @@ select:focus {
 	transform: translate3d(0, 0, 0)
 }
 
-.mui-popover.mui-popover-action .mui-table-view {
-	margin: 8px;
-	text-align: center;
-	color: #007aff;
-	border-radius: 4px
-}
 
 .mui-popover.mui-popover-action .mui-table-view .mui-table-view-cell:after {
 	position: absolute;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	height: 1px;
+	height: 0;
 	content: '';
 	-webkit-transform: scaleY(.5);
 	transform: scaleY(.5);
@@ -3130,7 +3123,7 @@ select:focus {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background-color: rgba(0, 0, 0, .3)
+	background-color: rgba(0, 0, 0, 0)
 }
 
 .mui-bar-backdrop.mui-backdrop {
@@ -3139,7 +3132,7 @@ select:focus {
 }
 
 .mui-backdrop-action.mui-backdrop {
-	background-color: rgba(0, 0, 0, .3)
+	background-color: rgba(0, 0, 0, 0)
 }
 
 .mui-backdrop-action.mui-backdrop,
@@ -4181,7 +4174,7 @@ body>.mui-progressbar {
 
 .mui-icon {
 	font-family: Muiicons;
-	font-size: 24px;
+	font-size: 18px;
 	font-weight: 400;
 	font-style: normal;
 	line-height: 1;
