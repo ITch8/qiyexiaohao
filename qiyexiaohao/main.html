@@ -51,7 +51,7 @@
 			}
 			
 			.filter_result {
-				background: red;
+				background: #26A2FF;
 				z-index: 10;
 			}
 			.filter_result ul{
@@ -63,6 +63,17 @@
 			.filter_result .mui-table-view-cell{
 			    background-color: #fff;
 			    margin: 5px 0;
+			}
+			
+			.fade-enter-active, .fade-leave-active {
+			  transition: opacity .5s;
+			}
+			.fade-enter, .fade-leave-to{
+			  opacity: 0;
+			}
+			
+			#middlePopover{
+				top: 0;left: 0;right: 0;bottom: 0;margin: auto;height:100px;
 			}
 		</style>
 	</head>
@@ -84,54 +95,6 @@
 								</p>
 							</div>
 						</li>
-						<li class="mui-table-view-cell mui-media">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-							<div class="mui-media-body">13510792830
-								<p><span class="i_flag">副1</span>广东广州
-									<span class="mui-pull-right span_right">16:05 <span class="mui-icon mui-icon-info"></span></span>
-								</p>
-							</div>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-							<div class="mui-media-body">13510792830
-								<p><span class="i_flag">副1</span>广东广州
-									<span class="mui-pull-right span_right">16:05 <span class="mui-icon mui-icon-info"></span></span>
-								</p>
-							</div>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-							<div class="mui-media-body">13510792830
-								<p><span class="i_flag">副1</span>广东广州
-									<span class="mui-pull-right span_right">16:05 <span class="mui-icon mui-icon-info"></span></span>
-								</p>
-							</div>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-							<div class="mui-media-body">13510792830
-								<p><span class="i_flag">副1</span>广东广州
-									<span class="mui-pull-right span_right">16:05 <span class="mui-icon mui-icon-info"></span></span>
-								</p>
-							</div>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-							<div class="mui-media-body">13510792830
-								<p><span class="i_flag">副1</span>广东广州
-									<span class="mui-pull-right span_right">16:05 <span class="mui-icon mui-icon-info"></span></span>
-								</p>
-							</div>
-						</li>
-						<li class="mui-table-view-cell mui-media">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-							<div class="mui-media-body">13510792830
-								<p><span class="i_flag">副1</span>广东广州
-									<span class="mui-pull-right span_right">16:05 <span class="mui-icon mui-icon-info"></span></span>
-								</p>
-							</div>
-						</li>
 					</ul>
 					<mt-popup v-model="popupVisible">
 						<div @tap="filterList(0,'全部通话')">
@@ -143,20 +106,26 @@
 					</mt-popup>
 				</div>
 			</div>
-			<div class="filter_result mui-fullscreen mui-scroll-wrapper">
-				<div class="mui-scroll">
-					<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-						<li class="mui-table-view-cell">
-							<div class="mui-table">
-								<div class="mui-table-cell mui-col-xs-8">
-									<h4 class="mui-ellipsis">王琦</h4>
-									<p class="mui-h6 mui-ellipsis"><span class="i_flag">主号</span>13510792830<span class="mui-icon mui-icon-info"></span></p>
+			<transition name="fade">
+				<div v-show="filter_resultShow" class="filter_result mui-fullscreen mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
+							<li class="mui-table-view-cell">
+								<div class="mui-table">
+									<div class="mui-table-cell mui-col-xs-8">
+										<h4 class="mui-ellipsis">王琦</h4>
+										<p class="mui-h6 mui-ellipsis"><span class="i_flag">主号</span>13510792830<span class="mui-icon mui-icon-info mui-pull-right"></span></p>
+									</div>
 								</div>
-							</div>
-						</li>
-					</ul>
+							</li>
+						</ul>
+					</div>
 				</div>
-			</div>
+			</transition>
+			<!--
+            	时间：2018-04-13
+            	描述   虚拟键盘
+            -->
 			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
@@ -203,22 +172,39 @@
 					<li @tap="input_key('0')" class="mui-table-view-cell mui-media mui-col-xs-12 mui-col-sm-12">
 						<span>0</span>
 					</li>
-					<li @tap="input_key('close')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-						<span class="mui-icon mui-icon-closeempty"></span>
-						<div class="mui-media-body">收起</div>
-					</li>
-					<li @tap="input_key('tel')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="padding-top: 20px;">
-						<span class="mui-icon mui-icon-phone-filled" style="font-size: 35px;"></span>
-					</li>
-					<li @tap="input_key('change')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-						<span class="mui-icon mui-icon-loop"></span>
-						<div class="mui-media-body">切换</div>
-					</li>
+					<div v-show="bottom_handle">
+						<li @tap="input_key('close')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+							<span class="mui-icon mui-icon-closeempty"></span>
+							<div class="mui-media-body">收起</div>
+						</li>
+						<li @tap="input_key('tel')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="padding-top: 20px;">
+							<span class="mui-icon mui-icon-phone-filled" style="font-size: 35px;"></span>
+						</li>
+						<li @tap="input_key('change')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+							<span class="mui-icon mui-icon-loop"></span>
+							<div class="mui-media-body">切换</div>
+						</li>
+					</div>
 				</ul>
+			</div>
+		
+			<!--
+            	时间：2018-04-13
+            	描述：切换组件
+            -->
+            <div id="middlePopover" class="mui-popover">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell">Item1</li>
+							<li class="mui-table-view-cell">Item2</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript" src="js/mui.js"></script>
+	<script type="text/javascript" src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
@@ -233,7 +219,9 @@
 					title: '全部通话',
 					list: [],
 					inputKey: '',
-					popupVisible: false
+					popupVisible: false,
+					filter_resultShow:false,
+					bottom_handle:false
 				},
 				plusReady: {
 					init: function() {
@@ -245,7 +233,20 @@
 						plus.device.dial(phone, false);
 					},
 					input_key: function(key) {
-						if('del' == key) {
+						if(self.inputKey.length >= 0){
+							self.filter_resultShow = true;
+							self.bottom_handle = true;
+						}else{
+							self.filter_resultShow = false;
+							self.bottom_handle = false;
+						}
+						if('close' == key){
+							self.bottom_handle = false;
+							_('#keyborde_div').popover('hide');
+						}else if('change' == key){
+							_("#keyborde_div").popover('show');
+							_('#middlePopover').popover('toggle');
+						}else if('del' == key) {
 							self.inputKey = self.inputKey.substr(0, self.inputKey.length - 1)
 						} else {
 							self.inputKey += key && key.substr(0, 1);
