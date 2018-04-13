@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>Hello MUI</title>
+		<title>企业小号</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -44,6 +44,10 @@
 			 //创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
 				var self = plus.webview.currentWebview();
+				//首页关闭ios右划
+				self.setStyle({
+					popGesture:"none"
+				});
 				for (var i = 0; i < 4; i++) {
 					var temp = {};
 					var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
@@ -56,6 +60,9 @@
 					self.append(sub);
 				}
 				mainWeb = plus.webview.getWebviewById('main.html');
+				setTimeout(function() {
+					plus.navigator.closeSplashscreen(); //手动关闭启动页
+				}, 3000);
 			});
 			 //当前激活选项
 			var activeTab = subpages[0];

@@ -461,7 +461,7 @@ p {
 	font-size: 14px;
 	margin-top: 0;
 	margin-bottom: 10px;
-	color: #8f8f94
+	color: #666
 }
 
 .mui-row:after,
@@ -1244,8 +1244,6 @@ input[type=submit]:enabled:active {
 	padding-left: 10px;
 	border-bottom: 0;
 	background-color: #fff;
-	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .85);
-	box-shadow: 0 0 1px rgba(0, 0, 0, .85);
 	-webkit-backface-visibility: hidden;
 	backface-visibility: hidden
 }
@@ -1295,8 +1293,6 @@ input[type=submit]:enabled:active {
 
 .mui-bar-nav {
 	top: 0;
-	-webkit-box-shadow: 0 1px 6px #ccc;
-	box-shadow: 0 1px 6px #ccc
 }
 
 .mui-bar-nav~.mui-content .mui-anchor {
@@ -1324,7 +1320,7 @@ input[type=submit]:enabled:active {
 	padding: 0;
 	text-align: center;
 	white-space: nowrap;
-	color: #000
+	color: #fff
 }
 
 .mui-title a {
@@ -1356,13 +1352,13 @@ input[type=submit]:enabled:active {
 }
 
 .mui-bar-tab .mui-tab-item.mui-active {
-	color: #007aff
+	color: #00acf8
 }
 
 .mui-bar-tab .mui-tab-item .mui-icon {
 	top: 3px;
-	width: 24px;
-	height: 24px;
+	width: 26px;
+	height: 26px;
 	padding-top: 0;
 	padding-bottom: 0
 }
@@ -2072,9 +2068,9 @@ input[type=submit]:enabled:active {
 }
 
 .mui-table-view .mui-media-object {
-	line-height: 42px;
-	max-width: 42px;
-	height: 42px
+	line-height: 12px;
+	max-width: 12px;
+	height: 12px
 }
 
 .mui-table-view .mui-media-object.mui-pull-left {
@@ -2294,14 +2290,14 @@ input[type=submit]:enabled:active {
 }
 
 .mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body {
-	font-size: 15px;
+	font-size: 10px;
 	line-height: 15px;
 	display: block;
 	width: 100%;
 	height: 15px;
 	margin-top: 8px;
 	text-overflow: ellipsis;
-	color: #333
+	color: #b2b2b2
 }
 
 .mui-table-view.mui-grid-view .mui-table-view-cell:after,
@@ -2328,12 +2324,14 @@ input[type=submit]:enabled:active {
 
 .mui-grid-view.mui-grid-9 .mui-table-view-cell {
 	margin: 0;
-	padding: 11px 15px;
+	padding: 6px 15px;
 	vertical-align: top;
+	border-right: 1px solid #eee;
+	border-top:1px solid #eee;
 }
 
 .mui-grid-view.mui-grid-9 .mui-table-view-cell.mui-active {
-	background-color: #FFF
+	background-color: #eee
 }
 
 .mui-grid-view.mui-grid-9 .mui-table-view-cell>a:not(.mui-btn) {
@@ -2342,11 +2340,11 @@ input[type=submit]:enabled:active {
 }
 
 .mui-grid-view.mui-grid-9:before {
-	height: 0
+	height: 1px
 }
 
 .mui-grid-view.mui-grid-9 .mui-media {
-	color: #797979
+	color: #333
 }
 
 .mui-slider-cell {
@@ -2552,8 +2550,8 @@ select:focus {
 .mui-input-row label {
 	font-family: 'Helvetica Neue', Helvetica, sans-serif;
 	line-height: 1.1;
-	float: left;
-	width: 35%;
+	float: right;
+	width: 25%;
 	padding: 11px 15px
 }
 
@@ -2561,7 +2559,7 @@ select:focus {
 .mui-input-row label~select,
 .mui-input-row label~textarea {
 	float: right;
-	width: 65%;
+	width: 50%;
 	margin-bottom: 0;
 	padding-left: 0;
 	border: 0
@@ -3193,11 +3191,11 @@ select:focus {
 	height: 0
 }
 
-.mui-popover .mui-table-view .mui-table-view-cell:first-child,
+/*.mui-popover .mui-table-view .mui-table-view-cell:first-child,
 .mui-popover .mui-table-view .mui-table-view-cell:first-child>a:not(.mui-btn) {
 	border-top-left-radius: 12px;
 	border-top-right-radius: 12px
-}
+}*/
 
 .mui-popover .mui-table-view .mui-table-view-cell:last-child,
 .mui-popover .mui-table-view .mui-table-view-cell:last-child>a:not(.mui-btn) {

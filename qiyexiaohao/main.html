@@ -7,19 +7,19 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/mint-ui-style.css" />
+		<link rel="stylesheet" href="css/common.css" />
 		<style>
-			.mui-table-view .mui-media-object {
-				line-height: 12;
-				max-width: 12px;
-				height: 12px;
+			.i_flag {
+				background: #00acf8;
+				color: #fff;
+				font-size: 8px;
+				padding: 2px;
+				margin: 0 0 0 10px;
 			}
 			
-			.i_flag {
-				background: #2AC845;
-				color: #fff;
-				font-size: 12px;
-				padding: 5px;
-				margin: 10px 10px 0 0;
+			.mui-table-view .mui-media-object {
+				position: relative;
+				top: 27px;
 			}
 			
 			.span_right {
@@ -37,13 +37,6 @@
 				background-color: #fff;
 			}
 			
-			input[type=text] {
-				width: 50%;
-				margin: 0 25%;
-				text-align: center;
-				font-size: 18px
-			}
-			
 			.input_keybord {
 				position: fixed;
 				z-index: 10;
@@ -51,29 +44,58 @@
 			}
 			
 			.filter_result {
-				background: #26A2FF;
+				background: #00acf8;
 				z-index: 10;
 			}
-			.filter_result ul{
+			
+			.filter_result ul {
 				margin: 10px;
 			}
-			.filter_result .mui-table-view{
+			
+			.filter_result .mui-table-view {
 				background: initial;
 			}
-			.filter_result .mui-table-view-cell{
-			    background-color: #fff;
-			    margin: 5px 0;
+			
+			.filter_result .mui-table-view-cell {
+				background-color: #fff;
+				margin: 5px 0;
 			}
 			
-			.fade-enter-active, .fade-leave-active {
-			  transition: opacity .5s;
-			}
-			.fade-enter, .fade-leave-to{
-			  opacity: 0;
+			.fade-enter-active,
+			.fade-leave-active {
+				transition: opacity .6s;
 			}
 			
-			#middlePopover{
-				top: 0;left: 0;right: 0;bottom: 0;margin: auto;height:100px;
+			.fade-enter,
+			.fade-leave-to {
+				opacity: 0;
+			}
+			
+			#middlePopover {
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				margin: auto;
+				height: 100px;
+			}
+			
+			.mui-input-row label[class='f'] {
+				font-family: 'Helvetica Neue', Helvetica, sans-serif;
+				line-height: 1.1;
+				float: left;
+				width: 25%;
+				padding: 11px 15px;
+			}
+			
+			.mui-input-row input[type=text] {
+				text-align: center;
+				padding: 2px 5px;
+				font-size: 18px;
+			}
+			
+			#keyborde>li>span {
+				font-size: 20px;
 			}
 		</style>
 	</head>
@@ -81,18 +103,27 @@
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<a @tap="toggleTopP()" class="mui-action-menu mui-icon mui-icon-bars mui-pull-left"></a>
+				<a @tap="toggleTopP()" class="mui-icon mui-icon-bars mui-pull-left"></a>
 				<h1 class="mui-title">{{title}}</h1>
+				<a @tap="toggleTopP()" class="mui-icon mui-icon-trash mui-pull-right"></a>
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
 						<li @tap="toTel('13510792830')" class="mui-table-view-cell mui-media">
 							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-							<div class="mui-media-body">13510792830
-								<p><span class="i_flag">副1</span>广东广州
-									<span class="mui-pull-right span_right">16:05 <span class="mui-icon mui-icon-info"></span></span>
-								</p>
+							<div class="mui-media-body">
+								<span class="color_333">13510792830</span>
+								<span class="i_flag">副1</span>
+								<p>广东广州 4月9日 呼入12分21秒 <span class="mui-icon mui-icon-info mui-pull-right span_right"></span></p>
+							</div>
+						</li>
+						<li @tap="toTel('13510792830')" class="mui-table-view-cell mui-media">
+							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+							<div class="mui-media-body">
+								<span class="color_333">13510792830</span>
+								<span class="i_flag">副1</span>
+								<p>广东广州 4月9日 呼入12分21秒 <span class="mui-icon mui-icon-info mui-pull-right span_right"></span></p>
 							</div>
 						</li>
 					</ul>
@@ -106,6 +137,10 @@
 					</mt-popup>
 				</div>
 			</div>
+			<!--
+            	时间：2018-04-13
+            	描述：查询结果
+            -->
 			<transition name="fade">
 				<div v-show="filter_resultShow" class="filter_result mui-fullscreen mui-scroll-wrapper">
 					<div class="mui-scroll">
@@ -129,13 +164,15 @@
 			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
+						<label class="f"></label>
+						<label @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></label>
 						<input type="text" placeholder="请输入号码搜索" maxlength="15" readonly="readonly" v-model="inputKey">
 					</div>
 				</form>
 				<ul id="keyborde" class="mui-table-view mui-grid-view mui-grid-9">
 					<li @tap="input_key('1')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 						<span>1</span>
-						<div class="mui-media-body"></div>
+						<div class="mui-media-body">-</div>
 					</li>
 					<li @tap="input_key('2ABC')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 						<span>2</span>
@@ -169,15 +206,24 @@
 						<span>9</span>
 						<div class="mui-media-body">WXYZ</div>
 					</li>
-					<li @tap="input_key('0')" class="mui-table-view-cell mui-media mui-col-xs-12 mui-col-sm-12">
+					<li @tap="input_key('*,')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<span>*</span>
+						<div class="mui-media-body">,</div>
+					</li>
+					<li @tap="input_key('0+')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 						<span>0</span>
+						<div class="mui-media-body">+</div>
+					</li>
+					<li @tap="input_key('#.')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<span>#</span>
+						<div class="mui-media-body">.</div>
 					</li>
 					<div v-show="bottom_handle">
 						<li @tap="input_key('close')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 							<span class="mui-icon mui-icon-closeempty"></span>
 							<div class="mui-media-body">收起</div>
 						</li>
-						<li @tap="input_key('tel')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="padding-top: 20px;">
+						<li @tap="input_key('tel')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="padding-top: 11px;">
 							<span class="mui-icon mui-icon-phone-filled" style="font-size: 35px;"></span>
 						</li>
 						<li @tap="input_key('change')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
@@ -187,12 +233,12 @@
 					</div>
 				</ul>
 			</div>
-		
+
 			<!--
             	时间：2018-04-13
             	描述：切换组件
             -->
-            <div id="middlePopover" class="mui-popover">
+			<div id="middlePopover" class="mui-popover">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
@@ -220,8 +266,9 @@
 					list: [],
 					inputKey: '',
 					popupVisible: false,
-					filter_resultShow:false,
-					bottom_handle:false
+					filter_resultShow: false,
+					bottom_handle: true,
+					allLoaded: false
 				},
 				plusReady: {
 					init: function() {
@@ -233,21 +280,27 @@
 						plus.device.dial(phone, false);
 					},
 					input_key: function(key) {
-						if(self.inputKey.length >= 0){
+						if(self.inputKey.length >= 0) {
 							self.filter_resultShow = true;
 							self.bottom_handle = true;
-						}else{
+						} else {
 							self.filter_resultShow = false;
 							self.bottom_handle = false;
 						}
-						if('close' == key){
+						if('close' == key) {
 							self.bottom_handle = false;
 							_('#keyborde_div').popover('hide');
-						}else if('change' == key){
+						} else if('change' == key) {
 							_("#keyborde_div").popover('show');
 							_('#middlePopover').popover('toggle');
-						}else if('del' == key) {
-							self.inputKey = self.inputKey.substr(0, self.inputKey.length - 1)
+						} else if('del' == key) {
+							self.inputKey = self.inputKey.substr(0, self.inputKey.length - 1);
+							if(self.inputKey.length == 0) {
+								self.filter_resultShow = false;
+								self.bottom_handle = false;
+							}
+						} else if('tel' == key) {
+							plus.device.dial(self.inputKey, false);
 						} else {
 							self.inputKey += key && key.substr(0, 1);
 						}
