@@ -16,7 +16,7 @@
 				<span class="mui-icon mui-icon-home"></span>
 				<span class="mui-tab-label">通话</span>
 			</a>
-			<a class="mui-tab-item" href="msg.html">
+			<a class="mui-tab-item" href="msg1.html">
 				<span class="mui-icon mui-icon-email"></span>
 				<span class="mui-tab-label">信息</span>
 			</a>
@@ -32,8 +32,13 @@
 		<script src="js/mui.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			 //mui初始化
-			mui.init();
-			var subpages = ['main.html', 'msg.html', 'contact_mint.html', 'my.html'];
+			mui.init({
+				preloadPages:[{
+					"url":"contactDetail.html",
+					"id":"contactDetail"
+				}]
+			});
+			var subpages = ['main.html', 'msg1.html', 'contact_mint.html', 'my.html'];
 			var subpage_style = {
 				top: '0',
 				bottom: '51px'

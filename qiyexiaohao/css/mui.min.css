@@ -234,7 +234,7 @@ a {
 }
 
 a:active {
-	color: #0062cc
+	color: #fff
 }
 
 .mui-content {
@@ -1058,8 +1058,8 @@ input[type=submit]:enabled:active {
 .mui-btn-negative,
 .mui-btn-red {
 	color: #fff;
-	border: 1px solid #dd524d;
-	background-color: #dd524d
+	border: 1px solid #ff4400;
+	background-color: #ff4400
 }
 
 .mui-btn-danger.mui-active:enabled,
@@ -1166,8 +1166,8 @@ input[type=submit]:enabled:active {
 	font-size: 18px;
 	display: block;
 	width: 100%;
-	margin-bottom: 10px;
-	padding: 15px 0
+	padding: 10px 0;
+	color: #ff4400;
 }
 
 .mui-btn .mui-badge {
@@ -1306,7 +1306,8 @@ input[type=submit]:enabled:active {
 	margin-right: -10px;
 	margin-left: -10px;
 	padding-right: 10px;
-	padding-left: 10px
+	padding-left: 10px;
+	margin-top: 10px;
 }
 
 .mui-title {
@@ -1405,13 +1406,13 @@ input[type=submit]:enabled:active {
 	line-height: 44px;
 	top: 0;
 	padding: 0;
-	color: #007aff;
+	color: #fff;
 	border: 0
 }
 
 .mui-bar .mui-btn-link.mui-active,
 .mui-bar .mui-btn-link:active {
-	color: #0062cc
+	color: #fff
 }
 
 .mui-bar .mui-btn-block {
@@ -1445,7 +1446,6 @@ input[type=submit]:enabled:active {
 	font-size: 24px;
 	position: relative;
 	z-index: 20;
-	padding-top: 10px;
 	padding-bottom: 10px
 }
 
@@ -1559,7 +1559,7 @@ input[type=submit]:enabled:active {
 .mui-badge-danger,
 .mui-badge-red {
 	color: #fff;
-	background-color: #dd524d
+	background-color: #ff4400
 }
 
 .mui-badge-danger.mui-badge-inverted,
@@ -1889,7 +1889,7 @@ input[type=submit]:enabled:active {
 
 .mui-table-view-cell.mui-checkbox input[type=checkbox],
 .mui-table-view-cell.mui-radio input[type=radio] {
-	top: 8px
+	top: 18px
 }
 
 .mui-table-view-cell.mui-checkbox.mui-left,
@@ -2665,7 +2665,7 @@ select:focus {
 
 .mui-checkbox.mui-left input[type=checkbox],
 .mui-radio.mui-left input[type=radio] {
-	left: 20px
+	left: 10px
 }
 
 .mui-checkbox.mui-left label,

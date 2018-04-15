@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>通话记录</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/common.css" />
+		<style>
+			.bottom_del_div {
+				position: fixed;
+				bottom: 0;
+				z-index: 9;
+			}
+			
+			.mui-table-view {
+				margin-bottom: 10px;
+			}
+			
+			.i_flag {
+				background: #00acf8;
+				color: #fff;
+				font-size: 8px;
+				padding: 2px;
+				margin: 0 0 0 10px;
+			}
+			
+			.mui-table-view .mui-media-object {
+				position: relative;
+				top: 27px;
+			}
+			
+			.mui-grid-view.mui-grid-9 {
+				background-color: #fff;
+			}
+			
+			.mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body {
+				font-size: 15px
+			}
+			
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell>a:not(.mui-btn) {
+				padding: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">通话记录</h1>
+		</header>
+		<div id="app" class="mui-content mui-scroll-wrapper mui-fullscreen">
+			<div class="mui-scroll">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span><span class="mui-icon mui-icon-info mui-pull-right span_right"></span>
+							<p>广东广州 </p>
+						</div>
+					</li>
+				</ul>
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
+					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+						<a href="#">
+							<span class="mui-icon mui-icon-plusempty"></span>
+							<div class="mui-media-body">新建</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+						<a href="#">
+							<span class="mui-icon mui-icon-person"></span>
+							<div class="mui-media-body">添加到联系人</div>
+						</a>
+					</li>
+				</ul>
+				<ul id="listData" class="mui-table-view">
+					<li @tap="toTel()"   class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
+							<p>广东广州 4月9日 呼入12分21秒</p>
+						</div>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
+							<p>广东广州 4月9日 呼入12分21秒</p>
+						</div>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
+							<p>广东广州 4月9日 呼入12分21秒</p>
+						</div>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
+							<p>广东广州 4月9日 呼入12分21秒</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<button @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除通话记录</button>
+		</div>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script type="text/javascript" src="js/vue.min.js"></script>
+	<script type="text/javascript" src="js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="js/mint-ui.min.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript">
+		(function(_, w, u) {
+			App({
+				el: '#app',
+				data: {},
+				plusReady: {
+					init: function() {
+						self = this;
+					}
+				},
+				methods: {
+					addContact: function(givenName, phoneNumbers) { //往通讯录添加新联系人
+						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
+							// 向通讯录中添加联系人
+							var contact = addressbook.create();
+							contact.name = {
+								givenName: "王安"
+							};
+							contact.phoneNumbers = [{
+								type: "手机",
+								value: "88888888",
+								preferred: true
+							}];
+							contact.save();
+
+							//TODO 更新联系人列表
+						}, function(e) {
+							alert("Get address book failed: " + e.message);
+						});
+					},
+					toDel: function() {
+						//删除通话记录
+						_.confirm("确定删除吗","提示",['确定','取消'],function(e){
+							if(e.index == 0){
+								console.log("11");
+							}
+						})
+					},
+					toTel:function(){
+						plus.device.dial("13510792830",false);
+					}
+				},
+				domReady: function() {
+					_.init();
+				}
+			})
+		})(mui, window, util)
+	</script>
+
+</html>

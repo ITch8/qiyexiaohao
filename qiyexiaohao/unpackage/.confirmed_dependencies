@@ -1,101 +1,106 @@
 {
-  "my.html": {
-    "href": "my.html",
-    "resources": [
-      "css/mui.min.css",
-      "js/mui.min.js"
-    ],
-    "refer": [],
-    "priority": 0
-  },
-  "sendMsg.html": {
-    "href": "sendMsg.html",
-    "resources": [
-      "js/mui.min.js",
-      "js/vue.min.js",
-      "js/vue-html5plus.js",
-      "js/vue-tap.js",
-      "js/mint-ui.min.js",
-      "css/mui.min.css",
-      "js/common.js"
-    ],
-    "refer": [],
-    "priority": 0
-  },
-  "addContact.html": {
-    "href": "addContact.html",
-    "resources": [
-      "js/mui.min.js",
-      "js/vue.min.js",
-      "js/vue-html5plus.js",
-      "js/mint-ui.min.js",
-      "js/common.js",
-      "css/mui.min.css"
-    ],
-    "refer": [],
-    "priority": 0
-  },
-  "contact_mint.html": {
-    "href": "contact_mint.html",
-    "resources": [
-      "js/mui.min.js",
-      "js/vue.min.js",
-      "js/vue-html5plus.js",
-      "js/vue-tap.js",
-      "js/mint-ui.min.js",
-      "js/ChinesePY.js",
-      "js/common.js",
-      "css/mui.min.css",
-      "css/mint-ui-style.css"
-    ],
-    "refer": [
-      "addContact.html"
-    ],
-    "priority": 0
-  },
-  "main.html": {
-    "href": "main.html",
-    "resources": [
-      "js/mui.min.js",
-      "js/vue.min.js",
-      "js/mint-ui.min.js",
-      "js/vue-html5plus.js",
-      "js/common.js",
-      "css/mui.min.css",
-      "css/mint-ui-style.css"
-    ],
-    "refer": [],
-    "priority": 0
-  },
-  "index.html": {
-    "href": "index.html",
-    "resources": [
-      "css/mui.min.css",
-      "js/mui.min.js"
-    ],
-    "refer": [
-      "my.html",
-      "sendMsg.html",
-      "contact_mint.html",
-      "main.html",
-      "msg.html"
-    ],
-    "priority": 0
-  },
-  "msg.html": {
-    "href": "msg.html",
-    "resources": [
-      "js/mui.min.js",
-      "js/vue.min.js",
-      "js/mint-ui.min.js",
-      "js/vue-html5plus.js",
-      "js/common.js",
-      "css/mui.min.css",
-      "css/mint-ui-style.css"
-    ],
-    "refer": [
-      "sendMsg.html"
-    ],
-    "priority": 0
-  }
+	"my.html": {
+		"href": "my.html",
+		"resources": [
+			"css/mui.min.css",
+			"js/mui.min.js"
+		],
+		"refer": [],
+		"priority": 0
+	},
+	"sendMsg.html": {
+		"href": "sendMsg.html",
+		"resources": [
+			"js/mui.min.js",
+			"js/vue.min.js",
+			"js/vue-html5plus.js",
+			"js/vue-tap.js",
+			"js/mint-ui.min.js",
+			"css/mui.min.css",
+			"js/common.js"
+		],
+		"refer": [],
+		"priority": 0
+	},
+	"addContact.html": {
+		"href": "addContact.html",
+		"resources": [
+			"js/mui.min.js",
+			"js/vue.min.js",
+			"js/vue-html5plus.js",
+			"js/mint-ui.min.js",
+			"js/common.js",
+			"css/mui.min.css"
+		],
+		"refer": [],
+		"priority": 0
+	},
+	"contact_mint.html": {
+		"href": "contact_mint.html",
+		"resources": [
+			"js/mui.min.js",
+			"js/vue.min.js",
+			"js/vue-html5plus.js",
+			"js/vue-tap.js",
+			"js/mint-ui.min.js",
+			"js/ChinesePY.js",
+			"js/common.js",
+			"css/mui.min.css",
+			"css/mint-ui-style.css"
+		],
+		"refer": [
+			"addContact.html"
+		],
+		"priority": 0
+	},
+	"main.html": {
+		"href": "main.html",
+		"resources": [
+			"js/mui.min.js",
+			"js/vue.min.js",
+			"js/mint-ui.min.js",
+			"js/vue-html5plus.js",
+			"js/common.js",
+			"css/mui.min.css",
+			"css/mint-ui-style.css"
+		],
+		"refer": [
+			"contactDetail.html"
+		],
+		"priority": 0
+	},
+	"index.html": {
+		"href": "index.html",
+		"resources": [
+			"css/mui.min.css",
+			"js/mui.min.js",
+			"main.html"
+		],
+		"refer": [
+			"my.html",
+			"sendMsg.html",
+			"contact_mint.html",
+			"main.html",
+			"msg.html",
+			"msg1.html",
+			"contactDetail.html"
+		],
+		"priority": 0
+	},
+	"msg.html": {
+		"href": "msg.html",
+		"resources": [
+			"js/mui.min.js",
+			"js/vue.min.js",
+			"js/mint-ui.min.js",
+			"js/vue-html5plus.js",
+			"js/common.js",
+			"css/mui.min.css",
+			"css/mint-ui-style.css"
+		],
+		"refer": [
+			"sendMsg.html"
+		],
+		"priority": 0
+	}
 }

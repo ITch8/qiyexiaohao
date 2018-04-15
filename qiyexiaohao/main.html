@@ -97,34 +97,59 @@
 			#keyborde>li>span {
 				font-size: 20px;
 			}
+			
+			.bottom_del_div {
+				position: fixed;
+				bottom: 0;
+				z-index: 9;
+			}
+			.mui-table-view{
+				margin-bottom: 45px;
+			}
+			.mui-bar-nav.mui-bar .mui-icon{
+				margin-top: 0;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<a @tap="toggleTopP()" class="mui-icon mui-icon-bars mui-pull-left"></a>
+				<button v-if="isToDel" @tap="toggleTopP()" class="mui-btn-link mui-icon mui-icon-bars mui-pull-left"></button>
+				<button v-else @tap="chooseAll()" class="mui-btn-link mui-pull-left">{{chooseText}}</button>
 				<h1 class="mui-title">{{title}}</h1>
-				<a @tap="toggleTopP()" class="mui-icon mui-icon-trash mui-pull-right"></a>
+				<button v-if="isToDel" @tap="toggleDel()" class="mui-btn-link mui-icon mui-icon-trash mui-pull-right"></button>
+				<button v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</button>
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
-					<ul class="mui-table-view">
-						<li @tap="toTel('13510792830')" class="mui-table-view-cell mui-media">
+					<ul id="listData" class="mui-table-view">
+						<li @tap="toTelDetail()" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
 							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 							<div class="mui-media-body">
 								<span class="color_333">13510792830</span>
 								<span class="i_flag">副1</span>
 								<p>广东广州 4月9日 呼入12分21秒 <span class="mui-icon mui-icon-info mui-pull-right span_right"></span></p>
 							</div>
+							<input v-if="!isToDel" type="checkbox" value="1" v-model="checkedArr" />
 						</li>
-						<li @tap="toTel('13510792830')" class="mui-table-view-cell mui-media">
+						<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
 							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 							<div class="mui-media-body">
 								<span class="color_333">13510792830</span>
 								<span class="i_flag">副1</span>
 								<p>广东广州 4月9日 呼入12分21秒 <span class="mui-icon mui-icon-info mui-pull-right span_right"></span></p>
 							</div>
+							<input v-if="!isToDel" type="checkbox" value="2" v-model="checkedArr" />
+						</li>
+						<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
+							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+							<div class="mui-media-body">
+								<span class="color_333">13510792830</span>
+								<span class="i_flag">副1</span>
+								<p>广东广州 4月9日 呼入12分21秒 <span class="mui-icon mui-icon-info mui-pull-right span_right"></span></p>
+							</div>
+							<input v-if="!isToDel" type="checkbox" value="3" v-model="checkedArr" />
 						</li>
 					</ul>
 					<mt-popup v-model="popupVisible">
@@ -136,6 +161,11 @@
 						</div>
 					</mt-popup>
 				</div>
+				<!--
+		            	时间：2018-04-13
+		            	描述：底部删除按钮
+		            -->
+					<button @tap="toDel()" v-show="!isToDel" type="button" class="bottom_del_div mui-btn mui-btn-block">删除({{checkedArr.length}})</button>
 			</div>
 			<!--
             	时间：2018-04-13
@@ -251,33 +281,48 @@
 		</div>
 	</body>
 	<script type="text/javascript" src="js/mui.min.js"></script>
+	<script type="text/javascript" src="js/vue-html5plus.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
-	<script type="text/javascript" src="js/vue-html5plus.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		var app = null;
 		(function(_, w, u) {
 			var self = null;
+			var listObj = null;
 			app = new App({
 				el: '#app',
 				data: {
 					title: '全部通话',
+					chooseText: '全选',
 					list: [],
 					inputKey: '',
 					popupVisible: false,
 					filter_resultShow: false,
 					bottom_handle: true,
-					allLoaded: false
+					allLoaded: false,
+					isToDel: true, //是否显示取消
+					delNumber:0,//删除数量
+					checkedArr:[]
 				},
 				plusReady: {
 					init: function() {
+						console.log("plusReady init1===" + this.bottom_handle);
 						self = this;
+						console.log("plusReady init2===" + self.bottom_handle);
 					}
 				},
 				methods: {
-					toTel: function(phone) {
-						plus.device.dial(phone, false);
+					toggleDel: function() { //控制删除
+						self.isToDel = false;
+					},
+					chooseAll: function() {
+						//TODO 赋值全部数据给self.checkedArr
+					},
+					toTelDetail: function(phone) {
+						if(self.isToDel) {
+							w.openView("contactDetail.html")
+						}
 					},
 					input_key: function(key) {
 						if(self.inputKey.length >= 0) {
@@ -318,10 +363,17 @@
 					},
 					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
+					},
+					cancelDel: function() {
+						self.isToDel = true;
+					},
+					toDel:function(){
+						console.log("value===" + self.checkedArr)
 					}
 				},
 				domReady: function() {
 					_.init(), _(".mui-scroll-wrapper").scroll();
+					listObj = document.getElementById("listData");
 				}
 			})
 		})(mui, window, util)
