@@ -77,7 +77,7 @@
 					</li>
 				</ul>
 				<ul id="listData" class="mui-table-view">
-					<li @tap="toTel()"   class="mui-table-view-cell mui-media">
+					<li @tap="toTel()" class="mui-table-view-cell mui-media">
 						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 						<div class="mui-media-body">
 							<span class="color_333">13510792830</span>
@@ -151,14 +151,17 @@
 					},
 					toDel: function() {
 						//删除通话记录
-						_.confirm("确定删除吗","提示",['确定','取消'],function(e){
-							if(e.index == 0){
+						plus.nativeUI.confirm("确定删除所选号码的通话记录?", function(e) {
+							if(e.index == 1) {
 								console.log("11");
 							}
+						}, {
+							"title": "删除通话记录",
+							"buttons": ["取消", "删除"]
 						})
 					},
-					toTel:function(){
-						plus.device.dial("13510792830",false);
+					toTel: function() {
+						plus.device.dial("13510792830", false);
 					}
 				},
 				domReady: function() {

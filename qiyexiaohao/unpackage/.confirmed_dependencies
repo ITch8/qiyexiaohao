@@ -102,5 +102,10 @@
 			"sendMsg.html"
 		],
 		"priority": 0
+	},
+	"msg1.html": {
+		"refer": [
+			"sendMsg.html"
+		]
 	}
 }

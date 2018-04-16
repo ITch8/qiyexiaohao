@@ -79,7 +79,9 @@
 				margin: auto;
 				height: 100px;
 			}
-			
+			.mui-input-row label {
+				float: right;
+			}
 			.mui-input-row label[class='f'] {
 				font-family: 'Helvetica Neue', Helvetica, sans-serif;
 				line-height: 1.1;
@@ -87,7 +89,9 @@
 				width: 25%;
 				padding: 11px 15px;
 			}
-			
+			.mui-input-row label~input{
+				width: 50%;
+			}
 			.mui-input-row input[type=text] {
 				text-align: center;
 				padding: 2px 5px;
@@ -123,7 +127,7 @@
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
-					<ul id="listData" class="mui-table-view">
+					<ul class="mui-table-view">
 						<li @tap="toTelDetail()" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
 							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 							<div class="mui-media-body">
@@ -288,8 +292,7 @@
 	<script type="text/javascript">
 		var app = null;
 		(function(_, w, u) {
-			var self = null;
-			var listObj = null;
+			var self = null,currentWeb = null;
 			app = new App({
 				el: '#app',
 				data: {
@@ -307,6 +310,7 @@
 				},
 				plusReady: {
 					init: function() {
+						currentWeb = plus.webview.currentWebview();
 						console.log("plusReady init1===" + this.bottom_handle);
 						self = this;
 						console.log("plusReady init2===" + self.bottom_handle);
@@ -355,6 +359,7 @@
 						console.log("type====" + type);
 						self.title = title;
 						self.popupVisible = false;
+						self.toggleTabbar();
 						if(0 == type) { //全部
 
 						} else { //副号
@@ -363,17 +368,25 @@
 					},
 					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
+						self.toggleTabbar();
 					},
 					cancelDel: function() {
 						self.isToDel = true;
 					},
 					toDel:function(){
 						console.log("value===" + self.checkedArr)
+					},
+					toggleTabbar:function(){
+						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
+						if(viewStyle.bottom=='0'){
+			                currentWeb.setStyle({bottom:'51px'});
+			            }else{
+			                currentWeb.setStyle({bottom:'0'});
+			            }
 					}
 				},
 				domReady: function() {
 					_.init(), _(".mui-scroll-wrapper").scroll();
-					listObj = document.getElementById("listData");
 				}
 			})
 		})(mui, window, util)
