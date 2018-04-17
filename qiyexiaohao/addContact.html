@@ -20,6 +20,14 @@
 				bottom: 0;
 				z-index: 9;
 			}
+			#middleP {
+				top: 0 !important;
+				left: 0 !important;
+				right: 0 !important;
+				bottom: 0 !important;
+				margin: auto;
+				height: 100px;
+			}
 		</style>
 	</head>
 
@@ -58,12 +66,26 @@
 						</form>
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell">
-								<a class="mui-navigate-right font_15">副号分组</a>
+								<a href="#middleP" class="mui-navigate-right font_15">副号分组</a>
 							</li>
 						</ul>
 					</div>
 				</div>
 				<button @tap="toAdd()" type="button" class="bottom_del_div mui-btn mui-btn-block">添加更多选项</button>
+				<!--
+            	时间：2018-04-13
+            	描述：切换组件
+	            -->
+				<div id="middleP" class="mui-popover">
+					<div class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view mui-text-center main-color">
+								<li class="mui-table-view-cell">手机</li>
+								<li class="mui-table-view-cell">电话</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>

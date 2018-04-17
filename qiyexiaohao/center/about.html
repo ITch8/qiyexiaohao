@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<style>
+			.mui-btn-block{
+			    position: absolute;
+    			bottom: 0;    font-size: 15px;
+			}
+			.mui-content {
+    			background-color: #fff;
+    		}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">关于企业小号</h1>
+		</header>
+		<div class="mui-content mui-fullscreen mui-scroll-wrapper" id="app">
+			<div class="mui-scroll mui-text-center">
+				<img style="margin: 20px 0 0;" src="../img/logo.png" />
+				<p>企业小号  v{{version}} </p>
+				<p>微信客服：<span><a @tap="toTel()">{{phone}}</a></span></p>
+			</div>
+			<button @tap="checkVer()" type="button" class="mui-btn mui-btn-block mui-btn-outlined">检测新版本</button>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" src="../js/vue.min.js" ></script>
+	<script type="text/javascript" src="../js/vue-html5plus.js" ></script>
+	<script type="text/javascript" src="../js/common.js" ></script>
+	<script type="text/javascript">
+		(function(_, w, u) {
+			App({
+				el: '#app',
+				data: {
+					version:'1.0.0',
+					phone:'13654265964'
+				},
+				plusReady: {
+					init: function() {
+						self = this;
+						plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+						    self.version = inf.version || '1.0.0';
+						});
+					}
+				},
+				methods: {
+					toTel:function(){
+						plus.device.dial(self.phone,true);
+					},
+					checkVer:function(){//检查版本
+						
+					}
+				},
+				domReady: function() {
+					_.init(),_(".mui-scroll-wrapper").scroll();
+				}
+			})
+		})(mui, window, util)
+	</script>
+</html>

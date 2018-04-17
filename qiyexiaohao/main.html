@@ -199,7 +199,7 @@
 				<form class="mui-input-group">
 					<div class="mui-input-row">
 						<label class="f"></label>
-						<label @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></label>
+						<label v-if="isShowDelInput" @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></label>
 						<input type="text" placeholder="请输入号码搜索" maxlength="15" readonly="readonly" v-model="inputKey">
 					</div>
 				</form>
@@ -302,18 +302,17 @@
 					inputKey: '',
 					popupVisible: false,
 					filter_resultShow: false,
-					bottom_handle: true,
+					bottom_handle: false,
 					allLoaded: false,
 					isToDel: true, //是否显示取消
 					delNumber:0,//删除数量
-					checkedArr:[]
+					checkedArr:[],
+					isShowDelInput:false//是否显示
 				},
 				plusReady: {
 					init: function() {
 						currentWeb = plus.webview.currentWebview();
-						console.log("plusReady init1===" + this.bottom_handle);
 						self = this;
-						console.log("plusReady init2===" + self.bottom_handle);
 					}
 				},
 				methods: {
@@ -332,21 +331,26 @@
 						if(self.inputKey.length >= 0) {
 							self.filter_resultShow = true;
 							self.bottom_handle = true;
+							self.hiddenTabbar();
 						} else {
 							self.filter_resultShow = false;
 							self.bottom_handle = false;
+							self.showTabbar();
 						}
 						if('close' == key) {
 							self.bottom_handle = false;
 							_('#keyborde_div').popover('hide');
-						} else if('change' == key) {
+							self.showTabbar();
+						} else if('change' == key) {//切换
 							_("#keyborde_div").popover('show');
 							_('#middlePopover').popover('toggle');
-						} else if('del' == key) {
+							self.showTabbar();
+						} else if('del' == key) {//删除输入号码
 							self.inputKey = self.inputKey.substr(0, self.inputKey.length - 1);
 							if(self.inputKey.length == 0) {
 								self.filter_resultShow = false;
 								self.bottom_handle = false;
+								self.showTabbar();
 							}
 						} else if('tel' == key) {
 							plus.device.dial(self.inputKey, false);
@@ -377,11 +381,26 @@
 						console.log("value===" + self.checkedArr)
 					},
 					toggleTabbar:function(){
-						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
+						var viewStyle = currentWeb.getStyle();//toggle隐藏tabbar
+						console.log("viewStyle.bottom==" + viewStyle.bottom);
 						if(viewStyle.bottom=='0'){
 			                currentWeb.setStyle({bottom:'51px'});
 			            }else{
 			                currentWeb.setStyle({bottom:'0'});
+			            }
+					},
+					hiddenTabbar:function(){
+						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
+						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
+						if(viewStyle.bottom != '0'){
+			                currentWeb.setStyle({bottom:'0'});
+			            }
+					},
+					showTabbar:function(){
+						var viewStyle = currentWeb.getStyle();//动态显示tabbar
+						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
+						if(viewStyle.bottom != '51px'){
+			                currentWeb.setStyle({bottom:'51px'});
 			            }
 					}
 				},
