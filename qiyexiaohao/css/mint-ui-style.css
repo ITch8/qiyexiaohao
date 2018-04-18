@@ -823,7 +823,7 @@
 .mint-tab-item-label {
 	color: inherit;
 	font-size: 15px;
-	line-height: 1
+	line-height: 20px;
 }
 
 .mint-tab-container-item {
@@ -855,11 +855,13 @@
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-	text-align: center
+	text-align: center;
+	border-bottom: 1px solid #dedede;
 }
 
 .mint-navbar .mint-tab-item {
-	padding: 13px 0;
+	padding: 5px 0;
+	border-right: 1px solid #dedede;
 	font-size: 15px
 }
 
@@ -868,9 +870,8 @@
 }
 
 .mint-navbar .mint-tab-item.is-selected {
-	border-bottom: 3px solid #26a2ff;
-	color: #26a2ff;
-	border-right: 1px solid #dedede;
+	border-bottom: 1px solid #00acf8;
+	color: #00acf8;
 }
 
 .mint-navbar.is-fixed {
