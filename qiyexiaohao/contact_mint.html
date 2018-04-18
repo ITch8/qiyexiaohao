@@ -13,10 +13,10 @@
 
 	<body>
 		<div id="app">
-			<!--<header class="mui-bar mui-bar-nav">
+			<header class="mui-bar mui-bar-nav">
 				<h1 class="mui-title">联系人</h1>
 				<a class="mui-icon mui-icon-plusempty mui-pull-right" @tap="toAddContact"></a>
-			</header>-->
+			</header>
 			<div class="mui-content">
 				<form class="mui-input-group" @submit.prevent="search">
 					<mt-search v-model="value" cancel-text="取消" placeholder="搜索"></mt-search>
@@ -44,52 +44,52 @@
 				data: {
 					arrContacts: [],
 					arrUfirst: [],
-					contactsData: [{"ufirst":"A","dataArr":[{"displayName":"阿达","wordsCode":"ad","ufirst":"A","phoneNumber":"135 5556 8880"}]},{"ufirst":"B","dataArr":[{"displayName":"巴德","wordsCode":"bd","ufirst":"B","phoneNumber":"25896687455"}]},{"ufirst":"C","dataArr":[{"displayName":"陈奕迅","wordsCode":"cyx","ufirst":"C","phoneNumber":"2658 8669"}]},{"ufirst":"G","dataArr":[{"displayName":"国贸","wordsCode":"gm","ufirst":"G","phoneNumber":"135 1079 3830"}]},{"ufirst":"H","dataArr":[{"displayName":"华为客服","wordsCode":"hwkf","ufirst":"H","phoneNumber":"4008308300"}]},{"ufirst":"L","dataArr":[{"displayName":"李白","wordsCode":"lb","ufirst":"L","phoneNumber":"135 3070 6802"},{"displayName":"刘德华","wordsCode":"ldh","ufirst":"L","phoneNumber":"136 5236 9965"}]},{"ufirst":"W","dataArr":[{"displayName":"王大锤","wordsCode":"wdc","ufirst":"W","phoneNumber":"135 1079 2830"}]},{"ufirst":"X","dataArr":[{"displayName":"小红","wordsCode":"xh","ufirst":"X","phoneNumber":"135 4862 8368"}]},{"ufirst":"Z","dataArr":[{"displayName":"张柏芝","wordsCode":"zbz","ufirst":"Z","phoneNumber":"6588 8996"}]},{"ufirst":"A","dataArr":[{"displayName":"阿达","wordsCode":"ad","ufirst":"A","phoneNumber":"135 5556 8880"}]},{"ufirst":"B","dataArr":[{"displayName":"巴德","wordsCode":"bd","ufirst":"B","phoneNumber":"25896687455"}]},{"ufirst":"C","dataArr":[{"displayName":"陈奕迅","wordsCode":"cyx","ufirst":"C","phoneNumber":"2658 8669"}]},{"ufirst":"G","dataArr":[{"displayName":"国贸","wordsCode":"gm","ufirst":"G","phoneNumber":"135 1079 3830"}]},{"ufirst":"H","dataArr":[{"displayName":"华为客服","wordsCode":"hwkf","ufirst":"H","phoneNumber":"4008308300"}]},{"ufirst":"L","dataArr":[{"displayName":"李白","wordsCode":"lb","ufirst":"L","phoneNumber":"135 3070 6802"},{"displayName":"刘德华","wordsCode":"ldh","ufirst":"L","phoneNumber":"136 5236 9965"}]},{"ufirst":"W","dataArr":[{"displayName":"王大锤","wordsCode":"wdc","ufirst":"W","phoneNumber":"135 1079 2830"}]},{"ufirst":"X","dataArr":[{"displayName":"小红","wordsCode":"xh","ufirst":"X","phoneNumber":"135 4862 8368"}]},{"ufirst":"Z","dataArr":[{"displayName":"张柏芝","wordsCode":"zbz","ufirst":"Z","phoneNumber":"6588 8996"}]}],
+					contactsData: [],
 					value: '',
 					popupVisible: true
 				},
 				plusReady: {
 					init: function() {
 						self = this;
-//						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
-//							addressbook.find(["displayName", "phoneNumbers"], function(contacts) {
-//								console.log('contacts1===' + JSON.stringify(contacts));
-//								for(var i = 0, len = contacts.length; i < len; i++) {
-//									contact = {};
-//									contact.displayName = contacts[i].displayName;
-//									contact.wordsCode = Pinyin.getWordsCode(contacts[i].displayName || '');
-//									contact.ufirst = Pinyin._ucfirstName(contact.wordsCode);
-//									contact.phoneNumber = contacts[i].phoneNumbers[0].value;
-//									self.arrContacts.push(contact);
-//									self.arrUfirst.push(contact.ufirst); //存放首字母
-//									self.arrUfirst.sort();
-//								}
-//								self.arrUfirst = self.unique(self.arrUfirst);
-//								var obj = {},
-//									contactsDataTmp = [];
-//								self.arrUfirst.forEach(function(item, index) {
-//									obj = {
-//										ufirst: "A",
-//										dataArr: []
-//									};
-//									self.arrContacts.forEach(function(o, i) {
-//										if(item == o.ufirst) {
-//											obj.ufirst = item;
-//											obj.dataArr.push(o)
-//										}
-//									})
-//									contactsDataTmp.push(obj);
-//								})
-//								self.contactsData = contactsDataTmp; //赋值
-//								console.log("contacts====" + JSON.stringify(self.contactsData));
-//							}, function() {
-//								mui.toast("获取电话簿失败 ");
-//							}, {
-//								multiple: true
-//							});
-//						}, function(e) {
-//							mui.toast("获取电话簿失败 " + e.message);
-//						});
+						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
+							addressbook.find(["displayName", "phoneNumbers"], function(contacts) {
+								console.log('contacts1===' + JSON.stringify(contacts));
+								for(var i = 0, len = contacts.length; i < len; i++) {
+									contact = {};
+									contact.displayName = contacts[i].displayName;
+									contact.wordsCode = Pinyin.getWordsCode(contacts[i].displayName || '');
+									contact.ufirst = Pinyin._ucfirstName(contact.wordsCode);
+									contact.phoneNumber = contacts[i].phoneNumbers[0].value;
+									self.arrContacts.push(contact);
+									self.arrUfirst.push(contact.ufirst); //存放首字母
+									self.arrUfirst.sort();
+								}
+								self.arrUfirst = self.unique(self.arrUfirst);
+								var obj = {},
+									contactsDataTmp = [];
+								self.arrUfirst.forEach(function(item, index) {
+									obj = {
+										ufirst: "A",
+										dataArr: []
+									};
+									self.arrContacts.forEach(function(o, i) {
+										if(item == o.ufirst) {
+											obj.ufirst = item;
+											obj.dataArr.push(o)
+										}
+									})
+									contactsDataTmp.push(obj);
+								})
+								self.contactsData = contactsDataTmp; //赋值
+								console.log("contacts====" + JSON.stringify(self.contactsData));
+							}, function() {
+								mui.toast("获取电话簿失败 ");
+							}, {
+								multiple: true
+							});
+						}, function(e) {
+							mui.toast("获取电话簿失败 " + e.message);
+						});
 					}
 				},
 				methods: {

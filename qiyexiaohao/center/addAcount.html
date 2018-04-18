@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加账号</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<style>
+			.mui-content {
+				background-color: #fff;
+			}
+			.point{
+			    font-weight: bold;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加账号</h1>
+		</header>
+		<div class="mui-content mui-fullscreen mui-scroll-wrapper" id="app">
+			<div class="mui-scroll mui-text-center">
+				<img style="margin: 20px 0 50px;" src="../img/logo.png" />
+				<div class="mui-row">
+					<div class="mui-col-sm-7 mui-col-xs-7">
+						<div class="color_333" style="margin: 10px">135107921830</div>
+						<div class="color_333"><span class="point main-color">·</span>当前使用</div>
+					</div>
+					<div class="mui-col-sm-5 mui-col-xs-5" style="text-align: left;">
+						<img src="../img/medical-add.png" style="width: 60px;margin-left: 3px;"/>
+						<div style="margin: 10px 0;">添加账号</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+	<script type="text/javascript" src="../js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script type="text/javascript">
+		(function(_, w, u) {
+			App({
+				el: '#app',
+				data: {
+				},
+				plusReady: {
+					init: function() {
+						self = this;
+					}
+				},
+				methods: {
+					toTel: function() {
+					}
+				},
+				domReady: function() {
+					_.init(), _(".mui-scroll-wrapper").scroll();
+				}
+			})
+		})(mui, window, util)
+	</script>
+
+</html>

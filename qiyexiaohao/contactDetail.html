@@ -77,10 +77,9 @@
 					<mt-tab-container-item id="1">
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell mui-media">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 								<div class="mui-media-body">
 									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span><span class="mui-icon mui-icon-info mui-pull-right span_right"></span>
+									<span class="i_flag">副1</span>
 									<p>广东广州 </p>
 								</div>
 							</li>
@@ -123,21 +122,6 @@
 						</ul>
 					</mt-tab-container-item>
 				</mt-tab-container>
-
-				<!--<ul class="mui-table-view mui-grid-view mui-grid-9">
-					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
-						<a href="#">
-							<span class="mui-icon mui-icon-plusempty"></span>
-							<div class="mui-media-body">新建</div>
-						</a>
-					</li>
-					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
-						<a href="#">
-							<span class="mui-icon mui-icon-person"></span>
-							<div class="mui-media-body">添加到联系人</div>
-						</a>
-					</li>
-				</ul>-->
 			</div>
 			<button @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除联系人</button>
 		</div>
@@ -160,33 +144,14 @@
 					}
 				},
 				methods: {
-					addContact: function(givenName, phoneNumbers) { //往通讯录添加新联系人
-						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
-							// 向通讯录中添加联系人
-							var contact = addressbook.create();
-							contact.name = {
-								givenName: "王安"
-							};
-							contact.phoneNumbers = [{
-								type: "手机",
-								value: "88888888",
-								preferred: true
-							}];
-							contact.save();
-
-							//TODO 更新联系人列表
-						}, function(e) {
-							alert("Get address book failed: " + e.message);
-						});
-					},
 					toDel: function() {
 						//删除通话记录
-						plus.nativeUI.confirm("确定删除所选号码的通话记录?", function(e) {
+						plus.nativeUI.confirm("确定删除所选联系人吗?", function(e) {
 							if(e.index == 1) {
 								console.log("11");
 							}
 						}, {
-							"title": "删除通话记录",
+							"title": "删除联系人",
 							"buttons": ["取消", "删除"]
 						})
 					},
