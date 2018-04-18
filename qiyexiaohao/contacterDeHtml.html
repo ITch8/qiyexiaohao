@@ -3,10 +3,9 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>联系人详情</title>
+		<title>通话记录</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="css/mint-ui-style.css" />
 		<link rel="stylesheet" href="css/common.css" />
 		<style>
 			.bottom_del_div {
@@ -49,12 +48,13 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">联系人详情</h1>
+			<h1 class="mui-title">通话记录</h1>
 		</header>
 		<div id="app" class="mui-content mui-scroll-wrapper mui-fullscreen">
 			<div class="mui-scroll">
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 						<div class="mui-media-body">
 							<span class="color_333">13510792830</span>
 							<span class="i_flag">副1</span><span class="mui-icon mui-icon-info mui-pull-right span_right"></span>
@@ -62,62 +62,7 @@
 						</div>
 					</li>
 				</ul>
-				<mt-navbar v-model="selected">
-					<mt-tab-item id="1">详情</mt-tab-item>
-					<mt-tab-item id="2">通话记录</mt-tab-item>
-				</mt-navbar>
-				<mt-tab-container v-model="selected">
-					<mt-tab-container-item id="1">
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell mui-media">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span><span class="mui-icon mui-icon-info mui-pull-right span_right"></span>
-									<p>广东广州 </p>
-								</div>
-							</li>
-						</ul>
-					</mt-tab-container-item>
-					<mt-tab-container-item id="2">
-						<ul id="listData" class="mui-table-view">
-							<li @tap="toTel()" class="mui-table-view-cell mui-media">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
-									<p>广东广州 4月9日 呼入12分21秒</p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
-									<p>广东广州 4月9日 呼入12分21秒</p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
-									<p>广东广州 4月9日 呼入12分21秒</p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
-									<p>广东广州 4月9日 呼入12分21秒</p>
-								</div>
-							</li>
-						</ul>
-					</mt-tab-container-item>
-				</mt-tab-container>
-
-				<!--<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
 						<a href="#">
 							<span class="mui-icon mui-icon-plusempty"></span>
@@ -130,9 +75,43 @@
 							<div class="mui-media-body">添加到联系人</div>
 						</a>
 					</li>
-				</ul>-->
+				</ul>
+				<ul id="listData" class="mui-table-view">
+					<li @tap="toTel()" class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
+							<p>广东广州 4月9日 呼入12分21秒</p>
+						</div>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
+							<p>广东广州 4月9日 呼入12分21秒</p>
+						</div>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
+							<p>广东广州 4月9日 呼入12分21秒</p>
+						</div>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+						<div class="mui-media-body">
+							<span class="color_333">13510792830</span>
+							<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
+							<p>广东广州 4月9日 呼入12分21秒</p>
+						</div>
+					</li>
+				</ul>
 			</div>
-			<button @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除联系人</button>
+			<button @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除通话记录</button>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
@@ -144,9 +123,7 @@
 		(function(_, w, u) {
 			App({
 				el: '#app',
-				data: {
-					selected: '1'
-				},
+				data: {},
 				plusReady: {
 					init: function() {
 						self = this;

@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>添加联系人</title>
+		<title>我的副号</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/mint-ui-style.css" />
@@ -12,14 +12,21 @@
 			.mg5 {
 				margin: 5px 0;
 			}
-			.form_bottom .mui-input-group:before,.form_bottom .mui-input-group:after,.form_bottom .mui-table-view:before,.form_bottom .mui-table-view:after,.form_bottom .mui-input-group .mui-input-row:after{
+			
+			.form_bottom .mui-input-group:before,
+			.form_bottom .mui-input-group:after,
+			.form_bottom .mui-table-view:before,
+			.form_bottom .mui-table-view:after,
+			.form_bottom .mui-input-group .mui-input-row:after {
 				height: 0;
 			}
+			
 			.bottom_del_div {
 				position: fixed;
 				bottom: 0;
 				z-index: 9;
 			}
+			
 			#middleP {
 				top: 0 !important;
 				left: 0 !important;
@@ -28,20 +35,60 @@
 				margin: auto;
 				height: 100px;
 			}
+			
+			.i_flag {
+				padding: 3px;
+				margin: 0 0 0 4px;
+			}
+			.mui-table-view {
+    			margin-top: 8px;
+			}
+			.mui-table-view-cell>div{
+				margin: 5px 0;
+			}
+			.btns{
+				margin: 10% 0 0;text-align: center;
+			}
+			.btns>button{
+			    width: 100px;border-radius: 10px;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<button @tap="openView('center/setting.html')" class="mui-btn-link mui-pull-left">活动</button>
 				<h1 class="mui-title">我的副号</h1>
 				<a @tap="openView('center/setting.html')" class="mui-icon mui-icon-gear mui-pull-right"></a>
 			</header>
 			<div class="mui-content mui-fullscreen mui-scroll-wrapper">
 				<div class="mui-scroll">
-					<form class="mui-input-group">
-					</form>
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<div>15863498562</div>
+							<div><span class="i_flag">主机</span></div>
+							<span class="mui-badge mui-badge-inverted">退出登录</span>
+						</li>
+					</ul>
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<div>15863498562</div>
+							<div><span class="i_flag">主机</span></div>
+							<span class="mui-badge mui-badge-primary">设置</span>
+						</li>
+					</ul>
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<div>15863498562</div>
+							<div><span class="i_flag">主机</span></div>
+							<span class="mui-badge mui-badge-primary">设置</span>
+						</li>
+					</ul>
+					<div class="btns">
+						<button type="button" class="mui-btn mui-btn-blue" style="margin-right: 50px;">添加账号</button>
+						<button type="button" class="mui-btn mui-btn-blue">联系客服</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -81,10 +128,10 @@
 							alert("Get address book failed: " + e.message);
 						});
 					},
-					toAdd:function(){
-						
+					toAdd: function() {
+
 					},
-					openView:function(url){
+					openView: function(url) {
 						w.openView(url);
 					}
 				},

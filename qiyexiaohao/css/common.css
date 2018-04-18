@@ -1,21 +1,32 @@
-.main-color{
+.main-color {
 	color: #00acf8;
 }
 
-.color_333{
+.color_333 {
 	color: #333;
 }
-header{
-	background-color: #00acf8 !important;
-}
-header>a,header>h1{
-	color: #fff;
+
+header {
+	background-color: #fff !important;
 }
 
-.font_15{
+header>a,
+header>h1 {
+	color: #333;
+}
+
+.font_15 {
 	font-size: 15px
 }
 
-.font-size-12{
+.font-size-12 {
 	font-size: 12px
+}
+
+.i_flag {
+	background: #00acf8;
+	color: #fff;
+	font-size: 8px;
+	padding: 2px;
+	margin: 0 0 0 10px;
 }

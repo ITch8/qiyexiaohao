@@ -1002,10 +1002,10 @@ input[type=submit]:disabled {
 
 .mui-btn-blue,
 .mui-btn-primary,
-input[type=submit] {
+.input[type=submit] {
 	color: #fff;
-	border: 1px solid #007aff;
-	background-color: #007aff
+	border: 1px solid #00acf8;
+	background-color: #00acf8
 }
 
 .mui-btn-blue.mui-active:enabled,
@@ -1292,7 +1292,7 @@ input[type=submit]:enabled:active {
 }
 
 .mui-bar-nav {
-	top: 0;
+	top: 0;border-bottom: 1px solid #dedede;
 }
 
 .mui-bar-nav~.mui-content .mui-anchor {
@@ -1321,7 +1321,7 @@ input[type=submit]:enabled:active {
 	padding: 0;
 	text-align: center;
 	white-space: nowrap;
-	color: #fff
+	color: #333
 }
 
 .mui-title a {
@@ -1406,7 +1406,7 @@ input[type=submit]:enabled:active {
 	line-height: 44px;
 	top: 0;
 	padding: 0;
-	color: #fff;
+	color: #333;
 	border: 0
 }
 
@@ -1508,7 +1508,7 @@ input[type=submit]:enabled:active {
 	font-size: 12px;
 	line-height: 1;
 	display: inline-block;
-	padding: 3px 6px;
+	padding: 6px 10px;
 	color: #333;
 	border-radius: 100px;
 	background-color: rgba(0, 0, 0, .15)
@@ -1523,7 +1523,7 @@ input[type=submit]:enabled:active {
 .mui-badge-blue,
 .mui-badge-primary {
 	color: #fff;
-	background-color: #007aff
+	background-color: #00acf8
 }
 
 .mui-badge-blue.mui-badge-inverted,
