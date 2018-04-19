@@ -8,6 +8,7 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/mint-ui-style.css" />
 		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
 			.mui-table-view .mui-media-object {
 				position: relative;
@@ -71,9 +72,18 @@
 				margin: auto;
 				height: 100px;
 			}
+			
 			.mui-input-row label {
 				float: right;
+				padding: 10px 10px 0 30px;
 			}
+			
+			.mui-input-row button {
+				padding: 0 5px;
+				border-bottom-left-radius: 50px;
+				border-top-left-radius: 50px;
+			}
+			
 			.mui-input-row label[class='f'] {
 				font-family: 'Helvetica Neue', Helvetica, sans-serif;
 				line-height: 1.1;
@@ -81,9 +91,11 @@
 				width: 25%;
 				padding: 11px 15px;
 			}
-			.mui-input-row label~input{
+			
+			.mui-input-row label~input {
 				width: 50%;
 			}
+			
 			.mui-input-row input[type=text] {
 				text-align: center;
 				padding: 2px 5px;
@@ -99,10 +111,12 @@
 				bottom: 0;
 				z-index: 9;
 			}
-			.mui-table-view{
+			
+			.mui-table-view {
 				margin-bottom: 45px;
 			}
-			.mui-bar-nav.mui-bar .mui-icon{
+			
+			.mui-bar-nav.mui-bar .mui-icon {
 				margin-top: 0;
 			}
 		</style>
@@ -111,39 +125,36 @@
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<button v-if="isToDel" @tap="toggleTopP()" class="mui-btn-link mui-icon mui-icon-bars mui-pull-left"></button>
+				<button v-if="isToDel" @tap="toggleTopP()" class="mui-btn-link mui-icon iconfont icon-dianjihoudesanheng mui-pull-left"></button>
 				<button v-else @tap="chooseAll()" class="mui-btn-link mui-pull-left">{{chooseText}}</button>
 				<h1 class="mui-title">{{title}}</h1>
-				<button v-if="isToDel" @tap="toggleDel()" class="mui-btn-link mui-icon mui-icon-trash mui-pull-right"></button>
+				<button v-if="isToDel" @tap="toggleDel()" class="mui-btn-link mui-icon iconfont icon-shanchu mui-pull-right"></button>
 				<button v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</button>
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
 						<li @tap="toTelDetail()" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 							<div class="mui-media-body">
 								<span class="color_333">13510792830</span>
 								<span class="i_flag">副1</span>
-								<p>广东广州 4月9日 呼入12分21秒 <span class="mui-icon mui-icon-info mui-pull-right span_right"></span></p>
+								<p><span class="mui-icon iconfont icon-hurujiantou"></span>广东广州 4月9日 呼入12分21秒 <span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 							</div>
 							<input v-if="!isToDel" type="checkbox" value="1" v-model="checkedArr" />
 						</li>
 						<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 							<div class="mui-media-body">
 								<span class="color_333">13510792830</span>
 								<span class="i_flag">副1</span>
-								<p>广东广州 4月9日 呼入12分21秒 <span class="mui-icon mui-icon-info mui-pull-right span_right"></span></p>
+								<p><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒 <span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 							</div>
 							<input v-if="!isToDel" type="checkbox" value="2" v-model="checkedArr" />
 						</li>
 						<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
-							<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
 							<div class="mui-media-body">
 								<span class="color_333">13510792830</span>
 								<span class="i_flag">副1</span>
-								<p>广东广州 4月9日 呼入12分21秒 <span class="mui-icon mui-icon-info mui-pull-right span_right"></span></p>
+								<p><span class="mui-icon iconfont icon-weijiejiantou"></span>广东广州 4月9日 呼入12分21秒 <span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 							</div>
 							<input v-if="!isToDel" type="checkbox" value="3" v-model="checkedArr" />
 						</li>
@@ -161,7 +172,7 @@
 		            	时间：2018-04-13
 		            	描述：底部删除按钮
 		            -->
-					<button @tap="toDel()" v-show="!isToDel" type="button" class="bottom_del_div mui-btn mui-btn-block">删除({{checkedArr.length}})</button>
+				<button @tap="toDel()" v-show="!isToDel" type="button" class="bottom_del_div mui-btn mui-btn-block">删除({{checkedArr.length}})</button>
 			</div>
 			<!--
             	时间：2018-04-13
@@ -190,8 +201,7 @@
 			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
-						<label class="f"></label>
-						<label v-if="isShowDelInput" @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></label>
+						<label v-if="isShowDelInput"><button type="button"  @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></button></label>
 						<input type="text" placeholder="请输入号码搜索" maxlength="15" readonly="readonly" v-model="inputKey">
 					</div>
 				</form>
@@ -284,7 +294,8 @@
 	<script type="text/javascript">
 		var app = null;
 		(function(_, w, u) {
-			var self = null,currentWeb = null;
+			var self = null,
+				currentWeb = null;
 			app = new App({
 				el: '#app',
 				data: {
@@ -292,14 +303,14 @@
 					chooseText: '全选',
 					list: [],
 					inputKey: '',
-					popupVisible: false,
-					filter_resultShow: false,
+					popupVisible: false,//popup显示
+					filter_resultShow: false,//筛选结果显示
 					bottom_handle: false,
 					allLoaded: false,
 					isToDel: true, //是否显示取消
-					delNumber:0,//删除数量
-					checkedArr:[],
-					isShowDelInput:false//是否显示
+					delNumber: 0, //删除数量
+					checkedArr: [],
+					isShowDelInput: false
 				},
 				plusReady: {
 					init: function() {
@@ -310,6 +321,11 @@
 				methods: {
 					toggleDel: function() { //控制删除
 						self.isToDel = false;
+						if(self.isToDel){
+							self.showTabbar();
+						}else{
+							self.hiddenTabbar();
+						}
 					},
 					chooseAll: function() {
 						//TODO 赋值全部数据给self.checkedArr
@@ -319,29 +335,32 @@
 							w.openView("contactDetail.html")
 						}
 					},
-					input_key: function(key) {
+					input_key: function(key) {//输入
 						if(self.inputKey.length >= 0) {
 							self.filter_resultShow = true;
 							self.bottom_handle = true;
+							self.isShowDelInput =  true;
 							self.hiddenTabbar();
 						} else {
 							self.filter_resultShow = false;
 							self.bottom_handle = false;
+							self.isShowDelInput =  false;
 							self.showTabbar();
 						}
 						if('close' == key) {
 							self.bottom_handle = false;
 							_('#keyborde_div').popover('hide');
 							self.showTabbar();
-						} else if('change' == key) {//切换
+						} else if('change' == key) { //切换
 							_("#keyborde_div").popover('show');
 							_('#middlePopover').popover('toggle');
 							self.showTabbar();
-						} else if('del' == key) {//删除输入号码
+						} else if('del' == key) { //删除输入号码
 							self.inputKey = self.inputKey.substr(0, self.inputKey.length - 1);
 							if(self.inputKey.length == 0) {
 								self.filter_resultShow = false;
 								self.bottom_handle = false;
+								self.isShowDelInput =  false;
 								self.showTabbar();
 							}
 						} else if('tel' == key) {
@@ -364,36 +383,49 @@
 					},
 					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
-						self.toggleTabbar();
+						if(self.popupVisible){
+							self.hiddenTabbar();
+						}else{
+							self.showTabbar();
+						}
 					},
 					cancelDel: function() {
 						self.isToDel = true;
+						self.showTabbar();
 					},
-					toDel:function(){
+					toDel: function() {
 						console.log("value===" + self.checkedArr)
 					},
-					toggleTabbar:function(){
-						var viewStyle = currentWeb.getStyle();//toggle隐藏tabbar
+					toggleTabbar: function() {
+						var viewStyle = currentWeb.getStyle(); //toggle隐藏tabbar
 						console.log("viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom=='0'){
-			                currentWeb.setStyle({bottom:'51px'});
-			            }else{
-			                currentWeb.setStyle({bottom:'0'});
-			            }
+						if(viewStyle.bottom == '0') {
+							currentWeb.setStyle({
+								bottom: '51px'
+							});
+						} else {
+							currentWeb.setStyle({
+								bottom: '0'
+							});
+						}
 					},
-					hiddenTabbar:function(){
-						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
+					hiddenTabbar: function() {
+						var viewStyle = currentWeb.getStyle(); //动态隐藏tabbar
 						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != '0'){
-			                currentWeb.setStyle({bottom:'0'});
-			            }
+						if(viewStyle.bottom != '0') {
+							currentWeb.setStyle({
+								bottom: '0'
+							});
+						}
 					},
-					showTabbar:function(){
-						var viewStyle = currentWeb.getStyle();//动态显示tabbar
+					showTabbar: function() {
+						var viewStyle = currentWeb.getStyle(); //动态显示tabbar
 						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != '51px'){
-			                currentWeb.setStyle({bottom:'51px'});
-			            }
+						if(viewStyle.bottom != '51px') {
+							currentWeb.setStyle({
+								bottom: '51px'
+							});
+						}
 					}
 				},
 				domReady: function() {

@@ -128,7 +128,9 @@
 					"js/mui.min.js"
 				],
 				"priority": 0,
-				"refer": []
+				"refer": [
+					"center/setting.html"
+				]
 			},
 			"sendMsg.html": {
 				"href": "sendMsg.html",
@@ -234,6 +236,14 @@
 				"resources": [],
 				"refer": [
 					"sendMsg.html"
+				],
+				"priority": 0
+			},
+			"center/setting.html": {
+				"resources": [],
+				"refer": [
+					"center/feedback.html",
+					"center/about.html"
 				],
 				"priority": 0
 			}

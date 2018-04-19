@@ -6,40 +6,165 @@
 		<title>发送短信</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/iconfont.css" />
+		<style>
+			.mui-input-row label~input {
+				width: 65%;
+				float: left;
+			}
+			
+			.mui-input-row label[class='f'] {
+				font-family: 'Helvetica Neue', Helvetica, sans-serif;
+				line-height: 1.1;
+				float: right;
+				width: 10%;
+				padding: 11px 15px;
+			}
+			
+			footer {
+				position: fixed;
+				width: 100%;
+				height: auto;
+				min-height: 50px;
+				border-top: solid 1px #bbb;
+				left: 0;
+				bottom: 0;
+				overflow: hidden;
+				padding: 0 50px;
+				background-color: #fafafa;
+			}
+			
+			.footer-left {
+				position: absolute;
+				width: 50px;
+				height: 50px;
+				left: 0;
+				top: 0;
+				text-align: center;
+				vertical-align: middle;
+				line-height: 100%;
+				padding: 12px 4px;
+			}
+			
+			.footer-center .input-text {
+				background: #fff;
+				border: solid 1px #ddd;
+				padding: 10px 10px 5px 50px !important;
+				font-size: 16px !important;
+				line-height: 18px !important;
+				font-family: verdana !important;
+				overflow: hidden;
+			}
+			
+			.footer-center [class*=input] {
+				width: 100%;
+				height: 100%;
+				border-radius: 5px;
+			}
+			
+			.footer-center {
+				height: 100%;
+				padding: 5px 0 0;
+			}
+			
+			footer .iconfont {
+				font-size: 20px;
+				margin: 5px 0 0;
+			}
+			
+			.footer-right {
+				position: absolute;
+				width: 50px;
+				height: 50px;
+				right: 0;
+				top: 0;
+				text-align: center;
+				vertical-align: middle;
+				line-height: 100%;
+				padding: 12px 5px;
+				display: inline-block;
+			}
+			
+			textarea {
+				margin-bottom: 0;
+			}
+			
+			.i_flag {
+				position: relative;
+				bottom: 20px;
+				left: 45px;
+			}
+		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">新短信</h1>
-		</header>
-		<div id="app" class="mui-content">
-		    
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon iconfont icon-jiantou mui-pull-left"></a>
+				<h1 class="mui-title">新短信</h1>
+				<button @tap="cancel()" class="mui-btn-link mui-pull-right">取消</button>
+			</header>
+			<div class="mui-content">
+				<form class="mui-input-group">
+					<div class="mui-input-row">
+						<label>收件人:</label>
+						<input type="text">
+						<label class="f"><span class="mui-icon iconfont icon-duanxintianjialianxiren"></span></label>
+					</div>
+				</form>
+				<footer>
+					<div class="footer-left">
+						<i id='msg-image' class="mui-icon iconfont icon-xunhuan"></i>
+						<span class="i_flag">主号</span>
+					</div>
+					<div class="footer-center">
+						<textarea type="text" class='input-text' placeholder="输入内容" v-model="msgBody"></textarea>
+					</div>
+					<label class="footer-right">
+					<i class="mui-icon iconfont icon-duanxinfasongjiantou"></i>
+				</label>
+				</footer>
+			</div>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
-	<script type="text/javascript" src="js/vue-tap.js"></script>
-	<script type="text/javascript" src="js/mint-ui.min.js"></script>
-	<script type="text/javascript" src="js/common.js" ></script>
+	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
+			var self = null;
 			App({
 				el: '#app',
 				data: {
+					msgBody:''
 				},
 				plusReady: {
 					init: function() {
+						plus.webview.currentWebview().setStyle({
+							softinputMode: "adjustResize"
+						});
 						self = this;
 					}
 				},
 				methods: {
-					sendMsg:function(toArr,msgBody){
+					sendMsg: function(toArr, msgBody) {
 						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
 						msg.to = ['18611497504', '15811140520'];
-						msg.body = 'This is HTML5 Plus example test message';
-						plus.messaging.sendMessage( msg );
+						msg.body = self.msgBody
+						plus.messaging.sendMessage(msg);
+					},
+					cancel: function() {
+						plus.nativeUI.confirm('是否放弃本次编辑？', function(e) {
+							console.log(e.index);
+							if(e.index == 1) {
+								//TODO 取消
+							}
+						}, {
+							"title": "提示",
+							"buttons": ["否", "是"]
+						})
 					}
 				},
 				domReady: function() {
