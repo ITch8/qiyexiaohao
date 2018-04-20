@@ -2,46 +2,89 @@
   "sendMsg.html": {
     "href": "sendMsg.html",
     "resources": [
-      "js/common.js"
+      "css/common.css",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
     ],
     "priority": 0
   },
   "msg.html": {
     "href": "msg.html",
     "resources": [
+      "css/common.css",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
+    ],
+    "refer": [],
+    "priority": 0
+  },
+  "contactDetail.html": {
+    "href": "contactDetail.html",
+    "resources": [
       "js/mui.min.js",
       "js/vue.min.js",
-      "js/mint-ui.min.js",
       "js/vue-html5plus.js",
+      "js/mint-ui.min.js",
       "js/common.js",
       "css/mui.min.css",
       "fonts/mui.ttf",
-      "css/mint-ui-style.css"
+      "css/mint-ui-style.css",
+      "css/common.css",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
     ],
-    "refer": [
-      "sendMsg.html"
+    "refer": [],
+    "priority": 1
+  },
+  "my.html": {
+    "href": "my.html",
+    "resources": [
+      "js/vue.min.js",
+      "js/vue-html5plus.js",
+      "js/common.js",
+      "css/common.css",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
     ],
-    "priority": 0
+    "priority": 2
+  },
+  "addContact.html": {
+    "href": "addContact.html",
+    "resources": [
+      "css/mint-ui-style.css",
+      "css/common.css",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
+    ],
+    "priority": 3
+  },
+  "contact_mint.html": {
+    "href": "contact_mint.html",
+    "resources": [
+      "css/common.css",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
+    ],
+    "refer": [],
+    "priority": 3
   },
   "main.html": {
     "href": "main.html",
     "resources": [
-      "js/vue.min.js",
-      "js/mint-ui.min.js",
-      "js/vue-html5plus.js",
-      "js/common.js",
-      "css/mui.min.css",
-      "fonts/mui.ttf",
-      "css/mint-ui-style.css"
+      "css/common.css",
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
     ],
-    "priority": 3
+    "refer": [],
+    "priority": 4
   },
   "index.html": {
     "href": "index.html",
-    "resources": [],
-    "refer": [
-      "msg.html"
+    "resources": [
+      "css/iconfont.css",
+      "fonts/iconfont.ttf"
     ],
+    "refer": [],
     "priority": 0
   }
 }

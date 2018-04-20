@@ -17,7 +17,7 @@
 			}
 			
 			.mui-table-view {
-				margin-bottom: 10px;
+				margin-bottom: 5px;
 			}
 			
 			.i_flag {
@@ -50,7 +50,9 @@
 			.mint-navbar a{
 				color: #333;
 			}
-				
+			#listData .mui-table-view-cell{
+				padding: 6px 10px;
+			}
 		</style>
 	</head>
 
@@ -62,7 +64,7 @@
 		<div id="app" class="mui-content mui-scroll-wrapper mui-fullscreen">
 			<div class="mui-scroll">
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell mui-media">
+					<li @tap="toMsg()" class="mui-table-view-cell mui-media">
 						<div class="mui-media-body">
 							<span class="color_333">13510792830</span>
 							<span class="i_flag">副1</span><span class="mui-icon iconfont icon-dingdan-duanxin  mui-pull-right span_right"></span>
@@ -71,8 +73,8 @@
 					</li>
 				</ul>
 				<mt-navbar v-model="selected">
-					<mt-tab-item id="1"><span class="mui-icon iconfont icon-lianxiren"></span><br>详情</mt-tab-item>
-					<mt-tab-item id="2"><span class="mui-icon iconfont icon-tonghuajilu"></span><br>通话记录</mt-tab-item>
+					<mt-tab-item id="1"><span class="mui-icon mui-icon-person"></span><br>详情</mt-tab-item>
+					<mt-tab-item id="2"><span class="mui-icon mui-icon-phone"></span><br>通话记录</mt-tab-item>
 				</mt-navbar>
 				<mt-tab-container v-model="selected">
 					<mt-tab-container-item id="1">
@@ -95,35 +97,14 @@
 									<p><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</p>
 								</div>
 							</li>
-							<li class="mui-table-view-cell mui-media">
+							<li @tap="toTel()" class="mui-table-view-cell mui-media">
 								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
+									<span class="color_red">13510792830</span>
 									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
-									<p><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</p>
+									<p><span class="mui-icon iconfont icon-huchujiantou color_red"></span>广东广州 4月9日 呼入</p>
 								</div>
 							</li>
-							<li class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
-									<p><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
-									<p><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
-									<span class="color_333">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
-									<p><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
+							<li @tap="toTel()" class="mui-table-view-cell mui-media">
 								<div class="mui-media-body">
 									<span class="color_333">13510792830</span>
 									<span class="i_flag">副1</span> <span class="mui-pull-right font_15">12:56</span>
@@ -159,7 +140,8 @@
 						//删除通话记录
 						plus.nativeUI.confirm("确定删除所选联系人吗?", function(e) {
 							if(e.index == 1) {
-								console.log("11");
+								_.back();
+								_.toast("已删除")
 							}
 						}, {
 							"title": "删除联系人",
@@ -168,6 +150,9 @@
 					},
 					toTel: function() {
 						plus.device.dial("13510792830", false);
+					},
+					toMsg:function(){
+						w.openView("sendMsg.html")
 					}
 				},
 				domReady: function() {

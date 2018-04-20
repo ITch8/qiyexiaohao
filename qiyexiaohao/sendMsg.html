@@ -90,10 +90,15 @@
 				margin-bottom: 0;
 			}
 			
-			.i_flag {
+			.flag {
 				position: relative;
 				bottom: 20px;
 				left: 45px;
+			}
+			
+			.mui-input-row label {
+				line-height: 20px;
+				height: 40px;
 			}
 		</style>
 	</head>
@@ -108,15 +113,15 @@
 			<div class="mui-content">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
-						<label>收件人:</label>
-						<input type="text">
+						<label class="font_15">收件人:</label>
+						<input type="text" value="王珂">
 						<label class="f"><span class="mui-icon iconfont icon-duanxintianjialianxiren"></span></label>
 					</div>
 				</form>
 				<footer>
-					<div class="footer-left">
-						<i id='msg-image' class="mui-icon iconfont icon-xunhuan"></i>
-						<span class="i_flag">主号</span>
+					<div  @tap="change()" class="footer-left">
+						<i class="mui-icon iconfont icon-xunhuan"></i>
+						<span v-bind:class="[isMain ? i_flag : i_flag_2,'flag']">{{cardType}}</span>
 					</div>
 					<div class="footer-center">
 						<textarea type="text" class='input-text' placeholder="输入内容" v-model="msgBody"></textarea>
@@ -138,7 +143,11 @@
 			App({
 				el: '#app',
 				data: {
-					msgBody:''
+					msgBody: '',
+					cardType:'主号',
+					i_flag: 'i_flag',
+  				    i_flag_2: 'i_flag_2',
+					isMain:true//是否是主号
 				},
 				plusReady: {
 					init: function() {
@@ -166,6 +175,15 @@
 							"title": "提示",
 							"buttons": ["否", "是"]
 						})
+					},
+					change:function(){
+						if(self.cardType == "主号"){
+							self.cardType = "副号";
+							self.isMain = false;
+						}else{
+							self.cardType = "主号";
+							self.isMain = true;
+						}
 					}
 				},
 				domReady: function() {
