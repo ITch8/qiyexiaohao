@@ -1091,7 +1091,7 @@ input[type=submit]:enabled:active {
 
 .mui-btn-grey {
 	color: #fff;
-	border: 1px solid #c7c7cc;
+	border: 0;
 	background-color: #c7c7cc
 }
 

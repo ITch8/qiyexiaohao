@@ -11,9 +11,6 @@
 		<link rel="stylesheet" href="js/component/indexList-style.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
-			.mui-bar-nav.mui-bar .mui-icon{
-				margin-top: 0;
-			}
 		</style>
 	</head>
 
@@ -21,7 +18,7 @@
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
 				<h1 class="mui-title">联系人</h1>
-				<button class="mui-btn-link mui-icon mui-icon-plusempty mui-pull-right" @tap="toAddContact"></button>
+				<a class="mui-icon iconfont icon-duanxinxinjianlianxirenjiahao mui-pull-right" @tap="toAddContact"></a>
 			</header>
 			<div class="mui-content">
 				<form class="mui-input-group" @submit.prevent="search">

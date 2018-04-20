@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/iconfont.css" />
+		<style>
+			.login-logo {
+				margin: 18% auto;
+				width: 90px;
+			}
+			
+			.mui-content {
+				background-color: #fff
+			}
+			
+			.login-logo-bg {
+				text-align: center
+			}
+			
+			.login-logo-bg img {
+				height: 70px;
+				width: 68px
+			}
+			
+			#login-form {
+				margin: 30px 30px 0;
+			}
+			
+			#login-form input {
+				padding: 10px 30px 0 2px;
+				font-size: 14px
+			}
+			
+			#login-form button {
+				width: 100%;
+				margin: 40px 0 0;
+				background-color: #00acf8;color: #fff;border: #323232;
+			}
+			
+			.mui-input-row label~input {
+				width: 80%;
+			}
+			
+			.mui-input-row label {
+				width: 20%;
+				padding: 16px 15px;
+			}
+			
+			.mui-input-group .mui-input-row:after,
+			.mui-input-group:after {
+				left: 0;
+			}
+			
+			.mui-input-group:before {
+				height: 0
+			}
+			
+			.mui-input-group:after {
+				height: 0
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon iconfont icon-jiantou mui-pull-left"></a>
+				<h1 class="mui-title">登录</h1>
+			</header>
+			<div class="mui-content mui-fullscreen mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<div class="login-logo">
+						<div class="login-logo-bg">
+							<img src="img/logo.png" />
+						</div>
+					</div>
+					<form id='login-form' class="mui-input-group">
+						<div class="mui-input-row">
+							<label><span class="mui-icon iconfont icon-lianxiren"></span></label>
+							<input type="tel" class="mui-input-clear mui-input" placeholder="請輸入11位手机号" value="">
+						</div>
+						<div class="mui-input-row">
+							<label><span class="mui-icon iconfont icon-suo"></span></label>
+							<input type="password" class="mui-input-clear mui-input" placeholder="請輸入密碼" value="" autocomplete="off">
+						</div>
+						<button type="button" class="mui-btn">立即登录</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script type="text/javascript" src="js/vue.min.js"></script>
+	<script type="text/javascript" src="js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript">
+		(function(_, w, u) {
+			App({
+				el: '#app',
+				data: {},
+				plusReady: {
+					init: function() {
+						
+						self = this;
+					}
+				},
+				methods: {
+					
+				},
+				domReady: function() {
+					_.init(), _(".mui-scroll-wrapper").scroll();
+				}
+			})
+		})(mui, window, util)
+	</script>
+
+</html>

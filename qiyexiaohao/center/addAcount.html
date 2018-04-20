@@ -31,7 +31,7 @@
 						<div class="color_333" style="margin: 10px">135107921830</div>
 						<div class="color_333"><span class="point main-color">·</span>当前使用</div>
 					</div>
-					<div class="mui-col-sm-5 mui-col-xs-5" style="text-align: left;">
+					<div class="mui-col-sm-5 mui-col-xs-5" style="text-align: left;" @tap="openView('../login.html')">
 						<img src="../img/medical-add.png" style="width: 60px;margin-left: 3px;"/>
 						<div style="margin: 10px 0;">添加账号</div>
 					</div>
@@ -55,7 +55,8 @@
 					}
 				},
 				methods: {
-					toTel: function() {
+					openView: function(url) {
+						w.openView(url);
 					}
 				},
 				domReady: function() {

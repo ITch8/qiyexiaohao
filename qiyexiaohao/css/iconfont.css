@@ -60,7 +60,7 @@
 	}
 	
 	.icon-duanxinxinjianlianxirenjiahao:before {
-		content: "\e60c";
+		content: "\e60c";font-size: 15px
 	}
 	
 	.icon-duanxintianjialianxiren:before {

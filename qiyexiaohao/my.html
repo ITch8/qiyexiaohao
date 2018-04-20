@@ -6,8 +6,8 @@
 		<title>我的副号</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="css/mint-ui-style.css" />
 		<link rel="stylesheet" href="css/common.css" />
+		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
 			.mg5 {
 				margin: 5px 0;
@@ -59,7 +59,7 @@
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
 				<h1 class="mui-title">我的副号</h1>
-				<a @tap="openView('center/setting.html')" class="mui-icon mui-icon-gear mui-pull-right"></a>
+				<a @tap="openView('center/setting.html')" class="mui-icon iconfont icon-shezhi mui-pull-right"></a>
 			</header>
 			<div class="mui-content mui-fullscreen mui-scroll-wrapper">
 				<div class="mui-scroll">
@@ -85,8 +85,8 @@
 						</li>
 					</ul>
 					<div class="btns">
-						<button type="button" class="mui-btn mui-btn-blue" style="margin-right: 50px;">添加账号</button>
-						<button type="button" class="mui-btn mui-btn-blue">联系客服</button>
+						<button type="button" class="mui-btn mui-btn-blue" @tap="openView('center/addAcount.html')" style="margin-right: 50px;">添加账号</button>
+						<button type="button" class="mui-btn mui-btn-blue" @tap="openView('center/kefu.html')">联系客服</button>
 					</div>
 				</div>
 			</div>
@@ -95,7 +95,6 @@
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
-	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
@@ -108,28 +107,6 @@
 					}
 				},
 				methods: {
-					addContact: function(givenName, phoneNumbers) { //往通讯录添加新联系人
-						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
-							// 向通讯录中添加联系人
-							var contact = addressbook.create();
-							contact.name = {
-								givenName: "王安"
-							};
-							contact.phoneNumbers = [{
-								type: "手机",
-								value: "88888888",
-								preferred: true
-							}];
-							contact.save();
-
-							//TODO 更新联系人列表
-						}, function(e) {
-							alert("Get address book failed: " + e.message);
-						});
-					},
-					toAdd: function() {
-
-					},
 					openView: function(url) {
 						w.openView(url);
 					}

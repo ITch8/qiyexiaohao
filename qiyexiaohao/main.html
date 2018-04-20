@@ -115,21 +115,17 @@
 			.mui-table-view {
 				margin-bottom: 45px;
 			}
-			
-			.mui-bar-nav.mui-bar .mui-icon {
-				margin-top: 0;
-			}
 		</style>
 	</head>
 
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<button v-if="isToDel" @tap="toggleTopP()" class="mui-btn-link mui-icon iconfont icon-dianjihoudesanheng mui-pull-left"></button>
-				<button v-else @tap="chooseAll()" class="mui-btn-link mui-pull-left">{{chooseText}}</button>
+				<a v-if="isToDel" @tap="toggleTopP()" class="mui-icon iconfont icon-dianjihoudesanheng mui-pull-left"></a>
+				<a v-else @tap="chooseAll()" class="mui-btn-link  mui-pull-left">{{chooseText}}</a>
 				<h1 class="mui-title">{{title}}</h1>
-				<button v-if="isToDel" @tap="toggleDel()" class="mui-btn-link mui-icon iconfont icon-shanchu mui-pull-right"></button>
-				<button v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</button>
+				<a v-if="isToDel" @tap="toggleDel()" class="mui-icon iconfont icon-shanchu mui-pull-right"></a>
+				<a v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</a>
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
