@@ -165,8 +165,8 @@
 		 * 参数默认为0(首页tab bar 的第一个子页面)
 		 * */
 		var i = i || 0; //设置默认值为0 
-		var idArr = ["gohome", "goClinic", "goInfo", "goMycenter"];
-		var main = plus.webview.getWebviewById("tabbar");
+		var idArr = ["main", "msg", "contact", "my"];
+		var main = plus.webview.getWebviewById("index");
 		mui.fire(main, 'goIndex', {
 			id: idArr[i]
 		});

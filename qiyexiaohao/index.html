@@ -13,19 +13,19 @@
 
 	<body>
 		<nav class="mui-bar mui-bar-tab">
-			<a id="defaultTab" class="mui-tab-item mui-active" href="main.html">
+			<a id="main" class="mui-tab-item mui-active" href="main.html">
 				<span class="mui-icon iconfont icon-tongxunlu"></span>
 				<span class="mui-tab-label">通话</span>
 			</a>
-			<a class="mui-tab-item" href="msg.html">
+			<a id="msg" class="mui-tab-item" href="msg.html">
 				<span class="mui-icon iconfont icon-dingdan-duanxin"></span>
 				<span class="mui-tab-label">短信</span>
 			</a>
-			<a class="mui-tab-item" href="contact_mint.html">
-				<i class="mui-icon iconfont icon-lianxiren1"></i>
+			<a id="contact" class="mui-tab-item" href="contact_mint.html">
+				<i class="mui-icon iconfont icon-lianxiren"></i>
 				<span class="mui-tab-label">联系人</span>
 			</a>
-			<a class="mui-tab-item" href="my.html">
+			<a id="my" class="mui-tab-item" href="my.html">
 				<span class="mui-icon iconfont icon-shouji"></span>
 				<span class="mui-tab-label">我的</span>
 			</a>
@@ -50,6 +50,7 @@
 			 //创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
 				var self = plus.webview.currentWebview();
+				console.log("self.id===" + self.id);
 				//首页关闭ios右划
 				self.setStyle({
 					popGesture:"none"
@@ -101,8 +102,8 @@
 			});
 			
 			 //自定义事件，模拟点击“首页选项卡”
-			document.addEventListener('gohome', function() { 
-				var defaultTab = document.getElementById("defaultTab");
+			document.addEventListener('goIndex', function() { 
+				var defaultTab = document.getElementById("main");
 				//模拟首页点击
 				mui.trigger(defaultTab, 'tap');
 				//切换选项卡高亮

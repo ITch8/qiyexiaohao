@@ -11,7 +11,10 @@
       "css/iconfont.css"
     ],
     "refer": [
-      "center/setting.html"
+      "center/setting.html",
+      "center/kefu.html",
+      "center/addAcount.html",
+      "login.html"
     ],
     "priority": 0
   },
@@ -150,6 +153,16 @@
       "css/mint-ui-style.css",
       "css/common.css",
       "css/iconfont.css"
+    ]
+  },
+  "center/addAcount.html": {
+    "refer": [
+      "login.html"
+    ]
+  },
+  "login.html": {
+    "refer": [
+      "index.html"
     ]
   }
 }

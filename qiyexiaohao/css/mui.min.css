@@ -440,14 +440,14 @@ h3 {
 
 .mui-h4,
 h4 {
-	font-size: 18px
+	font-size: 15px
 }
 
 .mui-h5,
 h5 {
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: 400;
-	color: #8f8f94
+	color: #666
 }
 
 .mui-h6,
@@ -4451,7 +4451,7 @@ body>.mui-progressbar {
 }
 
 .mui-icon-locked:before {
-	content: '\e506'
+	content: '\e506';
 }
 
 .mui-icon-more:before {

@@ -197,7 +197,7 @@
 			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
-						<label v-if="isShowDelInput"><button type="button"  @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></button></label>
+						<label v-if="isShowDelInput"  @tap="input_key('del')"><span class="mui-icon mui-icon-close-filled"></span></label>
 						<input type="text" placeholder="请输入号码搜索" maxlength="15" readonly="readonly" v-model="inputKey">
 					</div>
 				</form>

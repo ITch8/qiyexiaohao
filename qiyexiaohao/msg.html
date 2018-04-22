@@ -16,15 +16,22 @@
 			.mui-table-view-cell{
 			    padding: 8px 10px;
 			}
+			.mui-bar-nav.mui-bar .mui-icon{
+				margin-top: 0;
+			}
+			.mui-bar .mui-icon{
+				font-size: 12px;
+			}
+			h4{    font-weight: 100;}
 		</style>
 	</head>
 
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<button @tap="toggleTopP()" class="mui-btn-link mui-icon iconfont icon-dianjihoudesanheng mui-pull-left" style="margin-top: 0;"></button>
+				<button @tap="toggleTopP()" class="mui-btn-link mui-icon iconfont icon-dianjihoudesanheng mui-pull-left"></button>
 				<h1 class="mui-title">全部信息</h1>
-				<a class="mui-icon iconfont icon-duanxinxinjianlianxirenjiahao mui-pull-right" @tap="toAdd"></a>
+				<button class="mui-icon mui-btn-link iconfont icon-duanxinxinjianlianxirenjiahao mui-pull-right" @tap="toAdd"></button>
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">

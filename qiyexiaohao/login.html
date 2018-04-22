@@ -81,14 +81,14 @@
 					</div>
 					<form id='login-form' class="mui-input-group">
 						<div class="mui-input-row">
-							<label><span class="mui-icon iconfont icon-lianxiren"></span></label>
+							<label><span class="mui-icon mui-icon-person"></span></label>
 							<input type="tel" class="mui-input-clear mui-input" placeholder="請輸入11位手机号" value="">
 						</div>
 						<div class="mui-input-row">
-							<label><span class="mui-icon iconfont icon-suo"></span></label>
+							<label><span class="mui-icon mui-icon-locked "></span></label>
 							<input type="password" class="mui-input-clear mui-input" placeholder="請輸入密碼" value="" autocomplete="off">
 						</div>
-						<button type="button" class="mui-btn">立即登录</button>
+						<button type="button" class="mui-btn" @tap="login()">立即登录</button>
 					</form>
 				</div>
 			</div>
@@ -110,7 +110,9 @@
 					}
 				},
 				methods: {
-					
+					login:function(){
+						w.toIndex();
+					}
 				},
 				domReady: function() {
 					_.init(), _(".mui-scroll-wrapper").scroll();

@@ -166,9 +166,9 @@
 				"android": {
 					"mdpi": "", /*普通屏启动图片，分辨率：240x282*/
 					"ldpi": "", /*大屏启动图片，分辨率：320x442*/
-					"hdpi": "", /*高分屏启动图片，分辨率：480x762*/
-					"xhdpi": "", /*720P高分屏启动图片，分辨率：720x1242*/
-					"xxhdpi": ""
+					"hdpi": "C:/Users/haixia/Desktop/480.png", /*高分屏启动图片，分辨率：480x762*/
+					"xhdpi": "C:/Users/haixia/Desktop/720.png", /*720P高分屏启动图片，分辨率：720x1242*/
+					"xxhdpi": "C:/Users/haixia/Desktop/1080.png"
 				}
 			}
 		}
@@ -190,7 +190,10 @@
 				],
 				"priority": 0,
 				"refer": [
-					"center/setting.html"
+					"center/setting.html",
+					"center/kefu.html",
+					"center/addAcount.html",
+					"login.html"
 				]
 			},
 			"sendMsg.html": {
@@ -287,8 +290,7 @@
 					"contact_mint.html",
 					"msg.html",
 					"msg1.html",
-					"contactDetail.html",
-					"main.html"
+					"contactDetail.html"
 				],
 				"priority": 0
 			},
@@ -346,18 +348,30 @@
 					"sendMsg.html"
 				],
 				"priority": 0
+			},
+			"center/addAcount.html": {
+				"resources": [],
+				"refer": [
+					"login.html"
+				],
+				"priority": 0
+			},
+			"login.html": {
+				"resources": [],
+				"refer": [
+					"index.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {
 			"resources": [
 				"img/medical-add.png",
-				"login.html",
 				"img/zfb.png",
 				"img/logo.png",
 				"img/circle.png",
 				"contacterDeHtml.html",
-				"img/wechat.png",
-				"center/addAcount.html"
+				"img/wechat.png"
 			]
 		}
 	}
