@@ -221,8 +221,7 @@ th {
 
 body {
 	font-family: 'Helvetica Neue', Helvetica, sans-serif;
-	font-size: 17px;
-	line-height: 21px;
+	line-height: 1.5rem;
 	color: #000;
 	background-color: #efeff4;
 	-webkit-overflow-scrolling: touch
@@ -243,7 +242,7 @@ a:active {
 }
 
 .mui-bar-nav~.mui-content {
-	padding-top: 44px
+	padding-top: 3.14rem
 }
 
 .mui-bar-nav~.mui-content.mui-scroll-wrapper .mui-scrollbar-vertical {
@@ -1239,9 +1238,9 @@ input[type=submit]:enabled:active {
 	z-index: 10;
 	right: 0;
 	left: 0;
-	height: 44px;
-	padding-right: 10px;
-	padding-left: 10px;
+	height: 3.14rem;
+	padding-right: 0.71rem;
+	padding-left: 0.71rem;
 	border-bottom: 0;
 	background-color: #fff;
 	-webkit-backface-visibility: hidden;
@@ -1249,8 +1248,8 @@ input[type=submit]:enabled:active {
 }
 
 .mui-bar .mui-title {
-	right: 40px;
-	left: 40px;
+	right: 2.85rem;
+	left: 2.85rem;
 	display: inline-block;
 	overflow: hidden;
 	width: auto;
@@ -1303,17 +1302,17 @@ input[type=submit]:enabled:active {
 }
 
 .mui-bar-nav.mui-bar .mui-icon {
-	margin-right: -10px;
-	margin-left: -10px;
-	padding-right: 10px;
-	padding-left: 10px;
-	margin-top: 10px;
+	margin-right: -0.71rem;
+	margin-left: -0.71rem;
+	padding-right: 0.71rem;
+	padding-left: 0.71rem;
+	margin-top: 0.71rem;
 }
 
 .mui-title {
-	font-size: 17px;
+	font-size: 1.21rem;
 	font-weight: 500;
-	line-height: 44px;
+	line-height: 3.14rem;
 	position: absolute;
 	display: block;
 	width: 100%;
@@ -1332,7 +1331,7 @@ input[type=submit]:enabled:active {
 	bottom: 0;
 	display: table;
 	width: 100%;
-	height: 50px;
+	height: 3.75rem;
 	padding: 0;
 	table-layout: fixed;
 	border-top: 0;
@@ -1344,7 +1343,7 @@ input[type=submit]:enabled:active {
 	display: table-cell;
 	overflow: hidden;
 	width: 1%;
-	height: 50px;
+	height: 3.75rem;
 	text-align: center;
 	vertical-align: middle;
 	white-space: nowrap;
@@ -1357,15 +1356,15 @@ input[type=submit]:enabled:active {
 }
 
 .mui-bar-tab .mui-tab-item .mui-icon {
-	top: 3px;
-	width: 26px;
-	height: 26px;
+	top: 0.28rem;
+	width: 1.56rem;
+	height: 1.56rem;
 	padding-top: 0;
 	padding-bottom: 0
 }
 
 .mui-bar-tab .mui-tab-item .mui-icon~.mui-tab-label {
-	font-size: 11px;
+	font-size: 0.75rem;
 	display: block;
 	overflow: hidden;
 	text-overflow: ellipsis
@@ -1443,10 +1442,10 @@ input[type=submit]:enabled:active {
 }
 
 .mui-bar .mui-icon {
-	font-size: 20px;
+	font-size: 1.42rem;
 	position: relative;
 	z-index: 20;
-	padding-bottom: 10px
+	padding-bottom: 0.71rem
 }
 
 .mui-bar .mui-icon:active {
@@ -1871,7 +1870,7 @@ input[type=submit]:enabled:active {
 .mui-table-view-cell {
 	position: relative;
 	overflow: hidden;
-	padding: 11px 15px;
+	padding: 0.78rem 1.07rem;
 	-webkit-touch-callout: none
 }
 
@@ -2532,7 +2531,7 @@ select:focus {
 }
 
 .mui-input-group .mui-input-row {
-	height: 40px
+	height: 2.85rem
 }
 
 .mui-input-group .mui-input-row:after {
