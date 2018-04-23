@@ -5,7 +5,9 @@
 .color_333 {
 	color: #333;
 }
-
+.color_666 {
+	color: #666;
+}
 header {
 	background-color: #fff !important;
 }
