@@ -1162,10 +1162,10 @@ input[type=submit]:enabled:active {
 }
 
 .mui-btn-block {
-	font-size: 18px;
+	font-size: 1.18rem;
 	display: block;
 	width: 100%;
-	padding: 10px 0;
+	padding: 0.62rem 0;
 	color: #ff4400;
 }
 
@@ -1401,8 +1401,8 @@ input[type=submit]:enabled:active {
 }
 
 .mui-bar .mui-btn-link {
-	font-size: 16px;
-	line-height: 44px;
+	font-size: 0.87rem;
+	line-height: 3.14rem;
 	top: 0;
 	padding: 0;
 	color: #333;
@@ -1888,12 +1888,12 @@ input[type=submit]:enabled:active {
 
 .mui-table-view-cell.mui-checkbox input[type=checkbox],
 .mui-table-view-cell.mui-radio input[type=radio] {
-	top: 18px
+	top: 1.87rem
 }
 
 .mui-table-view-cell.mui-checkbox.mui-left,
 .mui-table-view-cell.mui-radio.mui-left {
-	padding-left: 58px
+	padding-left: 2.18rem
 }
 
 .mui-table-view-cell.mui-active {
@@ -2289,12 +2289,11 @@ input[type=submit]:enabled:active {
 }
 
 .mui-table-view.mui-grid-view .mui-table-view-cell .mui-media-body {
-	font-size: 10px;
-	line-height: 15px;
+	font-size: 0.62rem;
+	line-height: 0.93rem;
 	display: block;
 	width: 100%;
-	height: 15px;
-	margin-top: 8px;
+	margin-top: 0.15rem;
 	text-overflow: ellipsis;
 	color: #b2b2b2
 }
@@ -2664,7 +2663,7 @@ select:focus {
 
 .mui-checkbox.mui-left input[type=checkbox],
 .mui-radio.mui-left input[type=radio] {
-	left: 10px
+	left: 0.62rem
 }
 
 .mui-checkbox.mui-left label,
@@ -2679,8 +2678,8 @@ select:focus {
 	top: 4px;
 	right: 20px;
 	display: inline-block;
-	width: 28px;
-	height: 26px;
+	width: 1.12rem;
+	height: 1.12rem;
 	border: 0;
 	outline: 0!important;
 	background-color: transparent;
@@ -2695,7 +2694,7 @@ select:focus {
 .mui-checkbox input[type=checkbox]:before,
 .mui-radio input[type=radio]:before {
 	font-family: Muiicons;
-	font-size: 28px;
+	font-size: 1.12rem;
 	font-weight: 400;
 	line-height: 1;
 	text-decoration: none;
@@ -2707,7 +2706,7 @@ select:focus {
 
 .mui-checkbox input[type=checkbox]:checked:before,
 .mui-radio input[type=radio]:checked:before {
-	color: #007aff
+	color: #ff4400
 }
 
 .mui-checkbox label.mui-disabled,

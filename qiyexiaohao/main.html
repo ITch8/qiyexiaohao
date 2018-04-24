@@ -10,16 +10,10 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
-			.mui-table-view .mui-media-object {
-				position: relative;
-				top: 27px;
-			}
-			
 			.span_right {
 				position: relative;
-				bottom: 8px;
+				bottom: 0.5rem;
 			}
-			
 			.mui-input-group:after,
 			.mui-input-group:before,
 			.mui-input-group .mui-input-row:after {
@@ -99,11 +93,12 @@
 			.mui-input-row input[type=text] {
 				text-align: center;
 				padding: 2px 5px;
-				font-size: 18px;
+				font-size: 1.12rem;
+				height: 3.12rem;
 			}
 			
 			#keyborde>li>span {
-				font-size: 20px;
+				font-size: 1.25rem;
 			}
 			
 			.bottom_del_div {
@@ -114,6 +109,9 @@
 			
 			.mui-table-view {
 				margin-bottom: 45px;
+			}
+			.mui-input-group,.mui-input-group .mui-input-row{
+				height: 3.12rem;
 			}
 		</style>
 	</head>
@@ -194,7 +192,7 @@
             	时间：2018-04-13
             	描述   虚拟键盘
             -->
-			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom">
+			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom mui-active">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
 						<label v-if="isShowDelInput"  @tap="input_key('del')"><span class="mui-icon mui-icon-close-filled"></span></label>

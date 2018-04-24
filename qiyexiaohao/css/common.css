@@ -45,7 +45,9 @@ header>h1 {
 .font_15 {
 	font-size: 1.07rem
 }
-
+.font_18 {
+	font-size: 1.12rem
+}
 .font-size-12 {
 	font-size: 0.85rem
 }
@@ -53,9 +55,9 @@ header>h1 {
 .i_flag {
 	background: #00acf8;
 	color: #fff;
-	font-size: 8px;
+	font-size: 0.31rem;
 	padding: 2px;
-	margin: 0 0 0 10px;
+	margin: 0 0 0 0.5rem;
 }
 
 .i_flag_2 {
@@ -64,4 +66,10 @@ header>h1 {
 	font-size: 8px;
 	padding: 2px;
 	margin: 0 0 0 10px;
+}
+header>.icon-dianjihoudesanheng:before{
+	font-size: 1.5rem
+}
+header>.icon-shanchu:before{
+	font-size: 1.31rem
 }
