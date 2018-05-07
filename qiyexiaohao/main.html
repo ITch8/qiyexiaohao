@@ -14,6 +14,7 @@
 				position: relative;
 				bottom: 0.5rem;
 			}
+			
 			.mui-input-group:after,
 			.mui-input-group:before,
 			.mui-input-group .mui-input-row:after {
@@ -110,7 +111,9 @@
 			.mui-table-view {
 				margin-bottom: 45px;
 			}
-			.mui-input-group,.mui-input-group .mui-input-row{
+			
+			.mui-input-group,
+			.mui-input-group .mui-input-row {
 				height: 3.12rem;
 			}
 		</style>
@@ -195,7 +198,7 @@
 			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom mui-active">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
-						<label v-if="isShowDelInput"  @tap="input_key('del')"><span class="mui-icon mui-icon-close-filled"></span></label>
+						<label v-if="isShowDelInput" @tap="input_key('del')"><span class="mui-icon mui-icon-close-filled"></span></label>
 						<input type="text" placeholder="请输入号码搜索" maxlength="15" readonly="readonly" v-model="inputKey">
 					</div>
 				</form>
@@ -286,7 +289,8 @@
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
-		var app = null;
+		var app = null,
+			bottom = 0;;
 		(function(_, w, u) {
 			var self = null,
 				currentWeb = null;
@@ -297,8 +301,8 @@
 					chooseText: '全选',
 					list: [],
 					inputKey: '',
-					popupVisible: false,//popup显示
-					filter_resultShow: false,//筛选结果显示
+					popupVisible: false, //popup显示
+					filter_resultShow: false, //筛选结果显示
 					bottom_handle: false,
 					allLoaded: false,
 					isToDel: true, //是否显示取消
@@ -315,9 +319,9 @@
 				methods: {
 					toggleDel: function() { //控制删除
 						self.isToDel = false;
-						if(self.isToDel){
+						if(self.isToDel) {
 							self.showTabbar();
-						}else{
+						} else {
 							self.hiddenTabbar();
 						}
 					},
@@ -329,16 +333,16 @@
 							w.openView("contactDetail.html")
 						}
 					},
-					input_key: function(key) {//输入
+					input_key: function(key) { //输入
 						if(self.inputKey.length >= 0) {
 							self.filter_resultShow = true;
 							self.bottom_handle = true;
-							self.isShowDelInput =  true;
+							self.isShowDelInput = true;
 							self.hiddenTabbar();
 						} else {
 							self.filter_resultShow = false;
 							self.bottom_handle = false;
-							self.isShowDelInput =  false;
+							self.isShowDelInput = false;
 							self.showTabbar();
 						}
 						if('close' == key) {
@@ -354,7 +358,7 @@
 							if(self.inputKey.length == 0) {
 								self.filter_resultShow = false;
 								self.bottom_handle = false;
-								self.isShowDelInput =  false;
+								self.isShowDelInput = false;
 								self.showTabbar();
 							}
 						} else if('tel' == key) {
@@ -377,9 +381,9 @@
 					},
 					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
-						if(self.popupVisible){
+						if(self.popupVisible) {
 							self.hiddenTabbar();
-						}else{
+						} else {
 							self.showTabbar();
 						}
 					},
@@ -393,9 +397,9 @@
 					toggleTabbar: function() {
 						var viewStyle = currentWeb.getStyle(); //toggle隐藏tabbar
 						console.log("viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom == '0') {
+						if(viewStyle.bottom == 0) {
 							currentWeb.setStyle({
-								bottom: '51px'
+								bottom: bottom
 							});
 						} else {
 							currentWeb.setStyle({
@@ -406,16 +410,16 @@
 					hiddenTabbar: function() {
 						var viewStyle = currentWeb.getStyle(); //动态隐藏tabbar
 						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != '0') {
+						if(viewStyle.bottom == 0) {
 							currentWeb.setStyle({
-								bottom: '0'
+								bottom: bottom
 							});
 						}
 					},
 					showTabbar: function() {
 						var viewStyle = currentWeb.getStyle(); //动态显示tabbar
 						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != '51px') {
+						if(viewStyle.bottom == 0) {
 							currentWeb.setStyle({
 								bottom: '51px'
 							});
@@ -424,6 +428,23 @@
 				},
 				domReady: function() {
 					_.init(), _(".mui-scroll-wrapper").scroll();
+					//获取屏幕宽度
+					var width = document.documentElement.clientWidth;
+					console.log("width=" + width);
+					//3.75
+					if(width >= 320 && width < 360) {
+						bottom = "53px";
+					} else if(width >= 360 && width < 400) {
+						bottom = "60px";
+					} else if(width >= 400 && width < 440) {
+						bottom = "68px";
+					} else if(width >= 440 && width < 480) {
+						bottom = (20 * 3.75) + 'px';
+					} else if(width >= 480 && width < 640) {
+						bottom = (22 * 3.75) + 'px';
+					} else if(width >= 640) {
+						bottom = (28 * 3.75) + 'px';
+					}
 				}
 			})
 		})(mui, window, util)

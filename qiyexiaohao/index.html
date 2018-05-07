@@ -44,14 +44,26 @@
 			var width = document.documentElement.clientWidth;
 			var bottom = 0;
 			console.log("width=" + width);
-			
-			
+			//3.75
+			if(width >= 320 && width < 360){
+				bottom = "53px";
+			}else if(width >= 360 && width < 400){
+				bottom = "60px";
+			}else if(width >= 400 && width < 440){
+				bottom = "68px";
+			}else if(width >= 440 && width < 480){
+				bottom = (20 * 3.75) +'px';
+			}else if(width >= 480 && width < 640){
+				bottom = (22 * 3.75) +'px';
+			}else if(width >= 640){
+				bottom = (28 * 3.75) +'px';
+			}
 			
 
 			var subpages = ['main.html', 'msg.html', 'contact_mint.html', 'my.html'];
 			var subpage_style = {
 				top: '0',
-				bottom: '60px'
+				bottom: bottom
 			};
 
 			var aniShow = {};
