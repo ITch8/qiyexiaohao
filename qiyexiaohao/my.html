@@ -9,61 +9,51 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
-			.mg5 {
-				margin: 5px 0;
+			.mui-table-view-cell{
+				padding: 0.93rem;
 			}
-			
-			.form_bottom .mui-input-group:before,
-			.form_bottom .mui-input-group:after,
-			.form_bottom .mui-table-view:before,
-			.form_bottom .mui-table-view:after,
-			.form_bottom .mui-input-group .mui-input-row:after {
-				height: 0;
+			.mui-navigate-right:after, .mui-push-right:after{
+				/*color: #00acf8;*/
 			}
-			
-			.bottom_del_div {
-				position: fixed;
-				bottom: 0;
-				z-index: 9;
-			}
-			
-			#middleP {
-				top: 0 !important;
-				left: 0 !important;
-				right: 0 !important;
-				bottom: 0 !important;
-				margin: auto;
-				height: 100px;
-			}
-			
-			.i_flag {
-				padding: 3px;
-				margin: 0 0 0 4px;
-			}
-			.mui-table-view {
-    			margin-top: 8px;
-			}
-			.mui-table-view-cell>div{
-				margin: 5px 0;
-			}
-			.btns{
-				margin: 10% 0 0;text-align: center;
-			}
-			.btns>button{
-			    width: 100px;border-radius: 10px;
+			.mui-btn-block{
+				margin: 3.12rem auto;
+    			width: 80%;
+    			border-radius: 0.93rem;
 			}
 		</style>
 	</head>
-
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
 				<h1 class="mui-title">我的副号</h1>
-				<a @tap="openView('center/setting.html')" class="mui-icon iconfont icon-shezhi mui-pull-right"></a>
 			</header>
 			<div class="mui-content mui-fullscreen mui-scroll-wrapper">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" >
+							副号开机状态
+							<div class="mui-switch mui-switch-mini mui-active ">
+								<div class="mui-switch-handle"></div>
+							</div>
+						</li>
+						<li class="mui-table-view-cell" @tap="openView('center/settingAccout.html')">
+							<a class="mui-navigate-right">
+								已绑定副号信息
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="openView('center/kefu.html')">
+							<a class="mui-navigate-right">
+								联系客服
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="openView('center/about.html')">
+							<a class="mui-navigate-right">
+								关于企业小号
+							</a>
+						</li>
+					</ul>
+					<button type="button" class="mui-btn mui-btn-blue mui-btn-block">退出登录</button>
+					<!--<ul class="mui-table-view">
 						<li class="mui-table-view-cell" @tap="openView('login.html')">
 							<div>15863498562</div>
 							<div><span class="i_flag">主机</span></div>
@@ -83,9 +73,9 @@
 						</li>
 					</ul>
 					<div class="btns">
-						<button type="button" class="mui-btn mui-btn-blue" @tap="openView('center/addAcount.html')" style="margin-right: 50px;">添加账号</button>
+						<button type="button" class="mui-btn mui-btn-blue" @tap="openView('login.html')" style="margin-right: 50px;">添加账号</button>
 						<button type="button" class="mui-btn mui-btn-blue" @tap="openView('center/kefu.html')">联系客服</button>
-					</div>
+					</div>-->
 				</div>
 			</div>
 		</div>

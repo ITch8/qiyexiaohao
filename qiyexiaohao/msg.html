@@ -30,7 +30,7 @@
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
 				<button @tap="toggleTopP()" class="mui-btn-link mui-icon iconfont icon-dianjihoudesanheng mui-pull-left"></button>
-				<h1 class="mui-title">全部信息</h1>
+				<h1 class="mui-title">{{title}}</h1>
 				<button class="mui-icon mui-btn-link iconfont icon-duanxinxinjianlianxirenjiahao mui-pull-right" @tap="toAdd"></button>
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
@@ -126,12 +126,13 @@
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
-			var currentWeb = null;
+			var currentWeb = null,bottom=0;
 			var vm = new App({
 				el: '#app',
 				data: {
 					searchValue: '',
-					popupVisible: false
+					popupVisible: false,
+					title:"全部信息"
 				},
 				plusReady: {
 					init: function() {
@@ -172,29 +173,46 @@
 					toggleTabbar:function(){
 						var viewStyle = currentWeb.getStyle();//toggle隐藏tabbar
 						console.log("viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom=='0'){
-			                currentWeb.setStyle({bottom:'51px'});
+						if(viewStyle.bottom == 0){
+			                currentWeb.setStyle({bottom:bottom});
 			            }else{
-			                currentWeb.setStyle({bottom:'0'});
+			                currentWeb.setStyle({bottom:0});
 			            }
 					},
 					hiddenTabbar:function(){
 						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
 						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != '0'){
+						if(viewStyle.bottom != 0){
 			                currentWeb.setStyle({bottom:'0'});
 			            }
 					},
 					showTabbar:function(){
 						var viewStyle = currentWeb.getStyle();//动态显示tabbar
 						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != '51px'){
-			                currentWeb.setStyle({bottom:'51px'});
+						if(viewStyle.bottom == 0){
+			                currentWeb.setStyle({bottom:bottom});
 			            }
 					}
 				},
 				domReady: function() {
 					_.init(), _(".mui-scroll-wrapper").scroll();
+					//获取屏幕宽度
+					var width = document.documentElement.clientWidth;
+					console.log("width=" + width);
+					//3.75
+					if(width >= 320 && width < 360) {
+						bottom = "53px";
+					} else if(width >= 360 && width < 400) {
+						bottom = "60px";
+					} else if(width >= 400 && width < 440) {
+						bottom = "68px";
+					} else if(width >= 440 && width < 480) {
+						bottom = (20 * 3.75) + 'px';
+					} else if(width >= 480 && width < 640) {
+						bottom = (22 * 3.75) + 'px';
+					} else if(width >= 640) {
+						bottom = (28 * 3.75) + 'px';
+					}
 				}
 			})
 			_('#app').on('tap', '.mui-btn', function(event) {//删除短信

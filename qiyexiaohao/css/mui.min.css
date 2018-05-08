@@ -229,7 +229,7 @@ body {
 
 a {
 	text-decoration: none;
-	color: #007aff
+	/*color: #007aff*/
 }
 
 a:active {
@@ -457,7 +457,7 @@ h6 {
 }
 
 p {
-	font-size: 14px;
+	font-size: 0.87rem;
 	margin-top: 0;
 	margin-bottom: 10px;
 	color: #666
@@ -1166,7 +1166,7 @@ input[type=submit]:enabled:active {
 	display: block;
 	width: 100%;
 	padding: 0.62rem 0;
-	color: #ff4400;
+	color: #fff;
 }
 
 .mui-btn .mui-badge {
@@ -1870,7 +1870,7 @@ input[type=submit]:enabled:active {
 .mui-table-view-cell {
 	position: relative;
 	overflow: hidden;
-	padding: 0.78rem 1.07rem;
+	padding: 0.43rem 0.62rem;
 	-webkit-touch-callout: none
 }
 
@@ -1909,7 +1909,7 @@ input[type=submit]:enabled:active {
 	position: relative;
 	display: block;
 	overflow: hidden;
-	margin: -11px -15px;
+	margin: -0.93rem;
 	padding: inherit;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -1921,7 +1921,8 @@ input[type=submit]:enabled:active {
 }
 
 .mui-table-view-cell p {
-	margin-bottom: 0
+	margin-bottom: 0;
+	    line-height: initial;
 }
 
 .mui-table-view-cell.mui-transitioning>.mui-slider-handle,
@@ -2264,10 +2265,10 @@ input[type=submit]:enabled:active {
 }
 
 .mui-table-view.mui-grid-view .mui-table-view-cell {
-	font-size: 17px;
+	font-size: 1.06rem;
 	display: inline-block;
 	margin-right: -4px;
-	padding: 10px 0 0 14px;
+	padding: 0.62rem 0 0 0.87rem;
 	text-align: center;
 	vertical-align: middle;
 	background: 0 0
@@ -2322,7 +2323,7 @@ input[type=submit]:enabled:active {
 
 .mui-grid-view.mui-grid-9 .mui-table-view-cell {
 	margin: 0;
-	padding: 6px 15px;
+	padding: 0.37rem 0.93rem;
 	vertical-align: top;
 	border-right: 1px solid #eee;
 	border-top:1px solid #eee;

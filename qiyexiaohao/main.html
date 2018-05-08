@@ -16,7 +16,6 @@
 			}
 			
 			.mui-input-group:after,
-			.mui-input-group:before,
 			.mui-input-group .mui-input-row:after {
 				height: 0;
 			}
@@ -32,21 +31,17 @@
 			}
 			
 			.filter_result {
-				background: #00acf8;
+				background: #fff;
 				z-index: 10;
 			}
-			
-			.filter_result ul {
-				margin: 10px;
+			.filter_result .mui-table-view:before{
+				height: 0;
 			}
-			
-			.filter_result .mui-table-view {
-				background: initial;
+			.filter_result .back{
+				padding: 0.62rem 0.62rem 0;
 			}
-			
 			.filter_result .mui-table-view-cell {
 				background-color: #fff;
-				margin: 5px 0;
 			}
 			
 			.fade-enter-active,
@@ -70,7 +65,7 @@
 			
 			.mui-input-row label {
 				float: right;
-				padding: 10px 10px 0 30px;
+				padding: 0.62rem 0.62rem 0 1.87rem;
 			}
 			
 			.mui-input-row button {
@@ -178,13 +173,20 @@
 			<transition name="fade">
 				<div v-show="filter_resultShow" class="filter_result mui-fullscreen mui-scroll-wrapper">
 					<div class="mui-scroll">
+						<div class="back" @tap="backAll()"><a class="mui-icon iconfont icon-jiantou"></a><span class="font-size-12">返回全部</span></div>
 						<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-							<li class="mui-table-view-cell">
-								<div class="mui-table">
-									<div class="mui-table-cell mui-col-xs-8">
-										<h4 class="mui-ellipsis">王琦</h4>
-										<p class="mui-h6 mui-ellipsis"><span class="i_flag">主号</span>13510792830<span class="mui-icon mui-icon-info mui-pull-right"></span></p>
-									</div>
+							<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media">
+								<div class="mui-media-body">
+									<span class="color_333">王珂</span>
+									<span class="i_flag">副1</span>
+									<p>13510792830<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
+								</div>
+							</li>
+							<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media">
+								<div class="mui-media-body">
+									<span class="color_333">王珂</span>
+									<span class="i_flag">副1</span>
+									<p>13510792830<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 								</div>
 							</li>
 						</ul>
@@ -195,7 +197,7 @@
             	时间：2018-04-13
             	描述   虚拟键盘
             -->
-			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom mui-active">
+			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
 						<label v-if="isShowDelInput" @tap="input_key('del')"><span class="mui-icon mui-icon-close-filled"></span></label>
@@ -387,7 +389,7 @@
 							self.showTabbar();
 						}
 					},
-					cancelDel: function() {
+					cancelDel: function() {//取消删除
 						self.isToDel = true;
 						self.showTabbar();
 					},
@@ -410,9 +412,9 @@
 					hiddenTabbar: function() {
 						var viewStyle = currentWeb.getStyle(); //动态隐藏tabbar
 						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom == 0) {
+						if(viewStyle.bottom != 0) {
 							currentWeb.setStyle({
-								bottom: bottom
+								bottom: 0
 							});
 						}
 					},
@@ -421,9 +423,12 @@
 						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
 						if(viewStyle.bottom == 0) {
 							currentWeb.setStyle({
-								bottom: '51px'
+								bottom: bottom
 							});
 						}
+					},
+					backAll:function(){
+						self.filter_resultShow=false;
 					}
 				},
 				domReady: function() {
