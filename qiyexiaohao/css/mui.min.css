@@ -223,7 +223,8 @@ body {
 	font-family: 'Helvetica Neue', Helvetica, sans-serif;
 	line-height: 1.5rem;
 	color: #000;
-	background-color: #efeff4;
+	/*background-color: #efeff4;*/
+	background-color: #fff;
 	-webkit-overflow-scrolling: touch
 }
 
@@ -237,7 +238,8 @@ a:active {
 }
 
 .mui-content {
-	background-color: #efeff4;
+	/*background-color: #efeff4;*/
+	background-color: #fff;
 	-webkit-overflow-scrolling: touch
 }
 
