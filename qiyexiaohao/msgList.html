@@ -10,6 +10,9 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
+			.mui-bar-nav~.mui-content{
+				padding-bottom: 3.75rem;
+			}
 			.mui-input-row label~input {
 				width: 65%;
 				float: left;
@@ -27,33 +30,33 @@
 				position: fixed;
 				width: 100%;
 				height: auto;
-				min-height: 50px;
+				min-height: 3.12rem;
 				border-top: solid 1px #bbb;
 				left: 0;
-				bottom: 0;
+				bottom:-2px;
 				overflow: hidden;
-				padding: 0 50px;
+				padding: 0 3.12rem;
 				background-color: #fafafa;
 			}
 			
 			.footer-left {
 				position: absolute;
-				width: 50px;
-				height: 50px;
+				width: 3.12rem;
+				height: 3.12rem;
 				left: 0;
 				top: 0;
 				text-align: center;
 				vertical-align: middle;
 				line-height: 100%;
-				padding: 12px 4px;
+				padding: 0.75rem 0.25rem;
 			}
 			
 			.footer-center .input-text {
-				background: #fff;
+				/*background: #fff;*/
 				border: solid 1px #ddd;
-				padding: 10px 10px 5px 50px !important;
-				font-size: 16px !important;
-				line-height: 18px !important;
+				padding:  0.93rem 0.31rem 0.31rem 3.12rem !important;
+				font-size: 0.75rem !important;
+				line-height:0.62rem !important;
 				font-family: verdana !important;
 				overflow: hidden;
 			}
@@ -66,25 +69,21 @@
 			
 			.footer-center {
 				height: 100%;
-				padding: 5px 0 0;
+				padding: 0.31rem 0 0;
 			}
 			
 			footer .iconfont {
-				font-size: 20px;
-				margin: 5px 0 0;
+				font-size: 1.25rem;
+				margin: 0.31rem 0 0;
 			}
 			
 			.footer-right {
 				position: absolute;
-				width: 50px;
-				height: 50px;
+				width: 3.12rem;
+				height: 3.12rem;
 				right: 0;
 				top: 0;
-				text-align: center;
-				vertical-align: middle;
-				line-height: 100%;
-				padding: 12px 5px;
-				display: inline-block;
+				border: 0;
 			}
 			
 			textarea {
@@ -93,27 +92,27 @@
 			
 			.flag {
 				position: relative;
-				bottom: 20px;
-				left: 45px;
+				bottom: 1.25rem;
+				left: 2.81rem;
 			}
 			
 			.mui-input-row label {
-				line-height: 20px;
-				height: 40px;
+				line-height: 1.25rem;
+				height: 2.5rem;
 			}
 			
 			.right .time {
-				margin: 20px 10px 0 0;
+				margin: 1.25rem 0.62rem 0 0;
 			}
 			
 			.left .time {
-				margin: 20px 0 0 10px;
+				margin: 1.25rem 0 0 0.62rem;
 			}
 			
 			.content {
 				position: relative;
 				border-radius: 5px;
-				padding: 10px;
+				padding: 0.62rem;
 				display: inline-block;
 				text-align: justify;
 				max-width: 80%;
@@ -123,15 +122,15 @@
 			}
 			
 			.rightContent {
-				margin-right: 0px;
+				margin-right: 0;
 				color: #fff;
 				background: #00acf8;
-				right: 10px;
+				right: 0.62rem;
 			}
 			
 			.leftContent {
 				position: relative;
-				margin-left: 10px;
+				margin-left: 0.62rem;
 				background: #FFFFFF;
 				border: 1px solid #DEDEDE;
 			}
@@ -140,6 +139,7 @@
 				margin-top: 0;
 				text-align: right;
 			}
+			
 			.dialogDiv {
 				position: relative;
 			}
@@ -150,8 +150,8 @@
 			}
 			
 			.dialogDiv.right .i_flag_f {
-				margin: 0 10px 0 0;
-			    padding: 7px 2px;
+				margin: 0 0.62rem 0 0;
+				padding: 0.43rem 0.12rem;
 			}
 		</style>
 	</head>
@@ -161,7 +161,7 @@
 			<header class="mui-bar mui-bar-nav">
 				<a class="mui-action-back mui-icon  iconfont icon-jiantou mui-pull-left"></a>
 				<h1 class="mui-title">13510792830</h1>
-				<a v-if="isStranger"  @tap="toggleTopP()" class="mui-icon iconfont icon-sandian mui-pull-right"></a>
+				<a v-if="isStranger" @tap="toggleTopP()" class="mui-icon iconfont icon-sandian mui-pull-right"></a>
 				<a v-else @tap="toContactDetail()" class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right"></a>
 			</header>
 			<div class="mui-content">
@@ -170,6 +170,26 @@
 						<div class="time font-size-12">2018-10:25</div>
 						<span class="i_flag_f i_flag_2">主机</span>
 						<div class="content rightContent">111</div>
+					</div>
+					<div class="left dialogDiv">
+						<div class="time font-size-12">2018-10:25</div>
+						<div class="content leftContent">你好111111111111111112222222222222222222222222222222222222222222222222222222222222222222222222222222你好你好你1111111111111111111111cccccccccccccc好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好</div>
+						<span class="i_flag_f i_flag_2">主机</span>
+					</div>
+					<div class="left dialogDiv">
+						<div class="time font-size-12">2018-10:25</div>
+						<div class="content leftContent">符号内容</div>
+						<span class="i_flag_f i_flag">副号</span>
+					</div>
+					<div class="left dialogDiv">
+						<div class="time font-size-12">2018-10:25</div>
+						<div class="content leftContent">你好111111111111111112222222222222222222222222222222222222222222222222222222222222222222222222222222你好你好你1111111111111111111111cccccccccccccc好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好</div>
+						<span class="i_flag_f i_flag_2">主机</span>
+					</div>
+					<div class="left dialogDiv">
+						<div class="time font-size-12">2018-10:25</div>
+						<div class="content leftContent">符号内容</div>
+						<span class="i_flag_f i_flag">副号</span>
 					</div>
 					<div class="left dialogDiv">
 						<div class="time font-size-12">2018-10:25</div>
@@ -190,7 +210,6 @@
 						<mt-cell title="添加到已有联系人"></mt-cell>
 					</div>
 				</mt-popup>
-				<!--
 				<footer>
 					<div @tap="change()" class="footer-left">
 						<i class="mui-icon iconfont icon-xunhuan"></i>
@@ -199,17 +218,17 @@
 					<div class="footer-center">
 						<textarea type="text" class='input-text' placeholder="输入内容" v-model="msgBody"></textarea>
 					</div>
-					<label class="footer-right">
-					<i class="mui-icon iconfont icon-duanxinfasongjiantou"></i>
-				</label>
-				</footer>-->
+					<button class="footer-right">
+						<i class="mui-icon iconfont icon-duanxinfasongjiantou"></i>
+					</button>
+				</footer>
 			</div>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
-	<script type="text/javascript" src="js/mint-ui.min.js" ></script>
+	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
@@ -219,7 +238,7 @@
 				data: {
 					msgBody: '',
 					popupVisible: false,
-					isStranger:true,
+					isStranger: true,
 					cardType: '主号',
 					i_flag: 'i_flag',
 					i_flag_2: 'i_flag_2',
@@ -261,18 +280,18 @@
 							self.isMain = true;
 						}
 					},
-					toContactDetail: function() {//去联系人详情
+					toContactDetail: function() { //去联系人详情
 						w.openView("contactDetail.html")
 					},
-					toggleTopP:function(){
+					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
 						console.log("popupVisible===" + self.popupVisible);
 					},
-					creatNewC:function(){//添加新联系人
+					creatNewC: function() { //添加新联系人
 						console.log("添加新联系人===");
 						w.openView("addContact.html")
 					},
-					addTo:function(){//添加到已有的联系人
+					addTo: function() { //添加到已有的联系人
 						console.log("添加到已有的联系人===");
 						w.openView("main.html")
 					}

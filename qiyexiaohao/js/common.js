@@ -1,4 +1,4 @@
-﻿var ASKURL = "https://api.hk-dr.com/";
+﻿var ASKURL = "http://xhadmin.iotweixin.com/api";
 (function(w, _, u, owner) {
 	w.openView = function(url, extras) {
 		var web = null,
@@ -67,25 +67,42 @@
 	 * @param success 請求成功回调函数
 	 * @param error 请求失敗回调函数
 	 * */
-	u.mypost = function(postUrl, pdata, show, success, error) {
+	u.mypost = function(pdata, show, success, error) {
+		var jmSign_key = "O8tImgCcf*XgObVqLSbg2DoH4XM6$0to";
+		var sign= "";//加密求出
+		var nonce_str = u.mathRand();
+		console.log("nonce_str====" + nonce_str);
+		var timestamp = Date.parse(new Date()).substr(0,8);
+		console.log("timestamp====" + timestamp);
+		var client="web";//固定
+		var identifier = w.getItem("identifier");//设备标识号
+		
+		//业务参数
+		var app = "";//可变
+		var _class ="";//可变 class
+		var stringSignTemp = "app=Base&class=Test&client=web&identifier=6541345641546&mobile=13012345678&name=小王&nonce_str=562936×tamp=1510816253&"+jmSign_key;
+		var signValue = hex_md5(stringSignTemp);//进行md5加密得到sign
+		var pdata = {};//业务参数json对象
+		_.extend(true, pdata, {//组合必需参数
+			'sign':signValue,
+			'nonce_str': nonce_str,
+			'timestamp':timestamp,
+			'client':client,
+			'identifier':identifier
+		});
+		var EncryptString = strEnc(JSON.stringify(pdata),"MXHKEY17");//对pdata字符串des加密 得到最终的请求参数
 		if(show) {
 			plus.nativeUI.showWaiting("努力加載中...");
 		}
-		_.extend(true, pdata, {
-			'token': token
-		});
-		console.log(postUrl + '===pdata========' +  JSON.stringify(pdata));
+		console.log(postUrl + '===pdata========' + JSON.stringify(pdata));
+		console.log(postUrl + '===EncryptString========' + EncryptString);
 		setTimeout(function() {
 			_.ajax({
-				url: ASKURL + postUrl,
+				url: ASKURL,
 				type: 'post',
-				data: pdata,
+				data: {'EncryptString':EncryptString},
 				timeout: 60000,
 				success: function(data) {
-					data = JSON.parse(data);
-					data = JSON.stringify(data);
-					data = traditionalized(data);
-					data = JSON.parse(data);
 					plus.nativeUI.closeWaiting();
 					_.isFunction(success) ? success(data) : '';
 				},
@@ -98,6 +115,13 @@
 			});
 		}, 50);
 	};
+	u.mathRand = function() {
+		var num = "";
+		for(var i = 0; i < 6; i++) {
+			num += Math.floor(Math.random() * 10);
+		}
+		return num;
+	}
 	u.close = function(wid) {
 		var thisweb = null;
 		if(w.plus) {
@@ -172,12 +196,6 @@
 		});
 		main.show();
 	};
-	u.emptyHtml = function(list, flag) {
-		if(list && !flag) {
-			list.innerHTML = "";
-		}
-	}
-	
 	u.checkPhone = function(phone) {
 		var pReg = /^1[0-9]{10}$/;
 		var pReg_HK = /^([5|6|9|8])\d{7}$/;
@@ -204,32 +222,6 @@
 		return(value === "null" || value === null || value === "" || value === "undefined") ? true : false;
 	};
 })(window, mui, window.util = {}, window.app = {});
-
-/**
- * 原始js封装方法
- * **/
-function hasClass(obj, cls) {
-	return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-}
-
-function addClass(obj, cls) {
-	if(!this.hasClass(obj, cls)) obj.className += " " + cls;
-}
-
-function removeClass(obj, cls) {
-	if(hasClass(obj, cls)) {
-		var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-		obj.className = obj.className.replace(reg, ' ');
-	}
-}
-
-function toggleClass(obj, cls) {
-	if(hasClass(obj, cls)) {
-		removeClass(obj, cls);
-	} else {
-		addClass(obj, cls);
-	}
-}
 
 /**
  * post - error
