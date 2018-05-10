@@ -82,7 +82,7 @@
 		//		var stringSignTemp = "app=Base&class=Test&client=web&identifier=6541345641546&mobile=13012345678&name=小王&nonce_str=562936×tamp=1510816253&"+jmSign_key;
 		var stringSignTemp = stringSignTemp + jmSign_key;
 		console.log('===stringSignTemp========' + stringSignTemp);
-		var signValue = md5(stringSignTemp); //进行md5加密得到sign
+		var signValue = hex_md5(stringSignTemp); //进行md5加密得到sign
 		console.log('===signValue========' + signValue);
 		_.extend(true, pdata, { //组合必需参数
 			'sign': signValue
