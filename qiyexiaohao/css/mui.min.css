@@ -946,9 +946,9 @@ button,
 input[type=button],
 input[type=reset],
 input[type=submit] {
-	font-size: 14px;
+	font-size: 0.87rem;
 	font-weight: 400;
-	line-height: 1.42;
+	line-height: 1;
 	position: relative;
 	display: inline-block;
 	margin-bottom: 0;
@@ -2209,7 +2209,7 @@ input[type=submit]:enabled:active {
 	position: relative;
 	display: none;
 	overflow: hidden;
-	margin: 11px -15px -11px;
+	margin: 0 -15px -11px;
 	padding: 8px 15px;
 	-webkit-transition: height .35s ease;
 	-o-transition: height .35s ease;
@@ -2230,7 +2230,7 @@ input[type=submit]:enabled:active {
 
 .mui-table-view-cell.mui-collapse .mui-table-view {
 	display: none;
-	margin-top: 11px;
+	margin-top: 0;
 	margin-right: -15px;
 	margin-bottom: -11px;
 	margin-left: -15px;
@@ -2242,7 +2242,6 @@ input[type=submit]:enabled:active {
 }
 
 .mui-table-view-cell.mui-collapse .mui-table-view .mui-table-view-cell {
-	padding-left: 31px;
 	background-position: 31px 100%
 }
 
@@ -2250,7 +2249,7 @@ input[type=submit]:enabled:active {
 	position: absolute;
 	right: 0;
 	bottom: 0;
-	left: 30px;
+	left: 0;
 	height: 1px;
 	content: '';
 	-webkit-transform: scaleY(.5);

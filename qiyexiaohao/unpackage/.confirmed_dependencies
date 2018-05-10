@@ -14,7 +14,11 @@
 			"center/setting.html",
 			"center/kefu.html",
 			"center/addAcount.html",
-			"login.html"
+			"login.html",
+			"center/feedback.html",
+			"center/about.html",
+			"center/settingAccout.html",
+			"center/myOtherNumber.html"
 		],
 		"priority": 0
 	},
@@ -164,6 +168,12 @@
 		"refer": [
 			"index.html",
 			"loginOfC.html"
+		]
+	},
+	"center/myOtherNumber.html": {
+		"refer": [
+			"login.html",
+			"center/kefu.html"
 		]
 	}
 }

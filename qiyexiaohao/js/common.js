@@ -67,40 +67,43 @@
 	 * @param success 請求成功回调函数
 	 * @param error 请求失敗回调函数
 	 * */
-	u.mypost = function(pdata, stringSignTemp,show, success, error) {
+	u.mypost = function(pdata, stringSignTemp, show, success, error) {
 		var jmSign_key = "O8tImgCcf*XgObVqLSbg2DoH4XM6$0to";
-//		var nonce_str = u.mathRand();
-//		console.log("nonce_str====" + nonce_str);
-//		var timestamp = Date.parse(new Date()).substr(0,8);
-//		console.log("timestamp====" + timestamp);
-//		var client="web";//固定
-//		var identifier = w.getItem("identifier");//设备标识号
-		
+		//		var nonce_str = u.mathRand();
+		//		console.log("nonce_str====" + nonce_str);
+		//		var timestamp = Date.parse(new Date()).substr(0,8);
+		//		console.log("timestamp====" + timestamp);
+		//		var client="web";//固定
+		//		var identifier = w.getItem("identifier");//设备标识号
+
 		//业务参数
-//		var app = "";//可变
-//		var _class ="";//可变 class
-//		var stringSignTemp = "app=Base&class=Test&client=web&identifier=6541345641546&mobile=13012345678&name=小王&nonce_str=562936×tamp=1510816253&"+jmSign_key;
-		var stringSignTemp = stringSignTemp+jmSign_key;
-		var signValue = hex_md5(stringSignTemp);//进行md5加密得到sign
-		_.extend(true, pdata, {//组合必需参数
-			'sign':signValue
+		//		var app = "";//可变
+		//		var _class ="";//可变 class
+		//		var stringSignTemp = "app=Base&class=Test&client=web&identifier=6541345641546&mobile=13012345678&name=小王&nonce_str=562936×tamp=1510816253&"+jmSign_key;
+		var stringSignTemp = stringSignTemp + jmSign_key;
+		console.log('===stringSignTemp========' + stringSignTemp);
+		var signValue = md5(stringSignTemp); //进行md5加密得到sign
+		console.log('===signValue========' + signValue);
+		_.extend(true, pdata, { //组合必需参数
+			'sign': signValue
 		});
-		var EncryptString = strEnc(JSON.stringify(pdata),"MXHKEY17");//对pdata字符串des加密 得到最终的请求参数
+		var EncryptString = strEnc(JSON.stringify(pdata), "MXHKEY17"); //对pdata字符串des加密 得到最终的请求参数
 		if(show) {
 			plus.nativeUI.showWaiting("努力加載中...");
 		}
 		console.log('===pdata========' + JSON.stringify(pdata));
-		console.log('===stringSignTemp========' + stringSignTemp);
 		console.log('===EncryptString========' + EncryptString);
 		setTimeout(function() {
 			_.ajax({
 				url: ASKURL,
 				type: 'post',
-				data: {'EncryptString':EncryptString},
+				data: {
+					'EncryptString': EncryptString
+				},
 				timeout: 60000,
 				success: function(data) {
 					plus.nativeUI.closeWaiting();
-					console.log('data====' +JSON.stringify(data));
+					console.log('data====' + JSON.stringify(data));
 					_.isFunction(success) ? success(data) : '';
 				},
 				error: function(xhr) {
@@ -117,8 +120,30 @@
 		for(var i = 0; i < 6; i++) {
 			num += Math.floor(Math.random() * 10);
 		}
-		return num;
-	}
+		return num && Number(num);
+	};
+	u.formatTime = function(time) {//格式化通话时间
+		var h = 0,
+	        m = 0,
+	        s = 0,
+	        _h = '00',
+	        _m = '00',
+	        _s = '00';
+	    h = Math.floor(time / 3600);
+	    time = Math.floor(time % 3600);
+	    m = Math.floor(time / 60);
+	    s = Math.floor(time % 60);
+	    _s = s < 10 ? '0' + s : s + '';
+	    _m = m + '';
+	    _h = h + '';
+	    if(_h > 0){
+	    	return _h + "小时" + _m + "分钟" + _s + "秒";
+	    }else if(_h == 0 && _m > 0){
+	    	return  _m + "分钟" + _s  + "秒";
+	    }else{
+	    	return _s  + "秒";
+	    }
+	};
 	u.close = function(wid) {
 		var thisweb = null;
 		if(w.plus) {

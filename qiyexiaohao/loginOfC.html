@@ -82,11 +82,11 @@
 					<form id='login-form' class="mui-input-group">
 						<div class="mui-input-row">
 							<label><span class="mui-icon mui-icon-person"></span></label>
-							<input type="tel" class="mui-input-clear mui-input" placeholder="請輸入11位手机号" value="">
+							<input type="tel" class="mui-input-clear mui-input" placeholder="请输入账号" v-model="account">
 						</div>
 						<div class="mui-input-row">
 							<label><span class="mui-icon mui-icon-locked "></span></label>
-							<input type="password" class="mui-input-clear mui-input" placeholder="請輸入密碼" value="" autocomplete="off">
+							<input type="password" class="mui-input-clear mui-input" placeholder="请输入密码" v-model="password" autocomplete="off">
 						</div>
 						<button type="button" class="mui-btn" @tap="login()">立即登录</button>
 					</form>
@@ -102,9 +102,13 @@
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
+			var self = null;
 			App({
 				el: '#app',
-				data: {},
+				data: {
+					account:'',
+					password:'',
+				},
 				plusReady: {
 					init: function() {
 						self = this;
@@ -139,7 +143,32 @@
 						}, myerror);
 					},
 					login:function(){
-						w.toIndex();
+//						w.toIndex();
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0,8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier");//设备标识号
+						var company_id="bhluio12345613";
+						var pdata = {
+							app:"Member",
+							class:"Login",
+							nonce_str:nonce_str,
+							timestamp:timestamp,
+							identifier:identifier,
+							client:"web",
+							account:self.account,
+							password:self.password,
+							company_id:company_id
+						}
+						var stringSignTemp = "account="+self.account+"&app=Member&class=Login&company_id="+company_id+"&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&password="+self.password+"&timestamp="+timestamp+"&";
+						u.mypost(pdata, stringSignTemp,true, function(data){
+							if(data.status == 0){
+								data = data.data;
+							}else{
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
 					}
 				},
 				domReady: function() {

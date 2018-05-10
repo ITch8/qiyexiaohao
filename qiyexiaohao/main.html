@@ -9,111 +9,8 @@
 		<link rel="stylesheet" href="css/mint-ui-style.css" />
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
-		<style>
-			.span_right {
-				position: relative;
-				bottom: 0.5rem;
-			}
-			
-			.mui-input-group:after,
-			.mui-input-group .mui-input-row:after {
-				height: 0;
-			}
-			
-			.mui-grid-view.mui-grid-9 {
-				background-color: #fff;
-			}
-			
-			.input_keybord {
-				position: fixed;
-				z-index: 10;
-				bottom: 0;
-			}
-			
-			.filter_result {
-				background: #fff;
-				z-index: 10;
-			}
-			.filter_result .mui-table-view:before{
-				height: 0;
-			}
-			.filter_result .back{
-				padding: 0.62rem 0.62rem 0;
-			}
-			.filter_result .mui-table-view-cell {
-				background-color: #fff;
-			}
-			
-			.fade-enter-active,
-			.fade-leave-active {
-				transition: opacity .6s;
-			}
-			
-			.fade-enter,
-			.fade-leave-to {
-				opacity: 0;
-			}
-			
-			#middlePopover {
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				margin: auto;
-				height: 100px;
-			}
-			
-			.mui-input-row label {
-				float: right;
-				padding: 0.62rem 0.62rem 0 1.87rem;
-			}
-			
-			.mui-input-row button {
-				padding: 0 5px;
-				border-bottom-left-radius: 50px;
-				border-top-left-radius: 50px;
-			}
-			
-			.mui-input-row label[class='f'] {
-				font-family: 'Helvetica Neue', Helvetica, sans-serif;
-				line-height: 1.1;
-				float: left;
-				width: 25%;
-				padding: 11px 15px;
-			}
-			
-			.mui-input-row label~input {
-				width: 50%;
-			}
-			
-			.mui-input-row input[type=text] {
-				text-align: center;
-				padding: 2px 5px;
-				font-size: 1.12rem;
-				height: 3.12rem;
-			}
-			
-			#keyborde>li>span {
-				font-size: 1.25rem;
-			}
-			
-			.bottom_del_div {
-				position: fixed;
-				bottom: 0;
-				z-index: 9;
-			}
-			
-			.mui-table-view {
-				margin-bottom: 45px;
-			}
-			
-			.mui-input-group,
-			.mui-input-group .mui-input-row {
-				height: 3.12rem;
-			}
-		</style>
+		<link rel="stylesheet" href="css/style/main.css" />
 	</head>
-
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
@@ -126,15 +23,15 @@
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
-						<li @tap="toTelDetail()" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
+						<li @tap="toTelDetail(item.c_number)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in callList"  v-bind:class="{'mui-left': !isToDel }">
 							<div class="mui-media-body">
-								<span class="color_333">13510792830</span>
-								<span class="i_flag">副1</span>
-								<p><span class="mui-icon iconfont icon-hurujiantou"></span>广东广州 4月9日 呼入12分21秒 <span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
+								<span class="color_333">{{item.c_number}}</span>
+								<span class="i_flag">{{item.remark}}</span>
+								<p><span class="mui-icon iconfont"  v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 							</div>
 							<input v-if="!isToDel" type="checkbox" value="1" v-model="checkedArr" />
 						</li>
-						<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
+						<!--<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
 							<div class="mui-media-body">
 								<span class="color_red">13510792830</span>
 								<span class="i_flag">副1</span>
@@ -149,7 +46,7 @@
 								<p><span class="mui-icon iconfont icon-weijiejiantou"></span>广东广州 4月9日 呼入12分21秒 <span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 							</div>
 							<input v-if="!isToDel" type="checkbox" value="3" v-model="checkedArr" />
-						</li>
+						</li>-->
 					</ul>
 					<mt-popup v-model="popupVisible">
 						<div @tap="filterList(0,'全部通话')">
@@ -289,6 +186,8 @@
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
+	<script type="text/javascript" src="js/md5.js" ></script>
+	<script type="text/javascript" src="js/js_des.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		var app = null,
@@ -299,6 +198,25 @@
 			app = new App({
 				el: '#app',
 				data: {
+					callList:[
+					{
+				      "calling_number": "13006614405",
+				      "called_number": "13745658452",
+				      "virtual_number": "17136548459",
+				      "type": 1,
+				      "talk_time": 160,
+				      "create_time": "2018-05-09 22:42:49",
+				      "remark": "副卡"
+				    },
+					{
+				      "calling_number": "13006614405",
+				      "called_number": "13745658452",
+				      "virtual_number": "17136548459",
+				      "type": 2,
+				      "talk_time": 661,
+				      "create_time": "2017-05-19 10:42:00",
+				      "remark": "副卡"
+				    }],
 					title: '全部通话',
 					chooseText: '全选',
 					list: [],
@@ -316,9 +234,36 @@
 					init: function() {
 						currentWeb = plus.webview.currentWebview();
 						self = this;
+						self.callList = comConvert(self.callList);
+//						self.getCallLog();
 					}
 				},
 				methods: {
+					getCallLog:function(){
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0,8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier");//设备标识号
+						var user_token="13123456788";
+						var pdata = {
+							app:"Member",
+							class:"getCallLog",
+							nonce_str:nonce_str,
+							timestamp:timestamp,
+							identifier:identifier,
+							client:"web",
+							user_token:user_token
+						}
+						var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&timestamp="+timestamp+"&user_token="+user_token+"&";
+						u.mypost(pdata, stringSignTemp,true, function(data){
+							if(data.status == 0){
+								data = data.data;
+							}else{
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					toggleDel: function() { //控制删除
 						self.isToDel = false;
 						if(self.isToDel) {
@@ -452,8 +397,25 @@
 					}
 				}
 			})
+			
+			//转换
+			function comConvert(items) {
+				var newItems = [];
+				items.forEach(function(item, index) {
+					newItems.push({
+						c_number: item.type == 1?item.called_number:item.calling_number,
+						virtual_number: item.virtual_number,
+						type: item.type,
+						typeName:item.type == 1?'呼入':'呼出',
+						talk_time: u.formatTime(item.talk_time),
+						create_time:item.create_time,
+						remark:item.remark
+					});
+				});
+				return newItems.reverse();
+			}
 		})(mui, window, util)
-
+		
 		//改变键盘的显示
 		function toggleShow() {
 			mui('#keyborde_div').popover('toggle');

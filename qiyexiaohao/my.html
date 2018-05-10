@@ -19,6 +19,7 @@
 				margin: 3.12rem auto;
     			width: 80%;
     			border-radius: 0.93rem;
+			    font-size: 1rem;
 			}
 		</style>
 	</head>
@@ -26,6 +27,7 @@
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
 				<h1 class="mui-title">我的副号</h1>
+				<a @tap="openView('setting.html')" class="mui-icon iconfont icon-shezhi mui-pull-right"></a>
 			</header>
 			<div class="mui-content mui-fullscreen mui-scroll-wrapper">
 				<div class="mui-scroll">
@@ -36,7 +38,7 @@
 								<div class="mui-switch-handle"></div>
 							</div>
 						</li>
-						<li class="mui-table-view-cell" @tap="openView('center/settingAccout.html')">
+						<li class="mui-table-view-cell" @tap="openView('center/myOtherNumber.html')">
 							<a class="mui-navigate-right">
 								已绑定副号信息
 							</a>
@@ -44,6 +46,11 @@
 						<li class="mui-table-view-cell" @tap="openView('center/kefu.html')">
 							<a class="mui-navigate-right">
 								联系客服
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="openView('center/feedback.html')">
+							<a class="mui-navigate-right">
+								意见反馈
 							</a>
 						</li>
 						<li class="mui-table-view-cell" @tap="openView('center/about.html')">
