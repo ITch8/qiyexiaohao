@@ -62,40 +62,36 @@
 	};
 
 	/**@des 辅助工具--请求数据
-	 * @param postUrl  请求接口
 	 * @param pdata  请求参数
+	 * @param stringSignTemp 参数拼接字符串
 	 * @param success 請求成功回调函数
 	 * @param error 请求失敗回调函数
 	 * */
-	u.mypost = function(pdata, show, success, error) {
+	u.mypost = function(pdata, stringSignTemp,show, success, error) {
 		var jmSign_key = "O8tImgCcf*XgObVqLSbg2DoH4XM6$0to";
-		var sign= "";//加密求出
-		var nonce_str = u.mathRand();
-		console.log("nonce_str====" + nonce_str);
-		var timestamp = Date.parse(new Date()).substr(0,8);
-		console.log("timestamp====" + timestamp);
-		var client="web";//固定
-		var identifier = w.getItem("identifier");//设备标识号
+//		var nonce_str = u.mathRand();
+//		console.log("nonce_str====" + nonce_str);
+//		var timestamp = Date.parse(new Date()).substr(0,8);
+//		console.log("timestamp====" + timestamp);
+//		var client="web";//固定
+//		var identifier = w.getItem("identifier");//设备标识号
 		
 		//业务参数
-		var app = "";//可变
-		var _class ="";//可变 class
-		var stringSignTemp = "app=Base&class=Test&client=web&identifier=6541345641546&mobile=13012345678&name=小王&nonce_str=562936×tamp=1510816253&"+jmSign_key;
+//		var app = "";//可变
+//		var _class ="";//可变 class
+//		var stringSignTemp = "app=Base&class=Test&client=web&identifier=6541345641546&mobile=13012345678&name=小王&nonce_str=562936×tamp=1510816253&"+jmSign_key;
+		var stringSignTemp = stringSignTemp+jmSign_key;
 		var signValue = hex_md5(stringSignTemp);//进行md5加密得到sign
-		var pdata = {};//业务参数json对象
 		_.extend(true, pdata, {//组合必需参数
-			'sign':signValue,
-			'nonce_str': nonce_str,
-			'timestamp':timestamp,
-			'client':client,
-			'identifier':identifier
+			'sign':signValue
 		});
 		var EncryptString = strEnc(JSON.stringify(pdata),"MXHKEY17");//对pdata字符串des加密 得到最终的请求参数
 		if(show) {
 			plus.nativeUI.showWaiting("努力加載中...");
 		}
-		console.log(postUrl + '===pdata========' + JSON.stringify(pdata));
-		console.log(postUrl + '===EncryptString========' + EncryptString);
+		console.log('===pdata========' + JSON.stringify(pdata));
+		console.log('===stringSignTemp========' + stringSignTemp);
+		console.log('===EncryptString========' + EncryptString);
 		setTimeout(function() {
 			_.ajax({
 				url: ASKURL,
@@ -104,6 +100,7 @@
 				timeout: 60000,
 				success: function(data) {
 					plus.nativeUI.closeWaiting();
+					console.log('data====' +JSON.stringify(data));
 					_.isFunction(success) ? success(data) : '';
 				},
 				error: function(xhr) {

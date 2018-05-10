@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>登录</title>
+		<title>登录选择公司</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/common.css" />
@@ -97,6 +97,8 @@
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="js/js_des.js" ></script>
+	<script type="text/javascript" src="js/md5.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
@@ -105,14 +107,39 @@
 				data: {},
 				plusReady: {
 					init: function() {
-						
 						self = this;
+						self.getLoginCompany();
 					}
 				},
 				methods: {
+					getLoginCompany:function(){
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0,8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier");//设备标识号
+						var account="13123456788",password="123456";
+						var pdata = {
+							app:"Member",
+							class:"LoginCompany",
+							nonce_str:nonce_str,
+							timestamp:timestamp,
+							identifier:identifier,
+							client:"web",
+							account:account,
+							password:password
+						}
+						var stringSignTemp = "account="+account+"&app=Member&class=LoginCompany&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&password="+password+"&timestamp="+timestamp+"&";
+						u.mypost(pdata, stringSignTemp,true, function(data){
+							if(data.status == 0){
+								data = data.data;
+							}else{
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					login:function(){
-//						w.toIndex();
-						w.openView("loginOfC.html")
+						w.toIndex();
 					}
 				},
 				domReady: function() {

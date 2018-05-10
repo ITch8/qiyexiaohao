@@ -359,7 +359,8 @@
 			"login.html": {
 				"resources": [],
 				"refer": [
-					"index.html"
+					"index.html",
+					"loginOfC.html"
 				],
 				"priority": 0
 			}

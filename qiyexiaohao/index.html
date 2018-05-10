@@ -37,6 +37,7 @@
 			</a>
 		</nav>
 		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/common.js" ></script>
 		<script type="text/javascript" charset="utf-8">
 			//mui初始化
 			mui.init({
@@ -116,7 +117,8 @@
 					plus.navigator.closeSplashscreen(); //手动关闭启动页
 				}, 3000);
 				//设备唯一标识符
-				window.setItem("identifier",plus.device.uuid);
+				window.setItem("identifier",plus.device.uuid.substr(0,15));
+				console.log("device.uuid=======" + plus.device.uuid);
 			});
 			//自定义事件，模拟点击“首页选项卡”
 			document.addEventListener('goIndex', function() {
