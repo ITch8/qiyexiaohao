@@ -9,6 +9,11 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<link rel="stylesheet" href="css/detail.css" />
+		<!--
+        	作者：lichuang516@126.com
+        	时间：2018-05-11
+        	描述：陌生人通话记录
+        -->
 	</head>
 
 	<body>
@@ -27,17 +32,24 @@
 					<div class="detail_body_b font-size-12" @tap="toTel()">广东广州 </div>
 				</div>
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
-					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+					<li @tap="toCreateContact()" class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
 						<span class="mui-icon mui-icon-plusempty"></span>
 						<div class="mui-media-body">新建</div>
 					</li>
-					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+					<li @tap="toSaveContact()" class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
 						<span class="mui-icon iconfont icon-lianxiren"></span>
 						<div class="mui-media-body">添加到联系人</div>
 					</li>
 				</ul>
 				<ul id="listData" class="mui-table-view">
-					<li @tap="toTel()" class="mui-table-view-cell mui-media">
+					<li @tap="toTel(item.c_number)" class="mui-table-view-cell mui-media " v-for="item in callList">
+						<div class="mui-media-body">
+							<span class="color_333">{{item.c_number}}</span>
+							<span class="i_flag">{{item.remark}}</span>
+							<p><span class="mui-icon iconfont"  v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
+						</div>
+					</li>
+					<!--<li @tap="toTel()" class="mui-table-view-cell mui-media">
 						<div class="mui-media-body">
 							<span class="color_333 font_16">13510792830</span>
 							<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
@@ -50,21 +62,7 @@
 							<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
 							<div class="font-size-12"><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</div>
 						</div>
-					</li>
-					<li class="mui-table-view-cell mui-media">
-						<div class="mui-media-body">
-							<span class="color_333 font_16">13510792830</span>
-							<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
-							<div class="font-size-12"><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</div>
-						</div>
-					</li>
-					<li class="mui-table-view-cell mui-media">
-						<div class="mui-media-body">
-							<span class="color_333 font_16">13510792830</span>
-							<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
-							<div class="font-size-12"><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</div>
-						</div>
-					</li>
+					</li>-->
 				</ul>
 			</div>
 			<button @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除通话记录</button>
@@ -79,13 +77,61 @@
 		(function(_, w, u) {
 			App({
 				el: '#app',
-				data: {},
+				data: {
+					callList:[
+					{
+				      "calling_number": "13006614405",
+				      "called_number": "13745658452",
+				      "virtual_number": "17136548459",
+				      "type": 1,
+				      "talk_time": 160,
+				      "create_time": "2018-05-09 22:42:49",
+				      "remark": "副卡"
+				    },
+					{
+				      "calling_number": "13006614405",
+				      "called_number": "13745658452",
+				      "virtual_number": "17136548459",
+				      "type": 2,
+				      "talk_time": 661,
+				      "create_time": "2017-05-19 10:42:00",
+				      "remark": "副卡"
+				    }]
+				},
 				plusReady: {
 					init: function() {
 						self = this;
+						self.callList = comConvert(self.callList);
+//						self.getCallLog('13123456788');
 					}
 				},
 				methods: {
+					getCallLog:function(number){
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0,8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier");//设备标识号
+						var user_token="13123456788";
+						var pdata = {
+							app:"Member",
+							class:"getCallLog",
+							nonce_str:nonce_str,
+							timestamp:timestamp,
+							identifier:identifier,
+							client:"web",
+							user_token:user_token,
+							number:number
+						}
+						var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&number="+number+"&timestamp="+timestamp+"&user_token="+user_token+"&";
+						u.mypost(pdata, stringSignTemp,true, function(data){
+							if(data.status == 0){
+								data = data.data;
+							}else{
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					addContact: function(givenName, phoneNumbers) { //往通讯录添加新联系人
 						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
 							// 向通讯录中添加联系人
@@ -121,12 +167,35 @@
 					},
 					toSendMsg: function() {
 						w.openView("sendMsg.html")
+					},
+					toCreateContact:function(){//新建
+						w.openView("addContact.html")
+					},
+					toSaveContact:function(){//保存到已有联系人
+						w.openView("contact_mint.html")
 					}
 				},
 				domReady: function() {
 					_.init();
 				}
 			})
+			
+			//转换
+			function comConvert(items) {
+				var newItems = [];
+				items.forEach(function(item, index) {
+					newItems.push({
+						c_number: item.type == 1?item.called_number:item.calling_number,
+						virtual_number: item.virtual_number,
+						type: item.type,
+						typeName:item.type == 1?'呼入':'呼出',
+						talk_time: u.formatTime(item.talk_time),
+						create_time:item.create_time,
+						remark:item.remark
+					});
+				});
+				return newItems.reverse();
+			}
 		})(mui, window, util)
 	</script>
 

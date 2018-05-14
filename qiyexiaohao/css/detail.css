@@ -9,7 +9,8 @@
 	font-size: 1rem;
 	line-height: 100%;
 	padding: 0;
-	height: 1.88rem;
+	height: 2.5rem;
+	color: #ff4400;
 }
 
 .mui-grid-view.mui-grid-9 {
@@ -60,4 +61,8 @@ div {
 
 .mui-table-view-cell {
 	padding: 0.62rem 0.62rem 0.43rem 0.62rem;
+}
+
+.mint-navbar{
+	border-top: 1px solid #DEDEDE;
 }

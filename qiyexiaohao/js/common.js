@@ -87,7 +87,7 @@
 		_.extend(true, pdata, { //组合必需参数
 			'sign': signValue
 		});
-		var EncryptString = strEnc(JSON.stringify(pdata), "MXHKEY17"); //对pdata字符串des加密 得到最终的请求参数
+		var EncryptString = stringToHex(des("MXHKEY17",JSON.stringify(pdata),1,1,"12345678",1)); //对pdata字符串des加密 得到最终的请求参数
 		if(show) {
 			plus.nativeUI.showWaiting("努力加載中...");
 		}

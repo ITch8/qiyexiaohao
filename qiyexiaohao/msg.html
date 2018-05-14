@@ -141,6 +141,31 @@
 					}
 				},
 				methods: {
+					getCallLog:function(){
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0,8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier");//设备标识号
+						var user_token="13123456788";
+						var pdata = {
+							app:"Member",
+							class:"getCallLog",
+							nonce_str:nonce_str,
+							timestamp:timestamp,
+							identifier:identifier,
+							client:"web",
+							user_token:user_token
+						}
+						var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&timestamp="+timestamp+"&user_token="+user_token+"&";
+						u.mypost(pdata, stringSignTemp,true, function(data){
+							if(data.status == 0){
+								data = data.data;
+							}else{
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					toMsgList:function(){
 						w.openView("msgList.html")
 					},
