@@ -314,7 +314,8 @@
 					"fonts/iconfont.ttf"
 				],
 				"refer": [
-					"sendMsg.html"
+					"sendMsg.html",
+					"msgList.html"
 				],
 				"priority": 0
 			},

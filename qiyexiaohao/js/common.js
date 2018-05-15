@@ -223,7 +223,7 @@
 		 * */
 		var i = i || 0; //设置默认值为0 
 		var idArr = ["main", "msg", "contact", "my"];
-		var main = plus.webview.getWebviewById("index");
+		var main = plus.webview.getWebviewById("HBuilder");
 		mui.fire(main, 'goIndex', {
 			id: idArr[i]
 		});

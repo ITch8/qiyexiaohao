@@ -39,7 +39,9 @@
 			#login-form button {
 				width: 100%;
 				margin: 40px 0 0;
-				background-color: #00acf8;color: #fff;border: #323232;
+				background-color: #00acf8;
+				color: #fff;
+				border: #323232;
 			}
 			
 			.mui-input-row label~input {
@@ -82,13 +84,13 @@
 					<form id='login-form' class="mui-input-group">
 						<div class="mui-input-row">
 							<label><span class="mui-icon mui-icon-person"></span></label>
-							<input type="tel" class="mui-input-clear mui-input" placeholder="請輸入11位手机号" value="">
+							<input type="tel" class="mui-input-clear mui-input" placeholder="請輸入11位手机号" v-model="account">
 						</div>
 						<div class="mui-input-row">
 							<label><span class="mui-icon mui-icon-locked "></span></label>
-							<input type="password" class="mui-input-clear mui-input" placeholder="請輸入密碼" value="" autocomplete="off">
+							<input type="password" class="mui-input-clear mui-input" placeholder="請輸入密碼" v-model="password" autocomplete="off">
 						</div>
-						<button type="button" class="mui-btn" @tap="login()">立即登录</button>
+						<button type="button" class="mui-btn mui-btn-blue mui-btn-block" @tap="login()">立即登录</button>
 					</form>
 				</div>
 			</div>
@@ -97,22 +99,57 @@
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="js/md5.js" ></script>
+	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
+			var self = null;
 			App({
 				el: '#app',
-				data: {},
+				data: {
+					account:'13123456788',
+					password:'123456'
+				},
 				plusReady: {
 					init: function() {
-						
 						self = this;
 					}
 				},
 				methods: {
-					login:function(){
-//						w.toIndex();
-						w.openView("loginOfC.html")
+					login: function() {
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier"); //设备标识号
+						var company_id = "b3d6c6ae9c5f923602680fd704f7b0f8";
+						var pdata = {
+							app: "Member",
+							class: "Login",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							account: self.account,
+							password: self.password,
+							company_id: company_id
+						}
+						var stringSignTemp = "account=" + self.account + "&app=Member&class=Login&client=web&company_id="+company_id+"&identifier=" + identifier + "&nonce_str=" + nonce_str + "&password=" + self.password + "&timestamp=" + timestamp + "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								data = data.data;
+								w.setItem("user_token", data.user_token); //存储user_token
+								w.setItem("account", data.account); //存储账号
+								w.setItem("password", data.password); //存储密码
+								_.toast("登录成功");
+								_.later(function(){
+									w.toIndex();
+								},1000)
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
 					}
 				},
 				domReady: function() {

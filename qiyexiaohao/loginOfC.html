@@ -88,7 +88,7 @@
 							<label><span class="mui-icon mui-icon-locked "></span></label>
 							<input type="password" class="mui-input-clear mui-input" placeholder="请输入密码" v-model="password" autocomplete="off">
 						</div>
-						<button type="button" class="mui-btn" @tap="login()">立即登录</button>
+						<button type="button" class="mui-btn mui-btn-blue mui-btn-block" @tap="login()">立即登录</button>
 					</form>
 				</div>
 			</div>
@@ -137,13 +137,13 @@
 						u.mypost(pdata, stringSignTemp,true, function(data){
 							if(data.status == 0){
 								data = data.data;
+								w.setItem("company_id","b3d6c6ae9c5f923602680fd704f7b0f8");//存储企业id
 							}else{
 								_.toast(data.msg || '请求异常');
 							}
 						}, myerror);
 					},
 					login:function(){
-//						w.toIndex();
 						var nonce_str = u.mathRand();
 						console.log("nonce_str====" + nonce_str);
 						var timestamp = Date.parse(new Date()).toString().substr(0,8);

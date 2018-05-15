@@ -74,6 +74,7 @@
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
 				var self = plus.webview.currentWebview();
+				console.log("self.id======" + self.id);
 				//首頁关闭ios右划
 				self.setStyle({
 					popGesture: "none"

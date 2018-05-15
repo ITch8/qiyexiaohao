@@ -66,9 +66,9 @@
 				<div class="mui-scroll">
 					<div class="mui-card">
 						<ul class="mui-table-view">
-							<li class="mui-table-view-cell mui-collapse">
+							<li class="mui-table-view-cell mui-collapse" v-for="item in dataList">
 								<a class="mui-navigate-right" href="#">
-									<div class="font_16 _h">15986359863<span class="i_flag">副号</span></div>
+									<div class="font_16 _h">{{item.number}}<span class="i_flag">{{item.remark}}</span></div>
 								</a>
 								<div class="mui-collapse-content">
 									<ul class="mui-table-view color_666">
@@ -123,7 +123,7 @@
 								</div>
 							</li>
 							
-							<li class="mui-table-view-cell mui-collapse">
+							<!--<li class="mui-table-view-cell mui-collapse">
 								<a class="mui-navigate-right" href="#">
 									<div class="font_16 _h">15986359863<span class="i_flag">副号</span></div>
 								</a>
@@ -178,7 +178,7 @@
 										</li>
 									</ul>
 								</div>
-							</li>
+							</li>-->
 						</ul>
 					</div>
 					<div class="main">
@@ -193,18 +193,49 @@
 	<script src="../js/mui.min.js"></script>
 	<script type="text/javascript" src="../js/vue.min.js"></script>
 	<script type="text/javascript" src="../js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="../js/md5.js" ></script>
+	<script type="text/javascript" src="../js/des/crypto-js.js" ></script>
 	<script type="text/javascript" src="../js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
+			var self = null;
 			App({
 				el: '#app',
-				data: {},
+				data: {
+					dataList:[]
+				},
 				plusReady: {
 					init: function() {
 						self = this;
+						self.getMyNumber();
 					}
 				},
 				methods: {
+					getMyNumber: function() {
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier"); //设备标识号
+						var user_token = w.getItem("user_token");
+						var pdata = {
+							app: "Member",
+							class: "getMyNumber",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token
+						}
+						var stringSignTemp = "app=Member&class=getMyNumber&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp + "&user_token="+user_token+"&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								self.dataList = data.data;
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					openView: function(url) {
 						w.openView(url);
 					}

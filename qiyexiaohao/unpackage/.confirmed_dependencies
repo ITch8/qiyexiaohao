@@ -125,7 +125,8 @@
 			"css/iconfont.css"
 		],
 		"refer": [
-			"sendMsg.html"
+			"sendMsg.html",
+			"msgList.html"
 		],
 		"priority": 0
 	},

@@ -59,7 +59,7 @@
 							</a>
 						</li>
 					</ul>
-					<button type="button" class="mui-btn mui-btn-blue mui-btn-block" @tap="openView('login.html')">退出登录</button>
+					<button type="button" class="mui-btn mui-btn-blue mui-btn-block" @tap="loginout()">退出登录</button>
 					<!--<ul class="mui-table-view">
 						<li class="mui-table-view-cell" @tap="openView('login.html')">
 							<div>15863498562</div>
@@ -90,6 +90,8 @@
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="js/md5.js" ></script>
+	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
@@ -102,6 +104,39 @@
 					}
 				},
 				methods: {
+					loginout:function(){
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier"); //设备标识号
+						var account = w.getItem("account"),password = w.getItem("password"),company_id = w.getItem("company_id");
+						var pdata = {
+							app: "Member",
+							class: "Loginout",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							account: account,
+							password: password,
+							company_id: company_id
+						}
+						var stringSignTemp = "account=" + account + "&app=Member&class=Loginout&client=web&company_id="+company_id+"&identifier=" + identifier + "&nonce_str=" + nonce_str + "&password=" + password + "&timestamp=" + timestamp + "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								_.toast("退出成功");
+								w.removeItem("account");
+								w.removeItem("password");
+								w.removeItem("company_id");
+								_.later(function(){
+									w.openView("login.html");
+								},500)
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					openView: function(url) {
 						w.openView(url);
 					}
