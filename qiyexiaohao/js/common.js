@@ -87,11 +87,12 @@
 		_.extend(true, pdata, { //组合必需参数
 			'sign': signValue
 		});
-		var EncryptString = stringToHex(des("MXHKEY17",JSON.stringify(pdata),1,1,"12345678",1)); //对pdata字符串des加密 得到最终的请求参数
+		console.log('===pdata========' + JSON.stringify(pdata));
+		var  EncryptString = u.encryptByDESModeCBC(JSON.stringify(pdata),"MXHKEY17","12345678");
+		console.log("EncryptString====" + EncryptString);
 		if(show) {
 			plus.nativeUI.showWaiting("努力加載中...");
 		}
-		console.log('===pdata========' + JSON.stringify(pdata));
 		console.log('===EncryptString========' + EncryptString);
 		setTimeout(function() {
 			_.ajax({
@@ -115,7 +116,17 @@
 			});
 		}, 50);
 	};
-	u.mathRand = function() {
+	u.encryptByDESModeCBC = function(message,key,iv) {////CBC模式des加密
+		var keyHex = CryptoJS.enc.Utf8.parse(key);
+		var ivHex = CryptoJS.enc.Utf8.parse(iv);
+		encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+			iv: ivHex,
+			mode: CryptoJS.mode.CBC,
+			padding: CryptoJS.pad.Pkcs7
+		});
+		return CryptoJS.enc.Base64.stringify(encrypted.ciphertext);//转为base64
+	};
+	u.mathRand = function() {//随机6位数
 		var num = "";
 		for(var i = 0; i < 6; i++) {
 			num += Math.floor(Math.random() * 10);
