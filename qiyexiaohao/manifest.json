@@ -8,7 +8,7 @@
 	"name": "企业小号",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "1.0.0",/*应用版本名称*/
-		"code": "83"
+		"code": "1"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -16,9 +16,9 @@
 	},
 	"launch_path": "index.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
 	"developer": {
-		"name": "",/*开发者名称*/
+		"name": "lc",/*开发者名称*/
 		"email": "",/*开发者邮箱地址*/
-		"url": "http://www.dcloud.io"
+		"url": ""
 	},
 	"permissions": {
 		"Cache": {

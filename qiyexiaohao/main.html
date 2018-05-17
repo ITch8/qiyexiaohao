@@ -48,7 +48,8 @@
 							<input v-if="!isToDel" type="checkbox" value="3" v-model="checkedArr" />
 						</li>-->
 					</ul>
-					<mt-popup v-model="popupVisible">
+					<mt-popup v-model="popupVisible"
+						:closeOnClickModal="closeOnClickModal">
 						<div @tap="filterList(0,'全部通话')">
 							<mt-cell title="全部通话"></mt-cell>
 						</div>
@@ -61,7 +62,7 @@
 		            	时间：2018-04-13
 		            	描述：底部删除按钮
 		            -->
-				<button @tap="toDel()" v-show="!isToDel" type="button" class="bottom_del_div mui-btn mui-btn-block">删除({{checkedArr.length}})</button>
+				<button @tap="toDel()" v-show="!isToDel" type="button" class="bottom_del_div color_red mui-btn mui-btn-block">删除({{checkedArr.length}})</button>
 			</div>
 			<!--
             	时间：2018-04-13
@@ -187,7 +188,7 @@
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/md5.js" ></script>
-	<script type="text/javascript" src="js/js_des.js" ></script>
+	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		var app = null,
@@ -198,25 +199,7 @@
 			app = new App({
 				el: '#app',
 				data: {
-					callList:[
-					{
-				      "calling_number": "13006614405",
-				      "called_number": "13745658452",
-				      "virtual_number": "17136548459",
-				      "type": 1,
-				      "talk_time": 160,
-				      "create_time": "2018-05-09 22:42:49",
-				      "remark": "副卡"
-				    },
-					{
-				      "calling_number": "13006614405",
-				      "called_number": "13745658452",
-				      "virtual_number": "17136548459",
-				      "type": 2,
-				      "talk_time": 661,
-				      "create_time": "2017-05-19 10:42:00",
-				      "remark": "副卡"
-				    }],
+					callList:[],
 					title: '全部通话',
 					chooseText: '全选',
 					list: [],
@@ -228,14 +211,14 @@
 					isToDel: true, //是否显示取消
 					delNumber: 0, //删除数量
 					checkedArr: [],
-					isShowDelInput: false
+					isShowDelInput: false,
+					closeOnClickModal:false
 				},
 				plusReady: {
 					init: function() {
 						currentWeb = plus.webview.currentWebview();
 						self = this;
-						self.callList = comConvert(self.callList);
-//						self.getCallLog();
+						self.getCallLog();
 					}
 				},
 				methods: {
@@ -245,7 +228,7 @@
 						var timestamp = Date.parse(new Date()).toString().substr(0,8);
 						console.log("timestamp====" + timestamp);
 						var identifier = w.getItem("identifier");//设备标识号
-						var user_token="13123456788";
+						var user_token = w.getItem("user_token");
 						var pdata = {
 							app:"Member",
 							class:"getCallLog",
@@ -259,6 +242,7 @@
 						u.mypost(pdata, stringSignTemp,true, function(data){
 							if(data.status == 0){
 								data = data.data;
+								self.callList = comConvert(data);
 							}else{
 								_.toast(data.msg || '请求异常');
 							}
@@ -339,38 +323,39 @@
 						self.showTabbar();
 					},
 					toDel: function() {
-						console.log("value===" + self.checkedArr)
+						//删除通话记录
+						plus.nativeUI.confirm("确定删除所选号码的通话记录?", function(e) {
+							if(e.index == 1) {
+								_.toast("已删除");
+								console.log("value===" + self.checkedArr)
+							}
+						}, {
+							"title": "删除通话记录",
+							"buttons": ["取消", "删除"]
+						})
 					},
 					toggleTabbar: function() {
-						var viewStyle = currentWeb.getStyle(); //toggle隐藏tabbar
+						var viewStyle = currentWeb.getStyle();//toggle隐藏tabbar
 						console.log("viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom == 0) {
-							currentWeb.setStyle({
-								bottom: bottom
-							});
-						} else {
-							currentWeb.setStyle({
-								bottom: '0'
-							});
-						}
+						if(viewStyle.bottom == 0){
+			                currentWeb.setStyle({bottom:bottom});
+			            }else{
+			                currentWeb.setStyle({bottom:0});
+			            }
 					},
 					hiddenTabbar: function() {
-						var viewStyle = currentWeb.getStyle(); //动态隐藏tabbar
+						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
 						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != 0) {
-							currentWeb.setStyle({
-								bottom: 0
-							});
-						}
+						if(viewStyle.bottom != 0){
+			                currentWeb.setStyle({bottom:'0'});
+			            }
 					},
 					showTabbar: function() {
-						var viewStyle = currentWeb.getStyle(); //动态显示tabbar
+						var viewStyle = currentWeb.getStyle();//动态显示tabbar
 						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom == 0) {
-							currentWeb.setStyle({
-								bottom: bottom
-							});
-						}
+						if(viewStyle.bottom == 0){
+			                currentWeb.setStyle({bottom:bottom});
+			            }
 					},
 					backAll:function(){
 						self.filter_resultShow=false;
