@@ -13,16 +13,22 @@
 			.mui-input-group .mui-input-row {
 				line-height: 38px;
 			}
-			.mui-table-view-cell{
-			    padding: 8px 10px;
+			
+			.mui-table-view-cell {
+				padding: 8px 10px;
 			}
-			.mui-bar-nav.mui-bar .mui-icon{
+			
+			.mui-bar-nav.mui-bar .mui-icon {
 				margin-top: 0;
 			}
-			.mui-bar .mui-icon{
+			
+			.mui-bar .mui-icon {
 				font-size: 12px;
 			}
-			h4{    font-weight: 100;}
+			
+			h4 {
+				font-weight: 100;
+			}
 		</style>
 	</head>
 
@@ -39,24 +45,24 @@
 						<mt-search v-model="searchValue" cancel-text="取消" placeholder="搜索"></mt-search>
 					</form>
 					<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-						<li class="mui-table-view-cell" @tap="toMsgList()">
+						<li class="mui-table-view-cell" @tap="toMsgList()" v-for="item in smsList">
 							<div class="mui-slider-right mui-disabled">
 								<a class="mui-btn mui-btn-red">删除</a>
 							</div>
 							<div class="mui-slider-handle">
 								<div class="mui-table">
 									<div class="mui-table-cell mui-col-xs-9">
-										<h4>王大成<span class="i_flag">主号</span></h4>
+										<h4>{{item.c_number}}<span class="i_flag">{{item.remark}}</span></h4>
 										<p class="mui-h6 mui-ellipsis">【升级套餐仅加10元！流量变身不限量！】尊敬的客户</p>
 									</div>
 									<div class="mui-table-cell mui-col-xs-3 mui-text-right">
-										<div class="mui-h5">02-08</div>
+										<div class="mui-h5">{{item.create_time}}</div>
 										<div class="mui-badge mui-badge-danger">11</div>
 									</div>
 								</div>
 							</div>
 						</li>
-						<li class="mui-table-view-cell" @tap="toMsgList()">
+						<!--<li class="mui-table-view-cell" @tap="toMsgList()">
 							<div class="mui-slider-right mui-disabled">
 								<a class="mui-btn mui-btn-red">删除</a>
 							</div>
@@ -105,9 +111,12 @@
 									</div>
 								</div>
 							</div>
-						</li>
+						</li>-->
 					</ul>
-					<mt-popup v-model="popupVisible">
+					<mt-popup 
+						v-model="popupVisible"
+						position="top"
+						:closeOnClickModal=false>
 						<div v-on:click.stop="filterList(0,'全部信息')">
 							<mt-cell title="全部信息"></mt-cell>
 						</div>
@@ -123,50 +132,56 @@
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="js/md5.js"></script>
+	<script type="text/javascript" src="js/des/crypto-js.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
-			var currentWeb = null,bottom=0;
+			var currentWeb = null,
+				bottom = 0;
 			var vm = new App({
 				el: '#app',
 				data: {
+					smsList:[],
 					searchValue: '',
 					popupVisible: false,
-					title:"全部信息"
+					title: "全部信息"
 				},
 				plusReady: {
 					init: function() {
 						currentWeb = plus.webview.currentWebview();
 						self = this;
+						self.getSmsLog();
 					}
 				},
 				methods: {
-					getCallLog:function(){
+					getSmsLog: function() {
 						var nonce_str = u.mathRand();
 						console.log("nonce_str====" + nonce_str);
-						var timestamp = Date.parse(new Date()).toString().substr(0,8);
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
 						console.log("timestamp====" + timestamp);
-						var identifier = w.getItem("identifier");//设备标识号
-						var user_token="13123456788";
+						var identifier = w.getItem("identifier"); //设备标识号
+						var user_token = w.getItem("user_token");
 						var pdata = {
-							app:"Member",
-							class:"getCallLog",
-							nonce_str:nonce_str,
-							timestamp:timestamp,
-							identifier:identifier,
-							client:"web",
-							user_token:user_token
+							app: "Member",
+							class: "getSmsLog",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token
 						}
-						var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&timestamp="+timestamp+"&user_token="+user_token+"&";
-						u.mypost(pdata, stringSignTemp,true, function(data){
-							if(data.status == 0){
-								data = data.data;
-							}else{
+						var stringSignTemp = "app=Member&class=getSmsLog&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp + "&user_token=" + user_token + "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								self.smsList = comConvert(data.data || []);
+								
+							} else {
 								_.toast(data.msg || '请求异常');
 							}
 						}, myerror);
 					},
-					toMsgList:function(){
+					toMsgList: function() {
 						w.openView("msgList.html")
 					},
 					sendMsg: function(toArr, msgBody) {
@@ -186,7 +201,7 @@
 						console.log("type====" + type);
 						self.title = title;
 						self.popupVisible = false;
-						self.showTabbar();
+//						self.showTabbar();
 						if(0 == type) { //全部
 
 						} else { //副号
@@ -196,30 +211,38 @@
 					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
 						console.log("popupVisible===" + self.popupVisible);
-						self.toggleTabbar();
+//						self.toggleTabbar();
 					},
-					toggleTabbar:function(){
-						var viewStyle = currentWeb.getStyle();//toggle隐藏tabbar
+					toggleTabbar: function() {
+						var viewStyle = currentWeb.getStyle(); //toggle隐藏tabbar
 						console.log("viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom == 0){
-			                currentWeb.setStyle({bottom:bottom});
-			            }else{
-			                currentWeb.setStyle({bottom:0});
-			            }
+						if(viewStyle.bottom == 0) {
+							currentWeb.setStyle({
+								bottom: bottom
+							});
+						} else {
+							currentWeb.setStyle({
+								bottom: 0
+							});
+						}
 					},
-					hiddenTabbar:function(){
-						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
+					hiddenTabbar: function() {
+						var viewStyle = currentWeb.getStyle(); //动态隐藏tabbar
 						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != 0){
-			                currentWeb.setStyle({bottom:'0'});
-			            }
+						if(viewStyle.bottom != 0) {
+							currentWeb.setStyle({
+								bottom: '0'
+							});
+						}
 					},
-					showTabbar:function(){
-						var viewStyle = currentWeb.getStyle();//动态显示tabbar
+					showTabbar: function() {
+						var viewStyle = currentWeb.getStyle(); //动态显示tabbar
 						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom == 0){
-			                currentWeb.setStyle({bottom:bottom});
-			            }
+						if(viewStyle.bottom == 0) {
+							currentWeb.setStyle({
+								bottom: bottom
+							});
+						}
 					}
 				},
 				domReady: function() {
@@ -227,22 +250,22 @@
 					//获取屏幕宽度
 					var width = document.documentElement.clientWidth;
 					//3.75
-					if(width >= 320 && width < 360){
+					if(width >= 320 && width < 360) {
 						bottom = "54px";
-					}else if(width >= 360 && width < 400){
+					} else if(width >= 360 && width < 400) {
 						bottom = "61px";
-					}else if(width >= 400 && width < 440){
+					} else if(width >= 400 && width < 440) {
 						bottom = "69px";
-					}else if(width >= 440 && width < 480){
-						bottom = (20 * 3.75)+1 +'px';
-					}else if(width >= 480 && width < 640){
-						bottom = (22 * 3.75)+1 +'px';
-					}else if(width >= 640){
-						bottom = (28 * 3.75)+1 +'px';
+					} else if(width >= 440 && width < 480) {
+						bottom = (20 * 3.75) + 1 + 'px';
+					} else if(width >= 480 && width < 640) {
+						bottom = (22 * 3.75) + 1 + 'px';
+					} else if(width >= 640) {
+						bottom = (28 * 3.75) + 1 + 'px';
 					}
 				}
 			})
-			_('#app').on('tap', '.mui-btn', function(event) {//删除短信
+			_('#app').on('tap', '.mui-btn', function(event) { //删除短信
 				var elem = this;
 				var li = elem.parentNode.parentNode;
 				_.confirm('确认删除该条记录？', '提示', btnArray, function(e) {
@@ -256,6 +279,23 @@
 				});
 			});
 			var btnArray = ['确认', '取消'];
+			
+			
+			//转换
+			function comConvert(items) {
+				var newItems = [];
+				items.forEach(function(item, index) {
+					newItems.push({
+						c_number: item.type == 1?item.called_number:item.calling_number,
+						virtual_number: item.virtual_number,
+						type: item.type,
+						typeName:item.type == 1?'收入':'发出',
+						create_time:item.create_time.substr(0,10),
+						remark:item.remark
+					});
+				});
+				return newItems.reverse();
+			}
 		})(mui, window, util)
 	</script>
 

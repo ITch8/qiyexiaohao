@@ -10,6 +10,25 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<link rel="stylesheet" href="css/style/msg.css" />
+		<style>
+			.test_box {
+				width: 250px;
+				min-height: 45px;
+				max-height: 100px;
+				line-height: 1.12rem;
+				_height: 45px;
+				margin-left: auto;
+				margin-right: auto;
+				padding: 3px 3px 3px 40px;
+				outline: 0;
+				border: 1px solid #bbb;
+				word-wrap: break-word;
+				overflow-x: hidden;
+				overflow-y: auto;
+				_overflow-y: visible;
+				font-size: 0.75rem
+			}
+		</style>
 	</head>
 
 	<body>
@@ -72,9 +91,10 @@
 						<span v-bind:class="[isMain ? i_flag : i_flag_2,'flag']">{{cardType}}</span>
 					</div>
 					<div class="footer-center">
-						<textarea type="text" class='input-text' placeholder="输入内容" v-model="msgBody"></textarea>
+						<div class="test_box" contenteditable="true" id="msgBody"></div>
+						<!--<textarea type="text" class='input-text' placeholder="输入内容" v-model="msgBody"></textarea>-->
 					</div>
-					<button class="footer-right">
+					<button class="footer-right" @tap="sendMsg()">
 						<i class="mui-icon iconfont icon-duanxinfasongjiantou"></i>
 					</button>
 				</footer>
@@ -109,11 +129,12 @@
 					}
 				},
 				methods: {
-					sendMsg: function(toArr, msgBody) {
+					sendMsg: function(toArr) {
 						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
 						msg.to = ['18611497504', '15811140520'];
-						msg.body = self.msgBody
-						plus.messaging.sendMessage(msg);
+//						msg.body = self.msgBody
+						console.log("msgBody========" + document.getElementById("msgBody").innerHTML);
+//						plus.messaging.sendMessage(msg);
 					},
 					cancel: function() {
 						plus.nativeUI.confirm('是否放弃本次编辑？', function(e) {

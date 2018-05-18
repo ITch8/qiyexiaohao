@@ -24,12 +24,12 @@ footer {
 	position: fixed;
 	width: 100%;
 	height: auto;
-	min-height: 3.12rem;
+	/*min-height: 3.12rem;*/
 	border-top: solid 1px #bbb;
 	left: 0;
 	bottom: -2px;
 	overflow: hidden;
-	padding: 0 3.12rem;
+	/*padding: 0 3.12rem;*/
 	background-color: #fafafa;
 }
 
@@ -62,7 +62,7 @@ footer {
 
 .footer-center {
 	height: 100%;
-	padding: 0.31rem 0 0;
+	padding: 5px 0 5px;
 }
 
 footer .iconfont {
@@ -85,7 +85,7 @@ textarea {
 
 .flag {
 	position: relative;
-	bottom: 1.3rem;
+	bottom: 1.12rem;
 	left: 2.81rem;
 }
 

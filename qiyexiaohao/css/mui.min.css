@@ -984,8 +984,8 @@ input[type=reset].mui-active:enabled,
 input[type=reset]:enabled:active,
 input[type=submit].mui-active:enabled,
 input[type=submit]:enabled:active {
-	color: #fff;
-	background-color: #929292
+	color: #00acf8;
+	background-color: #fff
 }
 
 .mui-btn.mui-disabled,
