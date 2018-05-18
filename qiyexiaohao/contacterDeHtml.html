@@ -101,8 +101,8 @@
 				plusReady: {
 					init: function() {
 						self = this;
-						self.callList = comConvert(self.callList);
-//						self.getCallLog('13123456788');
+//						self.callList = comConvert(self.callList);
+						self.getCallLog('13123456788');
 					}
 				},
 				methods: {
@@ -112,7 +112,7 @@
 						var timestamp = Date.parse(new Date()).toString().substr(0,8);
 						console.log("timestamp====" + timestamp);
 						var identifier = w.getItem("identifier");//设备标识号
-						var user_token="13123456788";
+						var user_token= w.getItem("user_token");
 						var pdata = {
 							app:"Member",
 							class:"getCallLog",
@@ -126,7 +126,7 @@
 						var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&number="+number+"&timestamp="+timestamp+"&user_token="+user_token+"&";
 						u.mypost(pdata, stringSignTemp,true, function(data){
 							if(data.status == 0){
-								data = data.data;
+								self.callList = comConvert(data.data);
 							}else{
 								_.toast(data.msg || '请求异常');
 							}

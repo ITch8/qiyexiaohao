@@ -48,8 +48,7 @@
 							<input v-if="!isToDel" type="checkbox" value="3" v-model="checkedArr" />
 						</li>-->
 					</ul>
-					<mt-popup v-model="popupVisible"
-						:closeOnClickModal="closeOnClickModal">
+					<mt-popup v-model="popupVisible">
 						<div @tap="filterList(0,'全部通话')">
 							<mt-cell title="全部通话"></mt-cell>
 						</div>
@@ -211,8 +210,7 @@
 					isToDel: true, //是否显示取消
 					delNumber: 0, //删除数量
 					checkedArr: [],
-					isShowDelInput: false,
-					closeOnClickModal:false
+					isShowDelInput: false
 				},
 				plusReady: {
 					init: function() {
