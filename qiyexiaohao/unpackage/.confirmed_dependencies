@@ -163,18 +163,26 @@
   "center/addAcount.html": {
     "refer": [
       "login.html"
-    ]
+    ],
+    "resources": []
   },
   "login.html": {
     "refer": [
       "index.html",
       "loginOfC.html"
-    ]
+    ],
+    "resources": []
   },
   "center/myOtherNumber.html": {
     "refer": [
       "login.html",
       "center/kefu.html"
+    ],
+    "resources": []
+  },
+  "loginOfC.html": {
+    "refer": [
+      "index.html"
     ]
   }
 }

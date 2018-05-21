@@ -86,7 +86,7 @@
 						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
 						console.log("timestamp====" + timestamp);
 						var identifier = w.getItem("identifier"); //设备标识号
-						var account = w.getItem("account"),password = w.getItem("password"),company_id = w.getItem("company_id");
+						var account = w.getItem("mobile"),password = w.getItem("password"),company_id = w.getItem("company_id");
 						var pdata = {
 							app: "Member",
 							class: "Loginout",
@@ -102,6 +102,7 @@
 						u.mypost(pdata, stringSignTemp, true, function(data) {
 							if(data.status == 0) {
 								_.toast("退出成功");
+								w.removeItem("user_token");
 								w.removeItem("account");
 								w.removeItem("password");
 								w.removeItem("company_id");

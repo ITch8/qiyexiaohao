@@ -376,6 +376,13 @@
 					"center/kefu.html"
 				],
 				"priority": 0
+			},
+			"loginOfC.html": {
+				"resources": [],
+				"refer": [
+					"index.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

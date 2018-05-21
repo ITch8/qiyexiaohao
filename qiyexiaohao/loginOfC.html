@@ -8,88 +8,21 @@
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
-		<style>
-			.login-logo {
-				margin: 18% auto;
-				width: 90px;
-			}
-			
-			.mui-content {
-				background-color: #fff
-			}
-			
-			.login-logo-bg {
-				text-align: center
-			}
-			
-			.login-logo-bg img {
-				height: 100px;
-				width: 100px
-			}
-			
-			#login-form {
-				margin: 30px 30px 0;
-			}
-			
-			#login-form input {
-				padding: 10px 30px 0 2px;
-				font-size: 14px
-			}
-			
-			#login-form button {
-				width: 100%;
-				margin: 40px 0 0;
-				background-color: #00acf8;color: #fff;border: #323232;
-			}
-			
-			.mui-input-row label~input {
-				width: 80%;
-			}
-			
-			.mui-input-row label {
-				width: 20%;
-				padding: 16px 15px;
-			}
-			
-			.mui-input-group .mui-input-row:after,
-			.mui-input-group:after {
-				left: 0;
-			}
-			
-			.mui-input-group:before {
-				height: 0
-			}
-			
-			.mui-input-group:after {
-				height: 0
-			}
-		</style>
+		<link rel="stylesheet" href="css/style/loginOfC.css" />
 	</head>
-
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
 				<a class="mui-action-back mui-icon iconfont icon-jiantou mui-pull-left"></a>
-				<h1 class="mui-title">登录</h1>
+				<h1 class="mui-title">选择企业</h1>
 			</header>
 			<div class="mui-content mui-fullscreen mui-scroll-wrapper">
-				<div class="mui-scroll">
-					<div class="login-logo">
-						<div class="login-logo-bg">
-							<img src="img/logo.png" />
-						</div>
+				<div class="mui-scroll"> 
+					<div class="com-cell" v-bind:class="index == showIndex?'active':'' " v-for="(item, index) in companyList" @tap="choose(index,item)">
+						<div class="name">{{item.user_name}}</div>
+						<div class="name2">{{item.company_name}}<span class="icon-safety"></span></div>
 					</div>
-					<form id='login-form' class="mui-input-group">
-						<div class="mui-input-row">
-							<label><span class="mui-icon mui-icon-person"></span></label>
-							<input type="tel" class="mui-input-clear mui-input" placeholder="请输入账号" v-model="account">
-						</div>
-						<div class="mui-input-row">
-							<label><span class="mui-icon mui-icon-locked "></span></label>
-							<input type="password" class="mui-input-clear mui-input" placeholder="请输入密码" v-model="password" autocomplete="off">
-						</div>
-						<button type="button" class="mui-btn mui-btn-blue mui-btn-block" @tap="login()">立即登录</button>
-					</form>
+					<button type="button" class="mui-btn mui-btn-blue mui-btn-block" @tap="login()">进入企业</button>
 				</div>
 			</div>
 		</div>
@@ -97,78 +30,92 @@
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
-	<script type="text/javascript" src="js/md5.js" ></script>
-	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
+	<script type="text/javascript" src="js/md5.js"></script>
+	<script type="text/javascript" src="js/des/crypto-js.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
-			var self = null;
+			var self = null,password = "",company_id = "",account="";
 			App({
 				el: '#app',
 				data: {
-					account:'',
-					password:'',
+					companyList:[],
+					showIndex:0
 				},
 				plusReady: {
 					init: function() {
 						self = this;
+						var currentWeb = plus.webview.currentWebview();
+						account = currentWeb.account;
+						password = currentWeb.password;
 						self.getLoginCompany();
 					}
 				},
 				methods: {
-					getLoginCompany:function(){
+					getLoginCompany: function() {
 						var nonce_str = u.mathRand();
 						console.log("nonce_str====" + nonce_str);
-						var timestamp = Date.parse(new Date()).toString().substr(0,8);
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
 						console.log("timestamp====" + timestamp);
-						var identifier = w.getItem("identifier");//设备标识号
-						var account="13123456788",password="123456";
+						var identifier = w.getItem("identifier"); //设备标识号
 						var pdata = {
-							app:"Member",
-							class:"LoginCompany",
-							nonce_str:nonce_str,
-							timestamp:timestamp,
-							identifier:identifier,
-							client:"web",
-							account:account,
-							password:password
+							app: "Member",
+							class: "LoginCompany",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							account: account,
+							password: password
 						}
-						var stringSignTemp = "account="+account+"&app=Member&class=LoginCompany&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&password="+password+"&timestamp="+timestamp+"&";
-						u.mypost(pdata, stringSignTemp,true, function(data){
-							if(data.status == 0){
-								data = data.data;
-								w.setItem("company_id","b3d6c6ae9c5f923602680fd704f7b0f8");//存储企业id
-							}else{
+						var stringSignTemp = "account=" + account + "&app=Member&class=LoginCompany&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&password=" + password + "&timestamp=" + timestamp + "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								self.companyList = data.data.company;
+								company_id = data.data.company && data.data.company[0].company_id;
+							} else {
 								_.toast(data.msg || '请求异常');
 							}
 						}, myerror);
 					},
-					login:function(){
+					login: function() {
 						var nonce_str = u.mathRand();
 						console.log("nonce_str====" + nonce_str);
-						var timestamp = Date.parse(new Date()).toString().substr(0,8);
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
 						console.log("timestamp====" + timestamp);
-						var identifier = w.getItem("identifier");//设备标识号
-						var company_id="bhluio12345613";
+						var identifier = w.getItem("identifier"); //设备标识号
 						var pdata = {
-							app:"Member",
-							class:"Login",
-							nonce_str:nonce_str,
-							timestamp:timestamp,
-							identifier:identifier,
-							client:"web",
-							account:self.account,
-							password:self.password,
-							company_id:company_id
+							app: "Member",
+							class: "Login",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							account: account,
+							password: password,
+							company_id: company_id
 						}
-						var stringSignTemp = "account="+self.account+"&app=Member&class=Login&company_id="+company_id+"&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&password="+self.password+"&timestamp="+timestamp+"&";
-						u.mypost(pdata, stringSignTemp,true, function(data){
-							if(data.status == 0){
+						var stringSignTemp = "account=" + account + "&app=Member&class=Login&client=web&company_id=" + company_id + "&identifier=" + identifier + "&nonce_str=" + nonce_str + "&password=" + password + "&timestamp=" + timestamp + "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
 								data = data.data;
-							}else{
+								_.toast("登录成功");
+								w.setItem("user_token",data.user_token);
+								w.setItem("company_id",data.company_id);
+								w.setItem("mobile",data.mobile);
+								w.setItem("account",account);
+								w.setItem("password",password);
+								_.later(function(){
+									w.openView("index.html")
+								},800)
+							} else {
 								_.toast(data.msg || '请求异常');
 							}
 						}, myerror);
+					},
+					choose:function(index,item){
+						self.showIndex = index;
+						company_id = item.company_id;
 					}
 				},
 				domReady: function() {

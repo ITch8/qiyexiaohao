@@ -1,0 +1,31 @@
+.icon-safety{
+	content: url(../../img/safety.png);
+	width:1rem;
+	vertical-align: text-top;
+	margin: 0 0 0 0.62rem;
+}
+.com-cell{
+    border: 1px solid #dedede;
+    margin: 0.93rem;
+    padding: 1.25rem 1.25rem 1.37rem;
+    border-radius: 8px;
+    box-shadow: 1px 1.732px 4.85px 0.15px rgba(102, 102, 102, 0.1);
+}
+.com-cell.active{
+	border: 1px solid #00acf8;
+}
+.com-cell .name{
+	font-size: 1.25rem;
+	color: #333;
+	margin-bottom: 1rem
+}
+.com-cell .name2{
+	font-size: 1rem;
+	color: #666;
+}
+.mui-btn-block{
+    width: 94%;
+    margin: 5rem auto 0;
+    font-size: 1.12rem;
+    border-radius: 8px;
+}
