@@ -109,7 +109,15 @@
 								_.later(function(){
 									w.openView("login.html");
 								},500)
-							} else {
+							} else if(data.status == 1 || '用户不能为空' == data.msg){
+								w.removeItem("user_token");
+								w.removeItem("account");
+								w.removeItem("password");
+								w.removeItem("company_id");
+								_.later(function(){
+									w.openView("login.html");
+								},500)
+							} else{
 								_.toast(data.msg || '请求异常');
 							}
 						}, myerror);

@@ -107,7 +107,8 @@
       "main.html",
       "msg.html",
       "msg1.html",
-      "contactDetail.html"
+      "contactDetail.html",
+      "login.html"
     ],
     "priority": 0
   },

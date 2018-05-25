@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<link rel="stylesheet" href="css/style/main.css" />
 	</head>
+
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
@@ -23,11 +24,11 @@
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
-						<li @tap="toTelDetail(item.c_number)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in callList"  v-bind:class="{'mui-left': !isToDel }">
+						<li @tap="toTelDetail(item.c_number)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in callList" v-bind:class="{'mui-left': !isToDel }">
 							<div class="mui-media-body">
 								<span class="color_333">{{item.c_number}}</span>
 								<span class="i_flag">{{item.remark}}</span>
-								<p><span class="mui-icon iconfont"  v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
+								<p><span class="mui-icon iconfont" v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 							</div>
 							<input v-if="!isToDel" type="checkbox" value="1" v-model="checkedArr" />
 						</li>
@@ -70,7 +71,8 @@
 			<transition name="fade">
 				<div v-show="filter_resultShow" class="filter_result mui-fullscreen mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<div class="back" @tap="backAll()"><a class="mui-icon iconfont icon-jiantou"></a><span class="font-size-12">返回全部</span></div>
+						<div class="back" @tap="backAll()">
+							<a class="mui-icon iconfont icon-jiantou"></a><span class="font-size-12">返回全部</span></div>
 						<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
 							<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media">
 								<div class="mui-media-body">
@@ -186,8 +188,8 @@
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
-	<script type="text/javascript" src="js/md5.js" ></script>
-	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
+	<script type="text/javascript" src="js/md5.js"></script>
+	<script type="text/javascript" src="js/des/crypto-js.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		var app = null,
@@ -198,7 +200,7 @@
 			app = new App({
 				el: '#app',
 				data: {
-					callList:[],
+					callList: [],
 					title: '全部通话',
 					chooseText: '全选',
 					list: [],
@@ -220,31 +222,33 @@
 					}
 				},
 				methods: {
-					getCallLog:function(){
-						var nonce_str = u.mathRand();
-						console.log("nonce_str====" + nonce_str);
-						var timestamp = Date.parse(new Date()).toString().substr(0,8);
-						console.log("timestamp====" + timestamp);
-						var identifier = w.getItem("identifier");//设备标识号
-						var user_token = w.getItem("user_token");
-						var pdata = {
-							app:"Member",
-							class:"getCallLog",
-							nonce_str:nonce_str,
-							timestamp:timestamp,
-							identifier:identifier,
-							client:"web",
-							user_token:user_token
-						}
-						var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier="+identifier+"&nonce_str="+nonce_str+"&timestamp="+timestamp+"&user_token="+user_token+"&";
-						u.mypost(pdata, stringSignTemp,true, function(data){
-							if(data.status == 0){
-								data = data.data;
-								self.callList = comConvert(data);
-							}else{
-								_.toast(data.msg || '请求异常');
+					getCallLog: function() {
+						if(w.getItem("user_token")) {
+							var nonce_str = u.mathRand();
+							console.log("nonce_str====" + nonce_str);
+							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+							console.log("timestamp====" + timestamp);
+							var identifier = w.getItem("identifier"); //设备标识号
+							var user_token = w.getItem("user_token");
+							var pdata = {
+								app: "Member",
+								class: "getCallLog",
+								nonce_str: nonce_str,
+								timestamp: timestamp,
+								identifier: identifier,
+								client: "web",
+								user_token: user_token
 							}
-						}, myerror);
+							var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp + "&user_token=" + user_token + "&";
+							u.mypost(pdata, stringSignTemp, true, function(data) {
+								if(data.status == 0) {
+									data = data.data;
+									self.callList = comConvert(data);
+								} else {
+									_.toast(data.msg || '请求异常');
+								}
+							}, myerror);
+						}
 					},
 					toggleDel: function() { //控制删除
 						self.isToDel = false;
@@ -316,7 +320,7 @@
 							self.showTabbar();
 						}
 					},
-					cancelDel: function() {//取消删除
+					cancelDel: function() { //取消删除
 						self.isToDel = true;
 						self.showTabbar();
 					},
@@ -333,30 +337,30 @@
 						})
 					},
 					toggleTabbar: function() {
-//						var viewStyle = currentWeb.getStyle();//toggle隐藏tabbar
-//						console.log("viewStyle.bottom==" + viewStyle.bottom);
-//						if(viewStyle.bottom == 0){
-//			                currentWeb.setStyle({bottom:bottom});
-//			            }else{
-//			                currentWeb.setStyle({bottom:0});
-//			            }
+						//						var viewStyle = currentWeb.getStyle();//toggle隐藏tabbar
+						//						console.log("viewStyle.bottom==" + viewStyle.bottom);
+						//						if(viewStyle.bottom == 0){
+						//			                currentWeb.setStyle({bottom:bottom});
+						//			            }else{
+						//			                currentWeb.setStyle({bottom:0});
+						//			            }
 					},
 					hiddenTabbar: function() {
-//						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
-//						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-//						if(viewStyle.bottom != 0){
-//			                currentWeb.setStyle({bottom:'0'});
-//			            }
+						//						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
+						//						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
+						//						if(viewStyle.bottom != 0){
+						//			                currentWeb.setStyle({bottom:'0'});
+						//			            }
 					},
 					showTabbar: function() {
-//						var viewStyle = currentWeb.getStyle();//动态显示tabbar
-//						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
-//						if(viewStyle.bottom == 0){
-//			                currentWeb.setStyle({bottom:bottom});
-//			            }
+						//						var viewStyle = currentWeb.getStyle();//动态显示tabbar
+						//						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
+						//						if(viewStyle.bottom == 0){
+						//			                currentWeb.setStyle({bottom:bottom});
+						//			            }
 					},
-					backAll:function(){
-						self.filter_resultShow=false;
+					backAll: function() {
+						self.filter_resultShow = false;
 					}
 				},
 				domReady: function() {
@@ -364,40 +368,40 @@
 					//获取屏幕宽度
 					var width = document.documentElement.clientWidth;
 					//3.75
-					if(width >= 320 && width < 360){
+					if(width >= 320 && width < 360) {
 						bottom = "54px";
-					}else if(width >= 360 && width < 400){
+					} else if(width >= 360 && width < 400) {
 						bottom = "61px";
-					}else if(width >= 400 && width < 440){
+					} else if(width >= 400 && width < 440) {
 						bottom = "69px";
-					}else if(width >= 440 && width < 480){
-						bottom = (20 * 3.75)+1 +'px';
-					}else if(width >= 480 && width < 640){
-						bottom = (22 * 3.75)+1 +'px';
-					}else if(width >= 640){
-						bottom = (28 * 3.75)+1 +'px';
+					} else if(width >= 440 && width < 480) {
+						bottom = (20 * 3.75) + 1 + 'px';
+					} else if(width >= 480 && width < 640) {
+						bottom = (22 * 3.75) + 1 + 'px';
+					} else if(width >= 640) {
+						bottom = (28 * 3.75) + 1 + 'px';
 					}
 				}
 			})
-			
+
 			//转换
 			function comConvert(items) {
 				var newItems = [];
 				items.forEach(function(item, index) {
 					newItems.push({
-						c_number: item.type == 1?item.called_number:item.calling_number,
+						c_number: item.type == 1 ? item.called_number : item.calling_number,
 						virtual_number: item.virtual_number,
 						type: item.type,
-						typeName:item.type == 1?'呼入':'呼出',
+						typeName: item.type == 1 ? '呼入' : '呼出',
 						talk_time: u.formatTime(item.talk_time),
-						create_time:item.create_time,
-						remark:item.remark
+						create_time: item.create_time,
+						remark: item.remark
 					});
 				});
 				return newItems.reverse();
 			}
 		})(mui, window, util)
-		
+
 		//改变键盘的显示
 		function toggleShow() {
 			mui('#keyborde_div').popover('toggle');

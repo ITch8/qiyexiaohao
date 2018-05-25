@@ -36,7 +36,7 @@
 	w.doubleTapExit = function() { //连续点击返回键退出应用
 		var backButtonPress = 0;
 		_.back = function() {
-			++backButtonPress > 1 ? u.exitApp() : _.toast('再按壹次退出應用');
+			++backButtonPress > 1 ? u.exitApp() : _.toast('再按一次退出应用');
 			setTimeout(function() {
 				backButtonPress = 0;
 			}, 1000);

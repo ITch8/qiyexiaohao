@@ -171,7 +171,7 @@
 					"xxhdpi": "F:/qiyexiaohao/1080.png"
 				}
 			}
-		}
+		},"ads":{"rp":false,"splash":false,"push":false},"adid":""
 	},
 	"dependencies": {
 		"pages": {
@@ -294,7 +294,8 @@
 					"contact_mint.html",
 					"msg.html",
 					"msg1.html",
-					"contactDetail.html"
+					"contactDetail.html",
+					"login.html"
 				],
 				"priority": 0
 			},

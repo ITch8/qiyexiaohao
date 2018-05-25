@@ -100,14 +100,14 @@
 							if(data.status == 0) {
 								data = data.data;
 								_.toast("登录成功");
-								w.setItem("user_token",data.user_token);
+		 						w.setItem("user_token",data.user_token);
 								w.setItem("company_id",data.company_id);
 								w.setItem("mobile",data.mobile);
 								w.setItem("account",account);
 								w.setItem("password",password);
 								_.later(function(){
 									w.openView("index.html")
-								},800)
+								},500)
 							} else {
 								_.toast(data.msg || '请求异常');
 							}
