@@ -26,15 +26,17 @@
 				<h1 class="mui-title">联系人</h1>
 				<button class="mui-btn-link mui-icon iconfont icon-duanxinxinjianlianxirenjiahao mui-pull-right" @tap="toAddContact"></button>
 			</header>
-			<div class="mui-content">
-				<form class="mui-input-group" @submit.prevent="search">
-					<mt-search v-model="value" cancel-text="取消" placeholder="搜索"></mt-search>
-				</form>
-				<mt-index-list>
-					<mt-index-section v-for="item in contactsData" :index="item.ufirst">
-						<mt-cell v-for="obj in item.dataArr" :title="obj.displayName" v-tap="{methods: toTel , obj : obj}"></mt-cell>
-					</mt-index-section>
-				</mt-index-list>
+			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
+				<div class="mui-scroll">
+					<form class="mui-input-group" @submit.prevent="search">
+						<mt-search v-model="value" cancel-text="取消" placeholder="搜索"></mt-search>
+					</form>
+					<mt-index-list>
+						<mt-index-section v-for="item in contactsData" :index="item.ufirst">
+							<mt-cell v-for="obj in item.dataArr" :title="obj.displayName" v-tap="{methods: toTel , obj : obj}"></mt-cell>
+						</mt-index-section>
+					</mt-index-list>
+				</div>
 			</div>
 		</div>
 	</body>
@@ -46,9 +48,10 @@
 	<script type="text/javascript" src="js/ChinesePY.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script>
+		var app = null;
 		(function(_, w, u) {
 			var self = null;
-			App({
+			app = new App({
 				el: '#app',
 				data: {
 					arrContacts: [],
@@ -60,15 +63,25 @@
 				plusReady: {
 					init: function() {
 						self = this;
+						self.getAddressBook();
+					}
+				},
+				methods: {
+					getAddressBook:function(filter){
+						console.log('filter===' + JSON.stringify(filter));
 						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
-							addressbook.find(["displayName", "phoneNumbers"], function(contacts) {
+							addressbook.find(["displayName", "phoneNumbers","organizations"], function(contacts) {
 								console.log('contacts1===' + JSON.stringify(contacts));
+								self.arrContacts = [];
 								for(var i = 0, len = contacts.length; i < len; i++) {
 									contact = {};
 									contact.displayName = contacts[i].displayName;
 									contact.wordsCode = Pinyin.getWordsCode(contacts[i].displayName || '');
 									contact.ufirst = Pinyin._ucfirstName(contact.wordsCode);
-									contact.phoneNumber = contacts[i].phoneNumbers[0].value;
+									contact.phoneNumber = contacts[i].phoneNumbers[0].value;//手机
+									if(contacts[i].phoneNumbers[1]){
+										contact.tellNumber = contacts[i].phoneNumbers[1].value;//电话
+									}
 									self.arrContacts.push(contact);
 									self.arrUfirst.push(contact.ufirst); //存放首字母
 									self.arrUfirst.sort();
@@ -98,17 +111,25 @@
 							});
 						}, function(e) {
 							mui.toast("获取电话簿失败 " + e.message);
+						},{
+							filter:filter || [],
+							multiple:true
 						});
-					}
-				},
-				methods: {
+					},
 					search: function() {
 						var filterResult = self.filterResult(self.value);
-						console.log(self.value);
+						console.log("filterResult==" + JSON.stringify(filterResult));
+//						self.contactsData = filterResult;
+//						self.getAddressBook([{logic:"or",field:"displayName",value:'*'+(self.value|| '')+'*'}]);
 					},
 					toTel: function(param) {
 						var obj = param.obj;
-						plus.device.dial('' + obj.phoneNumber.replace(/\s/g, ""), true);
+						console.log("obj====" + JSON.stringify(obj));
+						if(!u.isNull(obj.phoneNumber)){
+							plus.device.dial('' + obj.phoneNumber.replace(/\s/g, ""), true);
+						}else if(!u.isNull(obj.tellNumber)){
+							plus.device.dial('' + obj.tellNumber.replace(/\s/g, ""), true);
+						}
 					},
 					toAddContact: function() {
 						w.openView('addContact.html')
@@ -126,6 +147,7 @@
 					filterResult: function(value) {
 						var searchRegex = new RegExp(value, 'i');
 						var arr = [];
+						console.log("searchRegex===" + searchRegex);
 						self.contactsData.forEach(function(item, index) {
 							if(searchRegex.test(item.ufirst)) {
 								arr = arr.concat(item.dataArr);
@@ -145,6 +167,10 @@
 				}
 			})
 		})(mui, window, util)
+		
+		function getData(){
+			window.location.reload();
+}
 	</script>
 
 </html>

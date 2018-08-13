@@ -10,24 +10,18 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
+			.mui-input-group:before {
+				height: 0;
+			}
+			
 			.mg5 {
 				margin: 5px 0;
 			}
-			.form_bottom .mui-input-group:before,.form_bottom .mui-input-group:after,.form_bottom .mui-table-view:before,.form_bottom .mui-table-view:after,.form_bottom .mui-input-group .mui-input-row:after{
-				height: 0;
-			}
+			
 			.bottom_del_div {
 				position: fixed;
 				bottom: 0;
 				z-index: 9;
-			}
-			#middleP {
-				top: 0 !important;
-				left: 0 !important;
-				right: 0 !important;
-				bottom: 0 !important;
-				margin: auto;
-				height: 100px;
 			}
 		</style>
 	</head>
@@ -43,50 +37,25 @@
 				<div class="mui-scroll">
 					<form class="mui-input-group">
 						<div class="mui-input-row">
-							<input type="text" class="mui-input-clear" placeholder="姓名">
+							<input type="text" class="mui-input-clear" v-model="givenName" placeholder="姓名">
 						</div>
 						<div class="mui-input-row">
-							<input type="text" class="mui-input-clear" placeholder="公司">
+							<input type="text" class="mui-input-clear" placeholder="公司" v-model="company">
 						</div>
 						<div class="mui-input-row">
 							<input type="text" class="mui-input-clear" placeholder="职位">
 						</div>
-					</form>
-					<div class="form_bottom">
-						<form class="mui-input-group mg5">
-							<div class="mui-input-row">
-								<label class="font_15">手机</label>
-								<input type="tel" class="mui-input-clear" maxlength="11">
-							</div>
-						</form>
-						<form class="mui-input-group mg5">
-							<div class="mui-input-row">
-								<label class="font_15">电话</label>
-								<input type="tel" class="mui-input-clear" maxlength="15">
-							</div>
-						</form>
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">
-								<a href="#middleP" class="mui-navigate-right font_15">副号分组</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<button @tap="toAdd()" type="button" class="bottom_del_div mui-btn mui-btn-block">添加更多选项</button>
-				<!--
-            	时间：2018-04-13
-            	描述：切换组件
-	            -->
-				<div id="middleP" class="mui-popover">
-					<div class="mui-scroll-wrapper">
-						<div class="mui-scroll">
-							<ul class="mui-table-view mui-text-center main-color">
-								<li class="mui-table-view-cell">手机</li>
-								<li class="mui-table-view-cell">电话</li>
-							</ul>
+						<div class="mui-input-row">
+							<input type="tel" class="mui-input-clear" placeholder="手机" maxlength="11" v-model="phoneNumber">
 						</div>
-					</div>
+						<div class="mui-input-row">
+							<input type="tel" class="mui-input-clear" placeholder="电话" v-model="tellNumber">
+						</div>
+						<mt-radio title="副号分组" v-model="groupType" :options="['手机', '电话']">
+						</mt-radio>
+					</form>
 				</div>
+				<!--<button @tap="toAdd()" type="button" class="bottom_del_div mui-btn mui-btn-block">添加更多选项</button>-->
 			</div>
 		</div>
 	</body>
@@ -97,36 +66,62 @@
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
-			App({
+			var em = new App({
 				el: '#app',
-				data: {},
+				data: {
+					groupType: '',
+					givenName: '',
+					phoneNumber: '',
+					tellNumber: '',
+					company:'',
+					job:''
+				},
 				plusReady: {
 					init: function() {
 						self = this;
 					}
 				},
 				methods: {
-					addContact: function(givenName, phoneNumbers) { //往通讯录添加新联系人
-						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
-							// 向通讯录中添加联系人
-							var contact = addressbook.create();
-							contact.name = {
-								givenName: "王安"
-							};
-							contact.phoneNumbers = [{
-								type: "手机",
-								value: "88888888",
-								preferred: true
-							}];
-							contact.save();
-
-							//TODO 更新联系人列表
-						}, function(e) {
-							alert("Get address book failed: " + e.message);
-						});
-					},
-					toAdd:function(){
-						
+					addContact: function() { //往通讯录添加新联系人
+						if(u.isNull(self.givenName)) {
+							_.toast("请输入姓名")
+						} else if(u.isNull(self.phoneNumber) && u.isNull(self.tellNumber)) {
+							_.toast("请输入手机号或者电话")
+						} else {
+							plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
+								// 向通讯录中添加联系人
+								var contact = addressbook.create();
+								contact.name = {
+									givenName: self.givenName
+								};
+								contact.phoneNumbers = [{
+										type: "mobile",
+										value: self.phoneNumber,
+										preferred: true
+									},
+									{
+										type: "mobile",
+										value: self.tellNumber,
+										preferred: false
+									}
+								];
+								contact.organizations = [{
+									type:"company",
+									name:self.company,
+									department:self.job,
+									title:self.job,
+									preferred:true
+								}];
+								contact.save();
+								_.toast("新增成功");
+								_.later(function(){
+									plus.webview.getWebviewById("contact_mint.html").evalJS("getData()");
+									_.back();
+								},500)
+							}, function(e) {
+								alert("Get address book failed: " + e.message);
+							});
+						}
 					}
 				},
 				domReady: function() {

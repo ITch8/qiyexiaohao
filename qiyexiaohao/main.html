@@ -99,68 +99,68 @@
 			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
-						<label v-if="isShowDelInput" @tap="input_key('del')"><span class="mui-icon mui-icon-close-filled"></span></label>
+						<label v-if="isShowDelInput" @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></label>
 						<input type="text" placeholder="请输入号码搜索" maxlength="15" readonly="readonly" v-model="inputKey">
 					</div>
 				</form>
 				<ul id="keyborde" class="mui-table-view mui-grid-view mui-grid-9">
-					<li @tap="input_key('1')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('1')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>1</span>
 						<div class="mui-media-body">-</div>
 					</li>
-					<li @tap="input_key('2ABC')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('2ABC')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>2</span>
 						<div class="mui-media-body">ABC</div>
 					</li>
-					<li @tap="input_key('3DEF')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('3DEF')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>3</span>
 						<div class="mui-media-body">DEF</div>
 					</li>
-					<li @tap="input_key('4GHI')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('4GHI')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>4</span>
 						<div class="mui-media-body">GHI</div>
 					</li>
-					<li @tap="input_key('5JKL')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('5JKL')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>5</span>
 						<div class="mui-media-body">JKL</div>
 					</li>
-					<li @tap="input_key('6MNO')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('6MNO')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>6</span>
 						<div class="mui-media-body">MNO</div>
 					</li>
-					<li @tap="input_key('7PQRS')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('7PQRS')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>7</span>
 						<div class="mui-media-body">PQRS</div>
 					</li>
-					<li @tap="input_key('8TUV')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('8TUV')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>8</span>
 						<div class="mui-media-body">TUV</div>
 					</li>
-					<li @tap="input_key('9WXYZ')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('9WXYZ')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>9</span>
 						<div class="mui-media-body">WXYZ</div>
 					</li>
-					<li @tap="input_key('*,')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('*,')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>*</span>
 						<div class="mui-media-body">,</div>
 					</li>
-					<li @tap="input_key('0+')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('0+')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>0</span>
 						<div class="mui-media-body">+</div>
 					</li>
-					<li @tap="input_key('#.')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<li @tap="input_key('#.')" class="mui-table-view-cell mui-media mui-col-xs-4">
 						<span>#</span>
 						<div class="mui-media-body">.</div>
 					</li>
 					<div v-show="bottom_handle">
-						<li @tap="input_key('close')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<li @tap="input_key('close')" class="mui-table-view-cell mui-media mui-col-xs-4">
 							<span class="mui-icon mui-icon-closeempty"></span>
 							<div class="mui-media-body">收起</div>
 						</li>
-						<li @tap="input_key('tel')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" style="padding-top: 11px;">
+						<li @tap="input_key('tel')" class="mui-table-view-cell mui-media mui-col-xs-4" style="padding-top: 11px;">
 							<span class="mui-icon mui-icon-phone-filled" style="font-size: 35px;"></span>
 						</li>
-						<li @tap="input_key('change')" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<li @tap="input_key('change')" class="mui-table-view-cell mui-media mui-col-xs-4">
 							<span class="mui-icon mui-icon-loop"></span>
 							<div class="mui-media-body">切换</div>
 						</li>

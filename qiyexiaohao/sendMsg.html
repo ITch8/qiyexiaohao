@@ -22,8 +22,8 @@
 				<form class="mui-input-group">
 					<div class="mui-input-row">
 						<label class="font_15">收件人:</label>
-						<input type="text" value="王珂">
-						<label class="f"><span class="mui-icon iconfont icon-duanxintianjialianxiren"></span></label>
+						<input type="text" v-model="names">
+						<label class="f" @tap="addContact()"><span class="mui-icon iconfont icon-duanxintianjialianxiren"></span></label>
 					</div>
 				</form>
 				<footer>
@@ -46,16 +46,18 @@
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
+		var app = null;
 		(function(_, w, u) {
 			var self = null;
-			App({
+		app = new App({
 				el: '#app',
 				data: {
 					msgBody: '',
 					cardType:'主号',
 					i_flag: 'i_flag',
   				    i_flag_2: 'i_flag_2',
-					isMain:true//是否是主号
+					isMain:true,//是否是主号
+					names:""
 				},
 				plusReady: {
 					init: function() {
@@ -92,6 +94,9 @@
 							self.cardType = "主号";
 							self.isMain = true;
 						}
+					},
+					addContact:function(){
+						w.openView("c_contact_mint.html");
 					}
 				},
 				domReady: function() {
@@ -99,6 +104,13 @@
 				}
 			})
 		})(mui, window, util)
+		
+		function addName(){
+			var name = window.getItem("displayName");
+			var names = app.names || '';
+			app.names = names + name;
+			console.log("111"+app.names);
+		}
 	</script>
 
 </html>
