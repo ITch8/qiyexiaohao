@@ -47,7 +47,7 @@ footer {
 
 .footer-center .input-text {
 	border: solid 1px #ddd;
-	padding: 0.73rem 0.31rem 0.11rem 3.12rem !important;
+	padding: 0.73rem 0.51rem 0.11rem 5.12rem !important;
 	font-size: 0.75rem !important;
 	line-height: 1 !important;
 	font-family: verdana !important;
@@ -85,8 +85,8 @@ textarea {
 
 .flag {
 	position: relative;
-	bottom: 1.12rem;
-	left: 2.81rem;
+	bottom: 1.5rem;
+	left: 2rem;
 }
 
 .right .time {

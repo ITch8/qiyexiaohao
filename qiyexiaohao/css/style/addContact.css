@@ -1,0 +1,20 @@
+.mui-input-group:before {
+	height: 0;
+}
+
+.mg5 {
+	margin: 5px 0;
+}
+
+.bottom_del_div {
+	position: fixed;
+	bottom: 0;
+	z-index: 9;
+}
+
+.mint-radio-label {
+	font-size: 0.87rem
+}
+input[type=text]{
+    padding: 10px 15px 0;
+}

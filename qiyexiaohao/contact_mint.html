@@ -17,6 +17,9 @@
 			.mui-bar-nav.mui-bar .mui-icon{
 				margin-top: 0;
 			}
+			.mint-indexlist{
+				background-color: #efeff4;
+			}
 		</style>
 	</head>
 
@@ -28,7 +31,7 @@
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
-					<form class="mui-input-group" @submit.prevent="search">
+					<form class="mui-input-group" @submit.prevent="search" @blur="showAllC">
 						<mt-search v-model="value" cancel-text="取消" placeholder="搜索"></mt-search>
 					</form>
 					<mt-index-list>
@@ -58,7 +61,8 @@
 					arrUfirst: [],
 					contactsData: [],
 					value: '',
-					popupVisible: true
+					popupVisible: true,
+					allContacts:[]
 				},
 				plusReady: {
 					init: function() {
@@ -67,8 +71,7 @@
 					}
 				},
 				methods: {
-					getAddressBook:function(filter){
-						console.log('filter===' + JSON.stringify(filter));
+					getAddressBook:function(){
 						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
 							addressbook.find(["displayName", "phoneNumbers","organizations"], function(contacts) {
 								console.log('contacts1===' + JSON.stringify(contacts));
@@ -103,24 +106,53 @@
 									contactsDataTmp.push(obj);
 								})
 								self.contactsData = contactsDataTmp; //赋值
+								self.allContacts = contactsDataTmp;//缓存所有的通讯录
+								if(self.allContacts.length == 0){
+									_.toast("暂无联系人 ");
+								}
 								console.log("contacts====" + JSON.stringify(self.contactsData));
 							}, function() {
-								mui.toast("获取电话簿失败 ");
+								_.toast("获取电话簿失败 ");
 							}, {
 								multiple: true
 							});
 						}, function(e) {
-							mui.toast("获取电话簿失败 " + e.message);
-						},{
-							filter:filter || [],
-							multiple:true
+							_.toast("获取电话簿失败 " + e.message);
 						});
 					},
-					search: function() {
+					search: function() {//搜索
 						var filterResult = self.filterResult(self.value);
 						console.log("filterResult==" + JSON.stringify(filterResult));
-//						self.contactsData = filterResult;
-//						self.getAddressBook([{logic:"or",field:"displayName",value:'*'+(self.value|| '')+'*'}]);
+						var arrContacts = [],arrUfirst=[];
+						for(var i = 0,len = filterResult.length; i < len; i++) {
+							contact = {};
+							contact.ufirst = filterResult[i].ufirst;
+							contact.displayName = filterResult[i].displayName;
+							contact.wordsCode = filterResult[i].wordsCode;
+							contact.phoneNumber = filterResult[i].phoneNumber;
+							contact.tellNumber = filterResult[i].tellNumber;
+							arrContacts.push(contact);
+							arrUfirst.push(contact.ufirst); //存放首字母
+							arrUfirst.sort();
+						}
+						arrUfirst = self.unique(arrUfirst);
+						var obj = {},
+							contactsDataTmp = [];
+						arrUfirst.forEach(function(item, index) {
+							obj = {
+								ufirst: "A",
+								dataArr: []
+							};
+							arrContacts.forEach(function(o, i) {
+								if(item == o.ufirst) {
+									obj.ufirst = item;
+									obj.dataArr.push(o)
+								}
+							})
+							contactsDataTmp.push(obj);
+						})
+						console.log("contactsDataTmp====" + JSON.stringify(contactsDataTmp));
+						self.contactsData = contactsDataTmp;
 					},
 					toTel: function(param) {
 						var obj = param.obj;
@@ -148,7 +180,7 @@
 						var searchRegex = new RegExp(value, 'i');
 						var arr = [];
 						console.log("searchRegex===" + searchRegex);
-						self.contactsData.forEach(function(item, index) {
+						self.allContacts.forEach(function(item, index) {
 							if(searchRegex.test(item.ufirst)) {
 								arr = arr.concat(item.dataArr);
 							} else {
@@ -160,6 +192,9 @@
 							}
 						})
 						return arr;
+					},
+					showAllC:function(){
+						self.contactsData = self.allContacts;
 					}
 				},
 				domReady: function() {
