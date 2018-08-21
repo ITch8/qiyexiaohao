@@ -51,8 +51,15 @@
 	right: 0;
 	bottom: 0;
 	margin: auto;
-	height: 6.25rem;
+	height: 72px;
+    border: 1px solid #dedede;
 }
+#middlePopover .mui-table-view-cell{
+	padding: 6px 15px;
+}
+.mui-popover .mui-scroll-wrapper {
+    margin: 0 0;
+    }
 
 .mui-input-row label {
 	float: right;

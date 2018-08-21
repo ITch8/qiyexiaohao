@@ -110,6 +110,7 @@
 						console.log("obj====" + JSON.stringify(obj));
 						var web = plus.webview.getWebviewById('sendMsg');
 						w.setItem("displayName",obj.displayName);
+						w.setItem("displayNumber",obj.phoneNumber);
 						web.evalJS("addName()");
 						_.later(function(){
 							web.show("slide-in-right",500);

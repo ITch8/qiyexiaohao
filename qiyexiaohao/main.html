@@ -74,7 +74,7 @@
 						<div class="back" @tap="backAll()">
 							<a class="mui-icon iconfont icon-jiantou"></a><span class="font-size-12">返回全部</span></div>
 						<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-							<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media">
+							<!--<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media">
 								<div class="mui-media-body">
 									<span class="color_333">王珂</span>
 									<span class="i_flag">副1</span>
@@ -87,7 +87,7 @@
 									<span class="i_flag">副1</span>
 									<p>13510792830<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 								</div>
-							</li>
+							</li>-->
 						</ul>
 					</div>
 				</div>
@@ -176,8 +176,8 @@
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<ul class="mui-table-view">
-							<li class="mui-table-view-cell">Item1</li>
-							<li class="mui-table-view-cell">Item2</li>
+							<li class="mui-table-view-cell" @tap="popChose(1)">主号</li>
+							<li class="mui-table-view-cell" @tap="popChose(0)">副号</li>
 						</ul>
 					</div>
 				</div>
@@ -361,6 +361,11 @@
 					},
 					backAll: function() {
 						self.filter_resultShow = false;
+					},
+					popChose:function(index){
+						console.log(index);
+						_('#middlePopover').popover('toggle');
+						_("#keyborde_div").popover('show');
 					}
 				},
 				domReady: function() {

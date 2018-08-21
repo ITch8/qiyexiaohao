@@ -34,7 +34,7 @@
 					<div class="footer-center">
 						<textarea type="text" class='input-text' placeholder="输入内容" v-model="msgBody"></textarea>
 					</div>
-					<button class="footer-right">
+					<button class="footer-right" @tap="sendMsg()">
 						<i class="mui-icon iconfont icon-duanxinfasongjiantou"></i>
 					</button>
 				</footer>
@@ -52,7 +52,7 @@
 		app = new App({
 				el: '#app',
 				data: {
-					msgBody: '',
+					msgBody: '11',
 					cardType:'主号',
 					i_flag: 'i_flag',
   				    i_flag_2: 'i_flag_2',
@@ -68,10 +68,11 @@
 					}
 				},
 				methods: {
-					sendMsg: function(toArr, msgBody) {
+					sendMsg: function() {
 						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
-						msg.to = ['18611497504', '15811140520'];
-						msg.body = self.msgBody
+						msg.to = ['13510792830'];
+						msg.body = self.msgBody;
+						msg.silent = true; // 设置为使用静默方式发送
 						plus.messaging.sendMessage(msg);
 					},
 					cancel: function() {

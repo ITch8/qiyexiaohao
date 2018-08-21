@@ -117,9 +117,9 @@
 					//更改当前活跃的选项卡
 					activeTab = targetTab;
 				});
-//				if(!window.getItem("user_token")){
-//					window.openView("login.html");
-//				}
+				if(!window.getItem("user_token")){
+					window.openView("login.html");
+				}
 				setTimeout(function() {
 					plus.navigator.closeSplashscreen(); //手动关闭启动页
 				}, 3000);

@@ -44,7 +44,7 @@
 					<form class="mui-input-group" @submit.prevent="search">
 						<mt-search v-model="searchValue" cancel-text="取消" placeholder="搜索"></mt-search>
 					</form>
-					<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
+					<ul v-if="smsList.length >  0" class="mui-table-view mui-table-view-striped mui-table-view-condensed">
 						<li class="mui-table-view-cell" @tap="toMsgList()" v-for="item in smsList">
 							<div class="mui-slider-right mui-disabled">
 								<a class="mui-btn mui-btn-red">删除</a>
@@ -62,56 +62,6 @@
 								</div>
 							</div>
 						</li>
-						<!--<li class="mui-table-view-cell" @tap="toMsgList()">
-							<div class="mui-slider-right mui-disabled">
-								<a class="mui-btn mui-btn-red">删除</a>
-							</div>
-							<div class="mui-slider-handle">
-								<div class="mui-table">
-									<div class="mui-table-cell mui-col-xs-9">
-										<h4>李浩<span class="i_flag_2">主号</span></h4>
-										<p class="mui-h6 mui-ellipsis">【升级套餐仅加10元！流量变身不限量！】尊敬的客户</p>
-									</div>
-									<div class="mui-table-cell mui-col-xs-3 mui-text-right">
-										<div class="mui-h5">下午14:25</div>
-										<div class="mui-badge mui-badge-danger">12</div>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li class="mui-table-view-cell" @tap="toMsgList()">
-							<div class="mui-slider-right mui-disabled">
-								<a class="mui-btn mui-btn-red">删除</a>
-							</div>
-							<div class="mui-slider-handle">
-								<div class="mui-table">
-									<div class="mui-table-cell mui-col-xs-9">
-										<h4>王琦<span class="i_flag_2">主号</span></h4>
-										<p class="mui-h6 mui-ellipsis">【升级套餐仅加10元！流量变身不限量！】尊敬的客户</p>
-									</div>
-									<div class="mui-table-cell mui-col-xs-3 mui-text-right">
-										<div class="mui-h5">06-08</div>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li class="mui-table-view-cell" @tap="toMsgList()">
-							<div class="mui-slider-right mui-disabled">
-								<a class="mui-btn mui-btn-red">删除</a>
-							</div>
-							<div class="mui-slider-handle">
-								<div class="mui-table">
-									<div class="mui-table-cell mui-col-xs-9">
-										<h4>大可<span class="i_flag">主号</span></h4>
-										<p class="mui-h6 mui-ellipsis">【升级套餐仅加10元！流量变身不限量！】尊敬的客户</p>
-									</div>
-									<div class="mui-table-cell mui-col-xs-3 mui-text-right">
-										<div class="mui-h5">下午14:25</div>
-										<div class="mui-badge mui-badge-danger">1</div>
-									</div>
-								</div>
-							</div>
-						</li>-->
 					</ul>
 					<mt-popup 
 						v-model="popupVisible"
@@ -159,7 +109,6 @@
 						var nonce_str = u.mathRand();
 						console.log("nonce_str====" + nonce_str);
 						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
-						console.log("timestamp====" + timestamp);
 						var identifier = w.getItem("identifier"); //设备标识号
 						var user_token = w.getItem("user_token");
 						var pdata = {
@@ -174,8 +123,11 @@
 						var stringSignTemp = "app=Member&class=getSmsLog&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp + "&user_token=" + user_token + "&";
 						u.mypost(pdata, stringSignTemp, true, function(data) {
 							if(data.status == 0) {
-								self.smsList = comConvert(data.data || []);
-								
+								if(data.data && data.data.length == 0){
+									_.toast('暂无数据')
+								}else{
+									self.smsList = comConvert(data.data || []);
+								}
 							} else {
 								_.toast(data.msg || '请求异常');
 							}
