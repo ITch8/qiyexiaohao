@@ -67,14 +67,26 @@
 				plusReady: {
 					init: function() {
 						self = this;
-						self.getAddressBook();
+						plus.nativeUI.showWaiting();
+						_.later(function(){
+							self.getAddressBook();
+						},500)
 					}
 				},
 				methods: {
 					getAddressBook:function(){
+						if(plus.os.name == 'Android') {
+							var Context = plus.android.runtimeMainActivity();
+							//检测是否打开了此权限
+							var res = plus.android.invoke(Context, "checkSelfPermission", "android.permission.READ_CONTACTS");
+							console.log("res======" + JSON.stringify(res));
+							if(res != 0){
+								_.alert("请从系统设置中设置\n开启通讯录访问\n后重试", "权限不足");
+								return;
+							}
+						}
 						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
 							addressbook.find(["displayName", "phoneNumbers","organizations"], function(contacts) {
-								console.log('contacts1===' + JSON.stringify(contacts));
 								self.arrContacts = [];
 								for(var i = 0, len = contacts.length; i < len; i++) {
 									contact = {};
@@ -110,13 +122,16 @@
 								if(self.allContacts.length == 0){
 									_.toast("暂无联系人 ");
 								}
+								plus.nativeUI.closeWaiting(); 
 								console.log("contacts====" + JSON.stringify(self.contactsData));
 							}, function() {
 								_.toast("获取电话簿失败 ");
+								plus.nativeUI.closeWaiting();
 							}, {
 								multiple: true
 							});
 						}, function(e) {
+							plus.nativeUI.closeWaiting();
 							_.toast("获取电话簿失败 " + e.message);
 						});
 					},
@@ -205,7 +220,7 @@
 		
 		function getData(){
 			window.location.reload();
-}
+		}
 	</script>
 
 </html>

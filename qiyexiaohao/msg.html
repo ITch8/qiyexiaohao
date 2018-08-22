@@ -46,18 +46,18 @@
 					</form>
 					<ul v-if="smsList.length >  0" class="mui-table-view mui-table-view-striped mui-table-view-condensed">
 						<li class="mui-table-view-cell" @tap="toMsgList()" v-for="item in smsList">
-							<div class="mui-slider-right mui-disabled">
+							<!--<div class="mui-slider-right mui-disabled">
 								<a class="mui-btn mui-btn-red">删除</a>
-							</div>
+							</div>-->
 							<div class="mui-slider-handle">
 								<div class="mui-table">
 									<div class="mui-table-cell mui-col-xs-9">
 										<h4>{{item.c_number}}<span class="i_flag">{{item.remark}}</span></h4>
-										<p class="mui-h6 mui-ellipsis">【升级套餐仅加10元！流量变身不限量！】尊敬的客户</p>
+										<p class="mui-h6 mui-ellipsis">{{item.remark}}</p>
 									</div>
 									<div class="mui-table-cell mui-col-xs-3 mui-text-right">
 										<div class="mui-h5">{{item.create_time}}</div>
-										<div class="mui-badge mui-badge-danger">11</div>
+										<!--<div class="mui-badge mui-badge-danger">11</div>-->
 									</div>
 								</div>
 							</div>
@@ -89,12 +89,13 @@
 		(function(_, w, u) {
 			var currentWeb = null,
 				bottom = 0;
+				var all = [];//缓存所有的信息
 			var vm = new App({
 				el: '#app',
 				data: {
 					smsList:[],
 					searchValue: '',
-					popupVisible: false,
+					popupVisible: true,
 					title: "全部信息"
 				},
 				plusReady: {
@@ -127,6 +128,36 @@
 									_.toast('暂无数据')
 								}else{
 									self.smsList = comConvert(data.data || []);
+									all = comConvert(data.data || []);
+								}
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
+					getSmsLogByNumber: function(number) {
+						var nonce_str = u.mathRand();
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						var identifier = w.getItem("identifier"); //设备标识号
+						var user_token = w.getItem("user_token");
+						var pdata = {
+							app: "Member",
+							class: "getSmsLog",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token,
+							number:number
+						}
+						var stringSignTemp = "app=Member&class=getSmsLog&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&number="+number+"&timestamp=" + timestamp + "&user_token=" + user_token + "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								if(data.data && data.data.length == 0){
+									_.toast('暂无数据');
+									self.smsList = [];
+								}else{
+									self.smsList = comConvert(data.data || []);
 								}
 							} else {
 								_.toast(data.msg || '请求异常');
@@ -134,13 +165,7 @@
 						}, myerror);
 					},
 					toMsgList: function() {
-						w.openView("msgList.html")
-					},
-					sendMsg: function(toArr, msgBody) {
-						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
-						msg.to = ['18611497504', '15811140520'];
-						msg.body = 'This is HTML5 Plus example test message';
-						plus.messaging.sendMessage(msg);
+//						w.openView("msgList.html")
 					},
 					toAdd: function() {
 						document.activeElement.blur();
@@ -148,22 +173,26 @@
 					},
 					search: function() {
 						console.log("value=======" + self.searchValue);
+						self.getSmsLogByNumber(self.searchValue);
 					},
 					filterList: function(type, title) {
 						console.log("type====" + type);
 						self.title = title;
 						self.popupVisible = false;
-//						self.showTabbar();
 						if(0 == type) { //全部
-
+							self.smsList = all;
 						} else { //副号
-
+							var virtual_number = w.getItem("virtual_number");
+							if(u.isNull(virtual_number)) {
+								_.toast("请重新登录");
+							} else {
+								self.getSmsLogByNumber(virtual_number);
+							}
 						}
 					},
 					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
 						console.log("popupVisible===" + self.popupVisible);
-//						self.toggleTabbar();
 					},
 					toggleTabbar: function() {
 						var viewStyle = currentWeb.getStyle(); //toggle隐藏tabbar
@@ -175,24 +204,6 @@
 						} else {
 							currentWeb.setStyle({
 								bottom: 0
-							});
-						}
-					},
-					hiddenTabbar: function() {
-						var viewStyle = currentWeb.getStyle(); //动态隐藏tabbar
-						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom != 0) {
-							currentWeb.setStyle({
-								bottom: '0'
-							});
-						}
-					},
-					showTabbar: function() {
-						var viewStyle = currentWeb.getStyle(); //动态显示tabbar
-						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
-						if(viewStyle.bottom == 0) {
-							currentWeb.setStyle({
-								bottom: bottom
 							});
 						}
 					}
@@ -243,12 +254,17 @@
 						type: item.type,
 						typeName:item.type == 1?'收入':'发出',
 						create_time:item.create_time.substr(0,10),
-						remark:item.remark
+						remark:item.remark,
+						content:item.content
 					});
 				});
 				return newItems.reverse();
 			}
 		})(mui, window, util)
+		
+		function getData(){
+			window.location.reload();
+		}
 	</script>
 
 </html>

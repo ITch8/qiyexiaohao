@@ -186,6 +186,8 @@
 						u.mypost(pdata, stringSignTemp, true, function(data) {
 							if(data.status == 0) {
 								self.dataList = data.data;
+								var virtual_number = data.data[0] && data.data[0].number;
+								w.setItem("virtual_number",virtual_number);
 							} else {
 								_.toast(data.msg || '请求异常');
 							}

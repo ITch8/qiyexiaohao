@@ -61,41 +61,10 @@
 				},
 				methods: {
 					login: function() {
-						
 						w.openView("loginOfC.html",{
 							account:self.account,
 							password:self.password
 						});
-						
-//						var nonce_str = u.mathRand();
-//						console.log("nonce_str====" + nonce_str);
-//						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
-//						console.log("timestamp====" + timestamp);
-//						var identifier = w.getItem("identifier"); //设备标识号
-//						var company_id = "b3d6c6ae9c5f923602680fd704f7b0f8";
-//						var pdata = {
-//							app: "Member",
-//							class: "Login",
-//							nonce_str: nonce_str,
-//							timestamp: timestamp,
-//							identifier: identifier,
-//							client: "web",
-//							account: self.account,
-//							password: self.password,
-//							company_id: company_id
-//						}
-//						var stringSignTemp = "account=" + self.account + "&app=Member&class=Login&client=web&company_id="+company_id+"&identifier=" + identifier + "&nonce_str=" + nonce_str + "&password=" + self.password + "&timestamp=" + timestamp + "&";
-//						u.mypost(pdata, stringSignTemp, true, function(data) {
-//							if(data.status == 0) {
-//								data = data.data;
-//								w.setItem("user_token", data.user_token); //存储user_token
-//								w.setItem("account", data.account); //存储账号
-//								w.setItem("password", data.password); //存储密码
-//								w.openView("loginOfC.html")
-//							} else {
-//								_.toast(data.msg || '请求异常');
-//							}
-//						}, myerror);
 					}
 				},
 				domReady: function() {

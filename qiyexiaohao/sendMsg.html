@@ -32,9 +32,9 @@
 						<span v-bind:class="[isMain ? i_flag : i_flag_2,'flag']">{{cardType}}</span>
 					</div>
 					<div class="footer-center">
-						<textarea type="text" class='input-text' placeholder="输入内容" v-model="msgBody"></textarea>
+						<textarea type="text" class='input-text' placeholder="输入内容" v-model="remark"></textarea>
 					</div>
-					<button class="footer-right" @tap="sendMsg()">
+					<button class="footer-right" @tap="uploadSms()">
 						<i class="mui-icon iconfont icon-duanxinfasongjiantou"></i>
 					</button>
 				</footer>
@@ -44,20 +44,24 @@
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
+	<script type="text/javascript" src="js/md5.js" ></script>
+	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		var app = null;
 		(function(_, w, u) {
 			var self = null;
-		app = new App({
+			app = new App({
 				el: '#app',
 				data: {
-					msgBody: '11',
-					cardType:'主号',
+					remark: '', //短信内容
+					cardType: '主号',
 					i_flag: 'i_flag',
-  				    i_flag_2: 'i_flag_2',
-					isMain:true,//是否是主号
-					names:""
+					i_flag_2: 'i_flag_2',
+					isMain: false, //是否是主号
+					names: "",
+					virtual_number: '', //登录虚拟小号
+					called_number: '13510792830', //接收方短信
 				},
 				plusReady: {
 					init: function() {
@@ -70,10 +74,53 @@
 				methods: {
 					sendMsg: function() {
 						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
-						msg.to = ['13510792830'];
-						msg.body = self.msgBody;
+						msg.to = [];
+						msg.body = self.remark;
 						msg.silent = true; // 设置为使用静默方式发送
-						plus.messaging.sendMessage(msg);
+						plus.messaging.sendMessage(msg, function() {
+							self.uploadSms();
+						}, function() {
+							_.alert("发送失败");
+						});
+					},
+					uploadSms: function() { //上传
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						var identifier = w.getItem("identifier"),
+							user_token = w.getItem("user_token"),virtual_number = w.getItem('virtual_number');
+						console.log("virtual_number=====" + virtual_number);
+						console.log("called_number=====" + self.called_number);
+						console.log("remark=====" + self.remark);
+						var pdata = {
+							app: "Member",
+							class: "UploadSms",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token,
+							virtual_number: virtual_number,
+							called_number: self.called_number,
+							remark: self.remark
+						}
+						console.log("pdata=====" + JSON.stringify(pdata));
+						var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadSms&client=web&identifier=" 
+							+ identifier + "&nonce_str=" + nonce_str + "&remark=" + pdata.remark + "&timestamp=" + timestamp 
+							+ "&user_token=" + user_token
+							+ "&virtual_number="+ pdata.virtual_number
+							+ "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								plus.webview.getWebviewById("msg.html").evalJS("getData()");
+								_.later(function(){
+									_.back();
+								},500)
+								_.toast(data.msg || '请求成功')
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
 					},
 					cancel: function() {
 						plus.nativeUI.confirm('是否放弃本次编辑？', function(e) {
@@ -87,16 +134,16 @@
 							"buttons": ["否", "是"]
 						})
 					},
-					change:function(){
-						if(self.cardType == "主号"){
+					change: function() {
+						if(self.cardType == "主号") {
 							self.cardType = "副号";
 							self.isMain = false;
-						}else{
+						} else {
 							self.cardType = "主号";
 							self.isMain = true;
 						}
 					},
-					addContact:function(){
+					addContact: function() {
 						w.openView("c_contact_mint.html");
 					}
 				},
@@ -105,12 +152,12 @@
 				}
 			})
 		})(mui, window, util)
-		
-		function addName(){
+
+		function addName() {
 			var name = window.getItem("displayName");
 			var names = app.names || '';
 			app.names = names + name;
-			console.log("111"+app.names);
+			console.log("111" + app.names);
 		}
 	</script>
 

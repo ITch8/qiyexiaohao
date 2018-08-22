@@ -59,16 +59,16 @@ header>h1 {
 	background: #00acf8;
 	color: #fff;
 	font-size: 0.31rem;
-	padding: 2px;
-	margin: 0 0 0 0.5rem;
+	padding: 0.12rem;
+	margin: 0 0 0 0.62rem;
 }
 
 .i_flag_2 {
 	background: #ff4400;
 	color: #fff;
-	font-size: 8px;
-	padding: 2px;
-	margin: 0 0 0 10px;
+	font-size: 0.31rem;
+	padding: 0.12rem;
+	margin: 0 0 0 0.62rem;
 }
 header>.icon-dianjihoudesanheng:before{
 	font-size: 1rem

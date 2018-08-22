@@ -18,7 +18,7 @@
 				<a v-if="isToDel" @tap="toggleTopP()" class="mui-icon iconfont icon-dianjihoudesanheng mui-pull-left"></a>
 				<a v-else @tap="chooseAll()" class="mui-btn-link  mui-pull-left">{{chooseText}}</a>
 				<h1 class="mui-title">{{title}}</h1>
-				<a v-if="isToDel" @tap="toggleDel()" class="mui-icon iconfont icon-shanchu mui-pull-right"></a>
+				<!--<a v-if="isToDel" @tap="toggleDel()" class="mui-icon iconfont icon-shanchu mui-pull-right"></a>-->
 				<a v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</a>
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
@@ -74,20 +74,13 @@
 						<div class="back" @tap="backAll()">
 							<a class="mui-icon iconfont icon-jiantou"></a><span class="font-size-12">返回全部</span></div>
 						<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-							<!--<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media">
+							<li @tap="toTelDetail(item.c_number)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in f_callList" v-bind:class="{'mui-left': !isToDel }">
 								<div class="mui-media-body">
-									<span class="color_333">王珂</span>
-									<span class="i_flag">副1</span>
-									<p>13510792830<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
+									<span class="color_333">{{item.c_number}}</span>
+									<span class="i_flag">{{item.remark}}</span>
+									<p><span class="mui-icon iconfont" v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 								</div>
 							</li>
-							<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
-									<span class="color_333">王珂</span>
-									<span class="i_flag">副1</span>
-									<p>13510792830<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
-								</div>
-							</li>-->
 						</ul>
 					</div>
 				</div>
@@ -100,7 +93,7 @@
 				<form class="mui-input-group">
 					<div class="mui-input-row">
 						<label v-if="isShowDelInput" @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></label>
-						<input type="text" placeholder="请输入号码搜索" maxlength="15" readonly="readonly" v-model="inputKey">
+						<input type="text" placeholder="请输入号码搜索" maxlength="11" readonly="readonly" v-model="inputKey">
 					</div>
 				</form>
 				<ul id="keyborde" class="mui-table-view mui-grid-view mui-grid-9">
@@ -197,10 +190,12 @@
 		(function(_, w, u) {
 			var self = null,
 				currentWeb = null;
+			var all = [];
 			app = new App({
 				el: '#app',
 				data: {
 					callList: [],
+					f_callList: [], //手机查找结果
 					title: '全部通话',
 					chooseText: '全选',
 					list: [],
@@ -225,9 +220,7 @@
 					getCallLog: function() {
 						if(w.getItem("user_token")) {
 							var nonce_str = u.mathRand();
-							console.log("nonce_str====" + nonce_str);
 							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
-							console.log("timestamp====" + timestamp);
 							var identifier = w.getItem("identifier"); //设备标识号
 							var user_token = w.getItem("user_token");
 							var pdata = {
@@ -243,7 +236,47 @@
 							u.mypost(pdata, stringSignTemp, true, function(data) {
 								if(data.status == 0) {
 									data = data.data;
-									self.callList = comConvert(data);
+									if(data && data.length > 0) {
+										self.callList = comConvert(data);
+										all = comConvert(data); //缓存所有通话
+									} else {
+										_.toast('暂无记录');
+									}
+								} else {
+									_.toast(data.msg || '请求异常');
+								}
+							}, myerror);
+						}
+					},
+					getCallLogByNumber: function(number, type) { //搜索指定号码的通话记录
+						if(w.getItem("user_token")) {
+							var nonce_str = u.mathRand();
+							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+							var identifier = w.getItem("identifier"); //设备标识号
+							var user_token = w.getItem("user_token");
+							var pdata = {
+								app: "Member",
+								class: "getCallLog",
+								nonce_str: nonce_str,
+								timestamp: timestamp,
+								identifier: identifier,
+								client: "web",
+								user_token: user_token,
+								number: number
+							}
+							var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&number=" + number + "&timestamp=" + timestamp + "&user_token=" + user_token + "&";
+							u.mypost(pdata, stringSignTemp, false, function(data) {
+								if(data.status == 0) {
+									data = data.data;
+									if(data && data.length > 0) {
+										if(1 == type) {
+											self.callList = comConvert(data);
+										} else {
+											self.f_callList = comConvert(data);
+										}
+									} else {
+										_.toast('暂无记录');
+									}
 								} else {
 									_.toast(data.msg || '请求异常');
 								}
@@ -252,11 +285,6 @@
 					},
 					toggleDel: function() { //控制删除
 						self.isToDel = false;
-						if(self.isToDel) {
-							self.showTabbar();
-						} else {
-							self.hiddenTabbar();
-						}
 					},
 					chooseAll: function() {
 						//TODO 赋值全部数据给self.checkedArr
@@ -271,58 +299,54 @@
 							self.filter_resultShow = true;
 							self.bottom_handle = true;
 							self.isShowDelInput = true;
-							self.hiddenTabbar();
 						} else {
 							self.filter_resultShow = false;
 							self.bottom_handle = false;
 							self.isShowDelInput = false;
-							self.showTabbar();
 						}
+
 						if('close' == key) {
 							self.bottom_handle = false;
 							_('#keyborde_div').popover('hide');
-							self.showTabbar();
+							self.filter_resultShow = false;
 						} else if('change' == key) { //切换
 							_("#keyborde_div").popover('show');
 							_('#middlePopover').popover('toggle');
-							self.showTabbar();
 						} else if('del' == key) { //删除输入号码
 							self.inputKey = self.inputKey.substr(0, self.inputKey.length - 1);
 							if(self.inputKey.length == 0) {
 								self.filter_resultShow = false;
 								self.bottom_handle = false;
 								self.isShowDelInput = false;
-								self.showTabbar();
 							}
 						} else if('tel' == key) {
 							plus.device.dial(self.inputKey, false);
 						} else {
 							self.inputKey += key && key.substr(0, 1);
 						}
-						console.log("key=====" + key);
+						if(self.inputKey.length == 11 && u.checkPhone(self.inputKey)) { //查找该手机号通话记录
+							self.getCallLogByNumber(self.inputKey, 0);
+						}
 					},
 					filterList: function(type, title) {
-						console.log("type====" + type);
 						self.title = title;
 						self.popupVisible = false;
-						self.toggleTabbar();
 						if(0 == type) { //全部
-
+							self.callList = all;
 						} else { //副号
-
+							var virtual_number = w.getItem("virtual_number");
+							if(u.isNull(virtual_number)) {
+								_.toast("请重新登录");
+							} else {
+								self.getCallLogByNumber(virtual_number, 1);
+							}
 						}
 					},
 					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
-						if(self.popupVisible) {
-							self.hiddenTabbar();
-						} else {
-							self.showTabbar();
-						}
 					},
 					cancelDel: function() { //取消删除
 						self.isToDel = true;
-						self.showTabbar();
 					},
 					toDel: function() {
 						//删除通话记录
@@ -336,34 +360,10 @@
 							"buttons": ["取消", "删除"]
 						})
 					},
-					toggleTabbar: function() {
-						//						var viewStyle = currentWeb.getStyle();//toggle隐藏tabbar
-						//						console.log("viewStyle.bottom==" + viewStyle.bottom);
-						//						if(viewStyle.bottom == 0){
-						//			                currentWeb.setStyle({bottom:bottom});
-						//			            }else{
-						//			                currentWeb.setStyle({bottom:0});
-						//			            }
-					},
-					hiddenTabbar: function() {
-						//						var viewStyle = currentWeb.getStyle();//动态隐藏tabbar
-						//						console.log("hiddenTabbar viewStyle.bottom==" + viewStyle.bottom);
-						//						if(viewStyle.bottom != 0){
-						//			                currentWeb.setStyle({bottom:'0'});
-						//			            }
-					},
-					showTabbar: function() {
-						//						var viewStyle = currentWeb.getStyle();//动态显示tabbar
-						//						console.log("showTabbar viewStyle.bottom==" + viewStyle.bottom);
-						//						if(viewStyle.bottom == 0){
-						//			                currentWeb.setStyle({bottom:bottom});
-						//			            }
-					},
 					backAll: function() {
 						self.filter_resultShow = false;
 					},
-					popChose:function(index){
-						console.log(index);
+					popChose: function(index) {
 						_('#middlePopover').popover('toggle');
 						_("#keyborde_div").popover('show');
 					}

@@ -91,7 +91,7 @@
 		var  EncryptString = u.encryptByDESModeCBC(JSON.stringify(pdata),"MXHKEY17","12345678");
 		console.log("EncryptString====" + EncryptString);
 		if(show) {
-			plus.nativeUI.showWaiting("努力加載中...");
+			plus.nativeUI.showWaiting();
 		}
 		console.log('===EncryptString========' + EncryptString);
 		setTimeout(function() {

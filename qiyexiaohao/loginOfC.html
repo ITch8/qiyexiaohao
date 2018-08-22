@@ -78,6 +78,33 @@
 							}
 						}, myerror);
 					},
+					getMyNumber: function() {//获取虚拟小号
+						var nonce_str = u.mathRand();
+						console.log("nonce_str====" + nonce_str);
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						console.log("timestamp====" + timestamp);
+						var identifier = w.getItem("identifier"); //设备标识号
+						var user_token = w.getItem("user_token");
+						var pdata = {
+							app: "Member",
+							class: "getMyNumber",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token
+						}
+						var stringSignTemp = "app=Member&class=getMyNumber&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp + "&user_token="+user_token+"&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								var virtual_number = data.data[0] && data.data[0].number;
+								w.setItem("virtual_number",virtual_number);
+								console.log("virtual_number==" +virtual_number);
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					login: function() {
 						var nonce_str = u.mathRand();
 						console.log("nonce_str====" + nonce_str);
@@ -100,11 +127,13 @@
 							if(data.status == 0) {
 								data = data.data;
 								_.toast("登录成功");
+								console.log("data===" + JSON.stringify(data));
 		 						w.setItem("user_token",data.user_token);
 								w.setItem("company_id",data.company_id);
 								w.setItem("mobile",data.mobile);
 								w.setItem("account",account);
 								w.setItem("password",password);
+								self.getMyNumber();
 								_.later(function(){
 									w.openView("index.html")
 								},500)
