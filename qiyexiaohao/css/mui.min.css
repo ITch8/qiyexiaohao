@@ -1350,7 +1350,8 @@ input[type=submit]:enabled:active {
 	vertical-align: middle;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	color: #929292
+	color: #929292;
+	touch-action: none;
 }
 
 .mui-bar-tab .mui-tab-item.mui-active {

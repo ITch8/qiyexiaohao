@@ -23,13 +23,13 @@
 				<div class="mui-scroll">
 					<form class="mui-input-group">
 						<div class="mui-input-row">
-							<input type="text" class="mui-input-clear" v-model="givenName" placeholder="姓名">
+							<input type="text" class="mui-input-clear" v-model="displayName" placeholder="姓名">
 						</div>
 						<div class="mui-input-row">
 							<input type="text" class="mui-input-clear" placeholder="公司" v-model="company">
 						</div>
 						<div class="mui-input-row">
-							<input type="text" class="mui-input-clear" placeholder="职位">
+							<input type="text" class="mui-input-clear" placeholder="职位" v-model="job">
 						</div>
 						<div class="mui-input-row">
 							<input type="tel" class="mui-input-clear" placeholder="手机" maxlength="11" v-model="phoneNumber">
@@ -37,11 +37,10 @@
 						<div class="mui-input-row">
 							<input type="tel" class="mui-input-clear" placeholder="电话" v-model="tellNumber">
 						</div>
-						<mt-radio title="副号分组" v-model="groupType" :options="['手机', '电话']">
-						</mt-radio>
+						<!--<mt-radio title="副号分组" v-model="groupType" :options="['手机', '电话']">
+						</mt-radio>-->
 					</form>
 				</div>
-				<!--<button @tap="toAdd()" type="button" class="bottom_del_div mui-btn mui-btn-block">添加更多选项</button>-->
 			</div>
 		</div>
 	</body>
@@ -56,7 +55,7 @@
 				el: '#app',
 				data: {
 					groupType: '',
-					givenName: '',
+					displayName: '',
 					phoneNumber: '',
 					tellNumber: '',
 					company:'',
@@ -65,11 +64,12 @@
 				plusReady: {
 					init: function() {
 						self = this;
+						self.phoneNumber = plus.webview.currentWebview().number || '';
 					}
 				},
 				methods: {
 					addContact: function() { //往通讯录添加新联系人
-						if(u.isNull(self.givenName)) {
+						if(u.isNull(self.displayName)) {
 							_.toast("请输入姓名")
 						} else if(u.isNull(self.phoneNumber) && u.isNull(self.tellNumber)) {
 							_.toast("请输入手机号或者电话")
@@ -77,9 +77,7 @@
 							plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
 								// 向通讯录中添加联系人
 								var contact = addressbook.create();
-								contact.name = {
-									givenName: self.givenName
-								};
+								contact.displayName = self.displayName;
 								contact.phoneNumbers = [{
 										type: "mobile",
 										value: self.phoneNumber,
@@ -101,11 +99,14 @@
 								contact.save();
 								_.toast("新增成功");
 								_.later(function(){
-									plus.webview.getWebviewById("contact_mint.html").evalJS("getData()");
+									var web = plus.webview.getWebviewById("contact_mint.html");
+									if(web){
+										plus.webview.getWebviewById("contact_mint.html").evalJS("getData()");
+									}
 									_.back();
 								},500)
 							}, function(e) {
-								alert("Get address book failed: " + e.message);
+								_.toast("获取电话簿失败 " + e.message);
 							});
 						}
 					}

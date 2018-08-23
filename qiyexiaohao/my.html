@@ -82,9 +82,7 @@
 				methods: {
 					loginout:function(){
 						var nonce_str = u.mathRand();
-						console.log("nonce_str====" + nonce_str);
 						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
-						console.log("timestamp====" + timestamp);
 						var identifier = w.getItem("identifier"); //设备标识号
 						var account = w.getItem("mobile"),password = w.getItem("password"),company_id = w.getItem("company_id");
 						var pdata = {

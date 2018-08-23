@@ -149,7 +149,8 @@
   },
   "contactDetail.html": {
     "refer": [
-      "sendMsg.html"
+      "sendMsg.html",
+      "addContact.html"
     ],
     "resources": [
       "js/mui.min.js",

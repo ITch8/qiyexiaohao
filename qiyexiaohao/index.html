@@ -52,7 +52,6 @@
 			//获取屏幕宽度
 			var width = document.documentElement.clientWidth;
 			var bottom = 0;
-			console.log("width=" + width);
 			//3.75
 			if(width >= 320 && width < 360){
 				bottom = "54px";
@@ -77,7 +76,6 @@
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
 				var self = plus.webview.currentWebview();
-				console.log("self.id======" + self.id);
 				//首頁关闭ios右划
 				self.setStyle({
 					popGesture: "none"
@@ -117,12 +115,6 @@
 					//更改当前活跃的选项卡
 					activeTab = targetTab;
 				});
-				if(!window.getItem("user_token")){
-					window.openView("login.html");
-				}
-				setTimeout(function() {
-					plus.navigator.closeSplashscreen(); //手动关闭启动页
-				}, 3000);
 				//设备唯一标识符
 				window.setItem("identifier",plus.device.uuid.substr(0,15));
 			});

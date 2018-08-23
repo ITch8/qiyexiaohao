@@ -56,6 +56,15 @@
 				},
 				plusReady: {
 					init: function() {
+						if(w.getItem("user_token")){
+							w.openView("index.html");
+						}
+						plus.webview.currentWebview().setStyle({
+							softinputMode: "adjustResize"
+						});
+						setTimeout(function() {
+							plus.navigator.closeSplashscreen(); //手动关闭启动页
+						}, 3000);
 						self = this;
 					}
 				},

@@ -21,7 +21,7 @@
 				<!--<a v-if="isToDel" @tap="toggleDel()" class="mui-icon iconfont icon-shanchu mui-pull-right"></a>-->
 				<a v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</a>
 			</header>
-			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
+			<div  class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
 						<li @tap="toTelDetail(item.c_number)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in callList" v-bind:class="{'mui-left': !isToDel }">
@@ -32,22 +32,6 @@
 							</div>
 							<input v-if="!isToDel" type="checkbox" value="1" v-model="checkedArr" />
 						</li>
-						<!--<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
-							<div class="mui-media-body">
-								<span class="color_red">13510792830</span>
-								<span class="i_flag">副1</span>
-								<p><span class="mui-icon iconfont icon-huchujiantou color_red"></span>广东广州 4月9日 呼入 <span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
-							</div>
-							<input v-if="!isToDel" type="checkbox" value="2" v-model="checkedArr" />
-						</li>
-						<li @tap="toTelDetail('13510792830')" class="mui-table-view-cell mui-media mui-checkbox" v-bind:class="{'mui-left': !isToDel }">
-							<div class="mui-media-body">
-								<span class="color_333">王珂</span>
-								<span class="i_flag">副1</span>
-								<p><span class="mui-icon iconfont icon-weijiejiantou"></span>广东广州 4月9日 呼入12分21秒 <span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
-							</div>
-							<input v-if="!isToDel" type="checkbox" value="3" v-model="checkedArr" />
-						</li>-->
 					</ul>
 					<mt-popup v-model="popupVisible">
 						<div @tap="filterList(0,'全部通话')">
@@ -186,10 +170,17 @@
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		var app = null,
-			bottom = 0;;
+			bottom = 0,self = null;
+			
+		//改变键盘的显示
+		function toggleShow() {
+			mui('#keyborde_div').popover('toggle');
+		}
+		function toggleHidden() {
+			mui('#keyborde_div').popover('hide');
+		}
 		(function(_, w, u) {
-			var self = null,
-				currentWeb = null;
+			var currentWeb = null;
 			var all = [];
 			app = new App({
 				el: '#app',
@@ -248,6 +239,36 @@
 							}, myerror);
 						}
 					},
+					uploadCall: function(called_number) { //上传拨打电话
+						var nonce_str = u.mathRand();
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						var identifier = w.getItem("identifier"),
+							user_token = w.getItem("user_token"),virtual_number = w.getItem('virtual_number');
+						var pdata = {
+							app: "Member",
+							class: "UploadCall",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token,
+							virtual_number: virtual_number,
+							called_number: called_number
+						}
+						var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" 
+							+ identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp 
+							+ "&user_token=" + user_token
+							+ "&virtual_number="+ pdata.virtual_number
+							+ "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								self.getCallLog();
+								plus.device.dial(called_number, false);
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					getCallLogByNumber: function(number, type) { //搜索指定号码的通话记录
 						if(w.getItem("user_token")) {
 							var nonce_str = u.mathRand();
@@ -275,7 +296,7 @@
 											self.f_callList = comConvert(data);
 										}
 									} else {
-										_.toast('暂无记录');
+										self.f_callList = [];
 									}
 								} else {
 									_.toast(data.msg || '请求异常');
@@ -290,9 +311,16 @@
 						//TODO 赋值全部数据给self.checkedArr
 					},
 					toTelDetail: function(phone) {
-						if(self.isToDel) {
-							w.openView("contactDetail.html")
+						//选择出该手机号下的通话记录
+						var callList = [];
+						console.log("self.callList==" + JSON.stringify(self.callList));
+						for (var i = 0; i < self.callList.length; i++) {
+							if(phone == self.callList[i].c_number){
+								callList.push(self.callList[i]);
+							}
 						}
+						console.log("callList==" + JSON.stringify(callList));
+						w.openView("contactDetail.html",{phone:phone,callList:callList})
 					},
 					input_key: function(key) { //输入
 						if(self.inputKey.length >= 0) {
@@ -319,12 +347,16 @@
 								self.bottom_handle = false;
 								self.isShowDelInput = false;
 							}
-						} else if('tel' == key) {
-							plus.device.dial(self.inputKey, false);
+						} else if('tel' == key) {//打电话
+							if(!u.isNull(self.inputKey) && u.checkPhone(self.inputKey)){
+								self.uploadCall(self.inputKey);
+							}else{
+								_.toast("请正确输入手机号")
+							}
 						} else {
 							self.inputKey += key && key.substr(0, 1);
 						}
-						if(self.inputKey.length == 11 && u.checkPhone(self.inputKey)) { //查找该手机号通话记录
+						if('tel' !== key && self.inputKey.length == 11 && u.checkPhone(self.inputKey)) { //查找该手机号通话记录
 							self.getCallLogByNumber(self.inputKey, 0);
 						}
 					},
@@ -388,33 +420,23 @@
 					}
 				}
 			})
-
-			//转换
-			function comConvert(items) {
-				var newItems = [];
-				items.forEach(function(item, index) {
-					newItems.push({
-						c_number: item.type == 1 ? item.called_number : item.calling_number,
-						virtual_number: item.virtual_number,
-						type: item.type,
-						typeName: item.type == 1 ? '呼入' : '呼出',
-						talk_time: u.formatTime(item.talk_time),
-						create_time: item.create_time,
-						remark: item.remark
-					});
-				});
-				return newItems.reverse();
-			}
 		})(mui, window, util)
 
-		//改变键盘的显示
-		function toggleShow() {
-			mui('#keyborde_div').popover('toggle');
-		}
-
-		function toggleHidden() {
-			mui('#keyborde_div').popover('hide');
+		//转换
+		function comConvert(items) {
+			var newItems = [];
+			items.forEach(function(item, index) {
+				newItems.push({
+					c_number: item.type == 2 ? item.called_number : item.calling_number,
+					virtual_number: item.virtual_number,
+					type: item.type,
+					typeName: item.type == 2 ? '呼出' : '呼入',
+					talk_time: util.formatTime(item.talk_time),
+					create_time: item.create_time,
+					remark: item.remark
+				});
+			});
+			return newItems;
 		}
 	</script>
-
 </html>

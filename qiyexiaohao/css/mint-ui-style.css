@@ -1975,7 +1975,8 @@
 	text-align: center;
 	-webkit-box-pack: center;
 	-ms-flex-pack: center;
-	justify-content: center
+	justify-content: center;
+	overflow: auto;
 }
 
 .mint-indexlist-nav,

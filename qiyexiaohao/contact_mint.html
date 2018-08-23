@@ -11,13 +11,15 @@
 		<link rel="stylesheet" href="js/component/indexList-style.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<style>
-			.mui-bar .mui-icon{
+			.mui-bar .mui-icon {
 				font-size: 12px;
 			}
-			.mui-bar-nav.mui-bar .mui-icon{
+			
+			.mui-bar-nav.mui-bar .mui-icon {
 				margin-top: 0;
 			}
-			.mint-indexlist{
+			
+			.mint-indexlist {
 				background-color: #efeff4;
 			}
 		</style>
@@ -49,6 +51,8 @@
 	<script type="text/javascript" src="js/vue-tap.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/ChinesePY.js"></script>
+	<script type="text/javascript" src="js/md5.js" ></script>
+	<script type="text/javascript" src="js/des/crypto-js.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script>
 		var app = null;
@@ -62,40 +66,39 @@
 					contactsData: [],
 					value: '',
 					popupVisible: true,
-					allContacts:[]
+					allContacts: []
 				},
 				plusReady: {
 					init: function() {
 						self = this;
 						plus.nativeUI.showWaiting();
-						_.later(function(){
+						_.later(function() {
 							self.getAddressBook();
-						},500)
+						}, 300)
 					}
 				},
 				methods: {
-					getAddressBook:function(){
+					getAddressBook: function() {
 						if(plus.os.name == 'Android') {
 							var Context = plus.android.runtimeMainActivity();
 							//检测是否打开了此权限
 							var res = plus.android.invoke(Context, "checkSelfPermission", "android.permission.READ_CONTACTS");
-							console.log("res======" + JSON.stringify(res));
-							if(res != 0){
+							if(res != 0) {
 								_.alert("请从系统设置中设置\n开启通讯录访问\n后重试", "权限不足");
 								return;
 							}
 						}
 						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
-							addressbook.find(["displayName", "phoneNumbers","organizations"], function(contacts) {
+							addressbook.find([], function(contacts) {
 								self.arrContacts = [];
 								for(var i = 0, len = contacts.length; i < len; i++) {
 									contact = {};
 									contact.displayName = contacts[i].displayName;
 									contact.wordsCode = Pinyin.getWordsCode(contacts[i].displayName || '');
 									contact.ufirst = Pinyin._ucfirstName(contact.wordsCode);
-									contact.phoneNumber = contacts[i].phoneNumbers[0].value;//手机
-									if(contacts[i].phoneNumbers[1]){
-										contact.tellNumber = contacts[i].phoneNumbers[1].value;//电话
+									contact.phoneNumber = contacts[i].phoneNumbers[0] && contacts[i].phoneNumbers[0].value; //手机
+									if(contacts[i].phoneNumbers[1]) {
+										contact.tellNumber = contacts[i].phoneNumbers[1].value; //电话
 									}
 									self.arrContacts.push(contact);
 									self.arrUfirst.push(contact.ufirst); //存放首字母
@@ -118,16 +121,17 @@
 									contactsDataTmp.push(obj);
 								})
 								self.contactsData = contactsDataTmp; //赋值
-								self.allContacts = contactsDataTmp;//缓存所有的通讯录
-								if(self.allContacts.length == 0){
+								self.allContacts = contactsDataTmp; //缓存所有的通讯录
+								if(self.allContacts.length == 0) {
 									_.toast("暂无联系人 ");
 								}
-								plus.nativeUI.closeWaiting(); 
+								plus.nativeUI.closeWaiting();
 								console.log("contacts====" + JSON.stringify(self.contactsData));
 							}, function() {
 								_.toast("获取电话簿失败 ");
 								plus.nativeUI.closeWaiting();
 							}, {
+								filter: {},
 								multiple: true
 							});
 						}, function(e) {
@@ -135,11 +139,12 @@
 							_.toast("获取电话簿失败 " + e.message);
 						});
 					},
-					search: function() {//搜索
+					search: function() { //搜索
 						var filterResult = self.filterResult(self.value);
 						console.log("filterResult==" + JSON.stringify(filterResult));
-						var arrContacts = [],arrUfirst=[];
-						for(var i = 0,len = filterResult.length; i < len; i++) {
+						var arrContacts = [],
+							arrUfirst = [];
+						for(var i = 0, len = filterResult.length; i < len; i++) {
 							contact = {};
 							contact.ufirst = filterResult[i].ufirst;
 							contact.displayName = filterResult[i].displayName;
@@ -166,17 +171,47 @@
 							})
 							contactsDataTmp.push(obj);
 						})
-						console.log("contactsDataTmp====" + JSON.stringify(contactsDataTmp));
 						self.contactsData = contactsDataTmp;
 					},
 					toTel: function(param) {
 						var obj = param.obj;
-						console.log("obj====" + JSON.stringify(obj));
-						if(!u.isNull(obj.phoneNumber)){
-							plus.device.dial('' + obj.phoneNumber.replace(/\s/g, ""), true);
-						}else if(!u.isNull(obj.tellNumber)){
-							plus.device.dial('' + obj.tellNumber.replace(/\s/g, ""), true);
+						if(!u.isNull(obj.phoneNumber)) {
+							self.uploadCall('' + obj.phoneNumber.replace(/\s/g, ""));
+						} else if(!u.isNull(obj.tellNumber)) {
+							self.uploadCall('' + obj.tellNumber.replace(/\s/g, ""));
 						}
+					},
+					uploadCall: function(called_number) { //上传拨打电话
+						var nonce_str = u.mathRand();
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						var identifier = w.getItem("identifier"),
+							user_token = w.getItem("user_token"),virtual_number = w.getItem('virtual_number');
+						console.log("virtual_number=====" + virtual_number);
+						console.log("called_number=====" + called_number);
+						var pdata = {
+							app: "Member",
+							class: "UploadCall",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token,
+							virtual_number: virtual_number,
+							called_number: called_number
+						}
+						console.log("pdata=====" + JSON.stringify(pdata));
+						var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" 
+							+ identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp 
+							+ "&user_token=" + user_token
+							+ "&virtual_number="+ pdata.virtual_number
+							+ "&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								plus.device.dial(called_number, false);
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
 					},
 					toAddContact: function() {
 						w.openView('addContact.html')
@@ -208,7 +243,7 @@
 						})
 						return arr;
 					},
-					showAllC:function(){
+					showAllC: function() {
 						self.contactsData = self.allContacts;
 					}
 				},
@@ -217,8 +252,8 @@
 				}
 			})
 		})(mui, window, util)
-		
-		function getData(){
+
+		function getData() {
 			window.location.reload();
 		}
 	</script>

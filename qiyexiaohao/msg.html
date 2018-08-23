@@ -95,7 +95,7 @@
 				data: {
 					smsList:[],
 					searchValue: '',
-					popupVisible: true,
+					popupVisible: false,
 					title: "全部信息"
 				},
 				plusReady: {
@@ -108,7 +108,6 @@
 				methods: {
 					getSmsLog: function() {
 						var nonce_str = u.mathRand();
-						console.log("nonce_str====" + nonce_str);
 						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
 						var identifier = w.getItem("identifier"); //设备标识号
 						var user_token = w.getItem("user_token");
@@ -258,7 +257,7 @@
 						content:item.content
 					});
 				});
-				return newItems.reverse();
+				return newItems;
 			}
 		})(mui, window, util)
 		

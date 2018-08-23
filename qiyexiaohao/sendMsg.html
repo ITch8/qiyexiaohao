@@ -48,9 +48,8 @@
 	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
-		var app = null;
+		var app = null,self = null;
 		(function(_, w, u) {
-			var self = null;
 			app = new App({
 				el: '#app',
 				data: {
@@ -58,10 +57,10 @@
 					cardType: '主号',
 					i_flag: 'i_flag',
 					i_flag_2: 'i_flag_2',
-					isMain: false, //是否是主号
+					isMain: true, //是否是主号
 					names: "",
 					virtual_number: '', //登录虚拟小号
-					called_number: '13510792830', //接收方短信
+					called_number: '', //接收方短信
 				},
 				plusReady: {
 					init: function() {
@@ -74,24 +73,27 @@
 				methods: {
 					sendMsg: function() {
 						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
-						msg.to = [];
+						msg.to = [self.called_number+''];
 						msg.body = self.remark;
 						msg.silent = true; // 设置为使用静默方式发送
 						plus.messaging.sendMessage(msg, function() {
-							self.uploadSms();
+							_.toast("发送成功");
+							plus.webview.getWebviewById("msg.html").evalJS("getData()");
+							_.later(function(){
+								_.back();
+							},500)
 						}, function() {
 							_.alert("发送失败");
 						});
 					},
 					uploadSms: function() { //上传
 						var nonce_str = u.mathRand();
-						console.log("nonce_str====" + nonce_str);
 						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
 						var identifier = w.getItem("identifier"),
 							user_token = w.getItem("user_token"),virtual_number = w.getItem('virtual_number');
-						console.log("virtual_number=====" + virtual_number);
-						console.log("called_number=====" + self.called_number);
-						console.log("remark=====" + self.remark);
+							if(u.checkPhone(self.names)){
+								self.called_number = self.names
+							}
 						var pdata = {
 							app: "Member",
 							class: "UploadSms",
@@ -104,7 +106,6 @@
 							called_number: self.called_number,
 							remark: self.remark
 						}
-						console.log("pdata=====" + JSON.stringify(pdata));
 						var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadSms&client=web&identifier=" 
 							+ identifier + "&nonce_str=" + nonce_str + "&remark=" + pdata.remark + "&timestamp=" + timestamp 
 							+ "&user_token=" + user_token
@@ -112,11 +113,7 @@
 							+ "&";
 						u.mypost(pdata, stringSignTemp, true, function(data) {
 							if(data.status == 0) {
-								plus.webview.getWebviewById("msg.html").evalJS("getData()");
-								_.later(function(){
-									_.back();
-								},500)
-								_.toast(data.msg || '请求成功')
+								self.sendMsg();
 							} else {
 								_.toast(data.msg || '请求异常');
 							}
@@ -155,9 +152,10 @@
 
 		function addName() {
 			var name = window.getItem("displayName");
-			var names = app.names || '';
-			app.names = names + name;
-			console.log("111" + app.names);
+			var phoneNumber = window.getItem("phoneNumber");
+//			var names = self.names || '';
+			self.names = name;
+			self.called_number = phoneNumber;
 		}
 	</script>
 

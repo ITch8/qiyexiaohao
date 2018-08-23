@@ -20,12 +20,12 @@
 		<div id="app" class="mui-content mui-scroll-wrapper mui-fullscreen">
 			<div class="mui-scroll">
 				<div class="detail_body">
-					<div class="mui-pull-right span_right" @tap="toMsg()"><span class="mui-icon iconfont icon-dingdan-duanxin"></span></div>
+					<!--<div class="mui-pull-right span_right" @tap="toMsg()"><span class="mui-icon iconfont icon-dingdan-duanxin"></span></div>-->
 					<div class="detail_body_h" @tap="toTel()">
-						<span class="color_333 font_16">王大锤</span>
-						<span class="i_flag">副1</span>
+						<span class="color_333 font_16">{{displayName}}</span>
+						<!--<span class="i_flag">副1</span>-->
 					</div>
-					<div class="detail_body_b font-size-12" @tap="toTel()">广东广州 </div>
+					<div class="detail_body_b font-size-12" @tap="toTel()">{{address}} </div>
 				</div>
 				<mt-navbar v-model="selected">
 					<mt-tab-item id="1"><span class="mui-icon iconfont icon-lianxiren"></span><br>详情</mt-tab-item>
@@ -36,35 +36,39 @@
 						<ul class="mui-table-view">
 							<li class="mui-table-view-cell mui-media">
 								<div class="mui-media-body">
-									<span class="color_333 font_16">13510792830</span>
-									<span class="i_flag">副1</span>
-									<p>广东广州 </p>
+									<span class="color_333 font_16">{{number}}</span>
+									<!--<span class="i_flag">副1</span>-->
+									<p>{{address}} </p>
 								</div>
 							</li>
 							<li class="mui-table-view-cell mui-media">
 								<div class="mui-media-body">
 									<span class="color_333 font_16">公司</span>
-									<p>有限公司</p>
+									<p>{{company}}</p>
 								</div>
 							</li>
 							<li class="mui-table-view-cell mui-media">
 								<div class="mui-media-body">
 									<span class="color_333 font_16">职位</span>
-									<p>董事长</p>
+									<p>{{job}}</p>
 								</div>
 							</li>
 						</ul>
 					</mt-tab-container-item>
 					<mt-tab-container-item id="2">
 						<ul id="listData" class="mui-table-view">
-							<li @tap="toTel()" class="mui-table-view-cell mui-media">
+							<li class="mui-table-view-cell mui-media" v-for="item in callList">
 								<div class="mui-media-body">
-									<span class="color_333 font_16">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
-									<div class="font-size-12"><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</div>
+									<span class="color_333 font_16">{{item.c_number}}</span>
+									<span class="i_flag">{{item.remark}}</span>
+									<p>
+										<span class="mui-icon iconfont" 
+											v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>
+											{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}
+									</p>
 								</div>
 							</li>
-							<li @tap="toTel()" class="mui-table-view-cell mui-media">
+							<!--<li @tap="toTel()" class="mui-table-view-cell mui-media">
 								<div class="mui-media-body">
 									<span class="color_red font_16">13510792830</span>
 									<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
@@ -77,12 +81,13 @@
 									<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
 									<div class="font-size-12"><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</div>
 								</div>
-							</li>
+							</li>-->
 						</ul>
 					</mt-tab-container-item>
 				</mt-tab-container>
 			</div>
-			<button @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除联系人</button>
+			<button v-if="isS" @tap="toSave()" type="button" class="bottom_del_div mui-btn mui-btn-block">保存联系人</button>
+			<button v-else @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除联系人</button>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
@@ -95,28 +100,90 @@
 			App({
 				el: '#app',
 				data: {
-					selected: '1'
+					callList:[],//通话记录
+					number: '', //号码
+					selected: '1',
+					displayName: '',
+					address: '未知地',
+					company: '未知',
+					job: '未知',
+					isS: true,//是否是陌生人,
+					contact:{}//联系人对象
 				},
 				plusReady: {
 					init: function() {
 						self = this;
+						w.addEventListener("event", function(e) {
+							plus.nativeUI.showWaiting();
+							self.number = e.detail.phone;
+							self.callList = e.detail.callList;
+							console.log("self.number ==" + self.number);
+							//查找通讯录
+							self.getAddressBook();
+						})
 					}
 				},
 				methods: {
+					getAddressBook: function() {
+						if(plus.os.name == 'Android') {
+							var Context = plus.android.runtimeMainActivity();
+							//检测是否打开了此权限
+							var res = plus.android.invoke(Context, "checkSelfPermission", "android.permission.READ_CONTACTS");
+							if(res != 0) {
+								_.alert("请从系统设置中设置\n开启通讯录访问\n后重试", "权限不足");
+								return;
+							}
+						}
+						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
+							addressbook.find(["displayName", "phoneNumbers", "organizations"], function(contacts) {
+								self.contact = contacts[0];
+								console.log("getAddressBook======" + JSON.stringify(self.contact));
+								if(self.contact) {
+									self.isS = false;
+									self.displayName = self.contact.displayName;
+									self.addresses =self.contact.addresses || '未知地';
+									self.company = self.contact.organizations[0] && self.contact.organizations[0].name || '未知';
+									self.job = self.contact.organizations[0] && self.contact.organizations[0].department || '未知';
+								} else {
+									self.isS = true;
+									self.displayName = self.number;
+									self.addresses = '未知地';
+									self.company = '未知';
+									self.job = '未知';
+								}
+								plus.nativeUI.closeWaiting();
+							}, function(e) {
+								plus.nativeUI.closeWaiting();
+								_.toast("获取电话簿失败 ");
+							}, {
+								filter: [{
+									logic: "or",
+									field: "phoneNumbers",
+									value: self.number
+								}],
+								multiple: false
+							});
+						}, function(e) {
+							plus.nativeUI.closeWaiting();
+							_.toast("获取电话簿失败 " + e.message);
+						});
+					},
 					toDel: function() {
 						//删除通话记录
 						plus.nativeUI.confirm("确定删除所选联系人吗?", function(e) {
 							if(e.index == 1) {
-								_.back();
-								_.toast("已删除")
+								self.contact.remove( function () {
+									_.toast("已删除");
+									_.back();
+								});
 							}
 						}, {
 							"title": "删除联系人",
 							"buttons": ["取消", "删除"]
 						})
 					},
-					toTel: function() {
-						plus.device.dial("13510792830", false);
+					toSave: function() {
+						w.openView("addContact.html",{number:self.number})
 					},
 					toMsg: function() {
 						w.openView("sendMsg.html")
