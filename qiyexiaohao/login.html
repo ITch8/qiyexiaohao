@@ -14,7 +14,6 @@
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<!--<a class="mui-action-back mui-icon iconfont icon-jiantou mui-pull-left"></a>-->
 				<h1 class="mui-title">登录</h1>
 			</header>
 			<div class="mui-content mui-fullscreen mui-scroll-wrapper">
@@ -42,8 +41,8 @@
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
-	<script type="text/javascript" src="js/md5.js" ></script>
-	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
+	<script type="text/javascript" src="js/md5.js"></script>
+	<script type="text/javascript" src="js/des/crypto-js.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
@@ -51,12 +50,12 @@
 			App({
 				el: '#app',
 				data: {
-					account:'',
-					password:''
+					account: '',
+					password: ''
 				},
 				plusReady: {
 					init: function() {
-						if(w.getItem("user_token")){
+						if(w.getItem("user_token")) {
 							w.openView("index.html");
 						}
 						plus.webview.currentWebview().setStyle({
@@ -64,20 +63,30 @@
 						});
 						setTimeout(function() {
 							plus.navigator.closeSplashscreen(); //手动关闭启动页
-						}, 3000);
+						}, 2000);
 						self = this;
+						//设备唯一标识符
+						w.setItem("identifier",plus.device.uuid.substr(0,15));
 					}
 				},
 				methods: {
 					login: function() {
-						w.openView("loginOfC.html",{
-							account:self.account,
-							password:self.password
+						w.openView("loginOfC.html", {
+							account: self.account,
+							password: self.password
 						});
 					}
 				},
 				domReady: function() {
-					_.init(), _(".mui-scroll-wrapper").scroll();
+					_.init({
+						preloadPages: [{
+							"url": "contactDetail.html",
+							"id": "contactDetail"
+						}, {
+							"url": "sendMsg.html",
+							"id": "sendMsg"
+						}]
+					}), _(".mui-scroll-wrapper").scroll();
 					w.doubleTapExit();
 				}
 			})

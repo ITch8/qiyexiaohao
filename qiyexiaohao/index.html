@@ -40,15 +40,7 @@
 		<script type="text/javascript" src="js/common.js" ></script>
 		<script type="text/javascript" charset="utf-8">
 			//mui初始化
-			mui.init({
-				preloadPages: [{
-					"url": "contactDetail.html",
-					"id": "contactDetail"
-				},{
-					"url": "sendMsg.html",
-					"id": "sendMsg"
-				}]
-			});
+			mui.init();
 			//获取屏幕宽度
 			var width = document.documentElement.clientWidth;
 			var bottom = 0;
@@ -115,8 +107,6 @@
 					//更改当前活跃的选项卡
 					activeTab = targetTab;
 				});
-				//设备唯一标识符
-				window.setItem("identifier",plus.device.uuid.substr(0,15));
 			});
 			//自定义事件，模拟点击“首页选项卡”
 			document.addEventListener('goIndex', function() {

@@ -10,6 +10,13 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<link rel="stylesheet" href="css/style/main.css" />
+		<link rel="stylesheet" href="css/style/numbersPopover.css" />
+
+		<style>
+			.v-modal {
+				top: 0;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -19,12 +26,12 @@
 				<a v-else @tap="chooseAll()" class="mui-btn-link  mui-pull-left">{{chooseText}}</a>
 				<h1 class="mui-title">{{title}}</h1>
 				<!--<a v-if="isToDel" @tap="toggleDel()" class="mui-icon iconfont icon-shanchu mui-pull-right"></a>-->
-				<a v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</a>
+				<!--<a v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</a>-->
 			</header>
-			<div  class="mui-content mui-scroll-wrapper mui-fullscreen">
+			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
-						<li @tap="toTelDetail(item.c_number)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in callList" v-bind:class="{'mui-left': !isToDel }">
+						<li @tap="toTelDetail(item)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in callList" v-bind:class="{'mui-left': !isToDel }">
 							<div class="mui-media-body">
 								<span class="color_333">{{item.c_number}}</span>
 								<span class="i_flag">{{item.remark}}</span>
@@ -33,13 +40,11 @@
 							<input v-if="!isToDel" type="checkbox" value="1" v-model="checkedArr" />
 						</li>
 					</ul>
-					<mt-popup v-model="popupVisible">
-						<div @tap="filterList(0,'全部通话')">
-							<mt-cell title="全部通话"></mt-cell>
-						</div>
-						<div @tap="filterList(1,'副号通话')">
-							<mt-cell title="副号通话"></mt-cell>
-						</div>
+					<mt-popup v-model="popupVisible" popup-transition="popup-fade">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell" @tap="filterList(0,'全部通话')">全部通话</li>
+							<li class="mui-table-view-cell" @tap="filterList(1,'副号通话')">副号通话</li>
+						</ul>
 					</mt-popup>
 				</div>
 				<!--
@@ -152,9 +157,11 @@
 			<div id="middlePopover" class="mui-popover">
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell" @tap="popChose(1)">主号</li>
-							<li class="mui-table-view-cell" @tap="popChose(0)">副号</li>
+						<ul class="mui-table-view mui-text-center">
+							<li class="mui-table-view-cell" @tap="popChose('')">主号 {{mobile}}</li>
+							<li class="mui-table-view-cell" @tap="popChose(item)" v-for="item in virtual_numberArr">
+								副号 {{item}}
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -170,17 +177,19 @@
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		var app = null,
-			bottom = 0,self = null;
-			
+			bottom = 0,
+			self = null,
+			isMain=true;
+
 		//改变键盘的显示
 		function toggleShow() {
 			mui('#keyborde_div').popover('toggle');
 		}
+
 		function toggleHidden() {
 			mui('#keyborde_div').popover('hide');
 		}
 		(function(_, w, u) {
-			var currentWeb = null;
 			var all = [];
 			app = new App({
 				el: '#app',
@@ -191,20 +200,25 @@
 					chooseText: '全选',
 					list: [],
 					inputKey: '',
-					popupVisible: false, //popup显示
+					popupVisible: false, //顶部popup显示
 					filter_resultShow: false, //筛选结果显示
 					bottom_handle: false,
 					allLoaded: false,
 					isToDel: true, //是否显示取消
 					delNumber: 0, //删除数量
 					checkedArr: [],
-					isShowDelInput: false
+					isShowDelInput: false,
+					numbersPopup: true,
+					mobile:'',//主号
+					virtual_numberArr:[],//副号数组
+					virtual_number:''//被选小号
 				},
 				plusReady: {
 					init: function() {
-						currentWeb = plus.webview.currentWebview();
 						self = this;
 						self.getCallLog();
+						self.mobile = w.getItem("mobile");
+						self.virtual_numberArr = (w.getItem('virtual_number') || '').split('-');
 					}
 				},
 				methods: {
@@ -240,34 +254,38 @@
 						}
 					},
 					uploadCall: function(called_number) { //上传拨打电话
-						var nonce_str = u.mathRand();
-						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
-						var identifier = w.getItem("identifier"),
-							user_token = w.getItem("user_token"),virtual_number = w.getItem('virtual_number');
-						var pdata = {
-							app: "Member",
-							class: "UploadCall",
-							nonce_str: nonce_str,
-							timestamp: timestamp,
-							identifier: identifier,
-							client: "web",
-							user_token: user_token,
-							virtual_number: virtual_number,
-							called_number: called_number
-						}
-						var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" 
-							+ identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp 
-							+ "&user_token=" + user_token
-							+ "&virtual_number="+ pdata.virtual_number
-							+ "&";
-						u.mypost(pdata, stringSignTemp, true, function(data) {
-							if(data.status == 0) {
-								self.getCallLog();
-								plus.device.dial(called_number, false);
-							} else {
-								_.toast(data.msg || '请求异常');
+						if(isMain){//主号正常拨打
+							plus.device.dial(called_number, false);
+						}else{
+							var nonce_str = u.mathRand();
+							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+							var identifier = w.getItem("identifier"),
+								user_token = w.getItem("user_token");
+							var pdata = {
+								app: "Member",
+								class: "UploadCall",
+								nonce_str: nonce_str,
+								timestamp: timestamp,
+								identifier: identifier,
+								client: "web",
+								user_token: user_token,
+								virtual_number: self.virtual_number,
+								called_number: called_number
 							}
-						}, myerror);
+							var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" +
+								identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp +
+								"&user_token=" + user_token +
+								"&virtual_number=" + pdata.virtual_number +
+								"&";
+							u.mypost(pdata, stringSignTemp, true, function(data) {
+								if(data.status == 0) {
+									self.getCallLog();
+									plus.device.dial(pdata.virtual_number, false);
+								} else {
+									_.toast(data.msg || '请求异常');
+								}
+							}, myerror);
+						}
 					},
 					getCallLogByNumber: function(number, type) { //搜索指定号码的通话记录
 						if(w.getItem("user_token")) {
@@ -307,20 +325,20 @@
 					toggleDel: function() { //控制删除
 						self.isToDel = false;
 					},
-					chooseAll: function() {
-						//TODO 赋值全部数据给self.checkedArr
-					},
-					toTelDetail: function(phone) {
+					toTelDetail: function(item) {
 						//选择出该手机号下的通话记录
 						var callList = [];
 						console.log("self.callList==" + JSON.stringify(self.callList));
-						for (var i = 0; i < self.callList.length; i++) {
-							if(phone == self.callList[i].c_number){
+						for(var i = 0; i < self.callList.length; i++) {
+							if(item.c_number == self.callList[i].c_number) {
 								callList.push(self.callList[i]);
 							}
 						}
-						console.log("callList==" + JSON.stringify(callList));
-						w.openView("contactDetail.html",{phone:phone,callList:callList})
+						w.openView("contactDetail.html", {
+							phone: item.c_number,
+							callList: callList,
+							remark:item.remark
+						})
 					},
 					input_key: function(key) { //输入
 						if(self.inputKey.length >= 0) {
@@ -347,10 +365,10 @@
 								self.bottom_handle = false;
 								self.isShowDelInput = false;
 							}
-						} else if('tel' == key) {//打电话
-							if(!u.isNull(self.inputKey) && u.checkPhone(self.inputKey)){
-								self.uploadCall(self.inputKey);
-							}else{
+						} else if('tel' == key) { //打电话
+							if(!u.isNull(self.inputKey) && u.checkPhone(self.inputKey)) {
+								_('#middlePopover').popover('toggle');
+							} else {
 								_.toast("请正确输入手机号")
 							}
 						} else {
@@ -366,7 +384,7 @@
 						if(0 == type) { //全部
 							self.callList = all;
 						} else { //副号
-							var virtual_number = w.getItem("virtual_number");
+							var virtual_number = (w.getItem("virtual_number") || '-').split('-')[0];
 							if(u.isNull(virtual_number)) {
 								_.toast("请重新登录");
 							} else {
@@ -394,10 +412,19 @@
 					},
 					backAll: function() {
 						self.filter_resultShow = false;
+						self.getCallLog();
 					},
-					popChose: function(index) {
+					popChose: function(number) {
 						_('#middlePopover').popover('toggle');
 						_("#keyborde_div").popover('show');
+						console.log("number" +  number);
+						if(!number || u.isNull(number)){
+							isMain = true;
+						}else{
+							isMain = false;
+							self.virtual_number = number;
+						}
+						self.uploadCall(self.inputKey);
 					}
 				},
 				domReady: function() {
@@ -439,4 +466,5 @@
 			return newItems;
 		}
 	</script>
+
 </html>

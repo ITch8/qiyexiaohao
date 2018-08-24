@@ -378,7 +378,9 @@
 				"resources": [],
 				"refer": [
 					"index.html",
-					"loginOfC.html"
+					"loginOfC.html",
+					"contactDetail.html",
+					"sendMsg.html"
 				],
 				"priority": 0
 			},

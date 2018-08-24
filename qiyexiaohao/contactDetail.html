@@ -10,114 +10,118 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<link rel="stylesheet" href="css/detail.css" />
+		<link rel="stylesheet" href="css/style/numbersPopover.css" />
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon iconfont icon-jiantou mui-pull-left"></a>
-			<h1 class="mui-title">联系人详情</h1>
-		</header>
-		<div id="app" class="mui-content mui-scroll-wrapper mui-fullscreen">
-			<div class="mui-scroll">
-				<div class="detail_body">
-					<!--<div class="mui-pull-right span_right" @tap="toMsg()"><span class="mui-icon iconfont icon-dingdan-duanxin"></span></div>-->
-					<div class="detail_body_h" @tap="toTel()">
-						<span class="color_333 font_16">{{displayName}}</span>
-						<!--<span class="i_flag">副1</span>-->
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-action-back mui-icon iconfont icon-jiantou mui-pull-left"></a>
+				<h1 class="mui-title">联系人详情</h1>
+				<a @tap="toMsg()" class="mui-icon iconfont icon-dingdan-duanxin mui-pull-right"></a>
+			</header>
+			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
+				<div class="mui-scroll">
+					<div class="detail_body">
+						<div class="detail_body_h">
+							<span class="color_333 font_16">{{displayName}}</span>
+						</div>
+						<div class="detail_body_b font-size-12">
+							{{address}}
+						</div>
 					</div>
-					<div class="detail_body_b font-size-12" @tap="toTel()">{{address}} </div>
-				</div>
-				<mt-navbar v-model="selected">
-					<mt-tab-item id="1"><span class="mui-icon iconfont icon-lianxiren"></span><br>详情</mt-tab-item>
-					<mt-tab-item id="2"><span class="mui-icon iconfont icon-tonghuajilu"></span><br>通话记录</mt-tab-item>
-				</mt-navbar>
-				<mt-tab-container v-model="selected">
-					<mt-tab-container-item id="1">
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
+					<mt-navbar v-model="selected">
+						<mt-tab-item id="1"><span class="mui-icon iconfont icon-lianxiren"></span><br>详情</mt-tab-item>
+						<mt-tab-item id="2"><span class="mui-icon iconfont icon-tonghuajilu"></span><br>通话记录</mt-tab-item>
+					</mt-navbar>
+					<mt-tab-container v-model="selected">
+						<mt-tab-container-item id="1">
+							<ul class="mui-table-view">
+								<li class="mui-table-view-cell" @tap="toTel()">
 									<span class="color_333 font_16">{{number}}</span>
-									<!--<span class="i_flag">副1</span>-->
-									<p>{{address}} </p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
+									<span class="i_flag">{{remark}}</span>
+									<p>{{address}}</p>
+								</li>
+								<li class="mui-table-view-cell">
 									<span class="color_333 font_16">公司</span>
 									<p>{{company}}</p>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
+								</li>
+								<li class="mui-table-view-cell">
 									<span class="color_333 font_16">职位</span>
 									<p>{{job}}</p>
-								</div>
-							</li>
-						</ul>
-					</mt-tab-container-item>
-					<mt-tab-container-item id="2">
-						<ul id="listData" class="mui-table-view">
-							<li class="mui-table-view-cell mui-media" v-for="item in callList">
-								<div class="mui-media-body">
-									<span class="color_333 font_16">{{item.c_number}}</span>
-									<span class="i_flag">{{item.remark}}</span>
-									<p>
-										<span class="mui-icon iconfont" 
-											v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>
-											{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}
-									</p>
-								</div>
-							</li>
-							<!--<li @tap="toTel()" class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
-									<span class="color_red font_16">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
-									<div class="font-size-12"><span class="mui-icon iconfont icon-huchujiantou color_red"></span>广东广州 4月9日 呼入</div>
-								</div>
-							</li>
-							<li @tap="toTel()" class="mui-table-view-cell mui-media">
-								<div class="mui-media-body">
-									<span class="color_333 font_16">13510792830</span>
-									<span class="i_flag">副1</span> <span class="mui-pull-right font-size-12">12:56</span>
-									<div class="font-size-12"><span class="mui-icon iconfont icon-huchujiantou"></span>广东广州 4月9日 呼入12分21秒</div>
-								</div>
-							</li>-->
-						</ul>
-					</mt-tab-container-item>
-				</mt-tab-container>
+								</li>
+							</ul>
+						</mt-tab-container-item>
+						<mt-tab-container-item id="2">
+							<ul id="listData" class="mui-table-view">
+								<li class="mui-table-view-cell mui-media" v-for="item in callList" @tap="toTel()">
+									<div class="mui-media-body">
+										<span class="color_333 font_16">{{item.c_number}}</span>
+										<span class="i_flag">{{item.remark}}</span>
+										<p>
+											<span class="mui-icon iconfont" v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span> {{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}
+										</p>
+									</div>
+								</li>
+							</ul>
+						</mt-tab-container-item>
+					</mt-tab-container>
+				</div>
+				<button v-if="isS" @tap="toSave()" type="button" class="bottom_del_div mui-btn mui-btn-block">保存联系人</button>
+				<button v-else @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除联系人</button>
 			</div>
-			<button v-if="isS" @tap="toSave()" type="button" class="bottom_del_div mui-btn mui-btn-block">保存联系人</button>
-			<button v-else @tap="toDel()" type="button" class="bottom_del_div mui-btn mui-btn-block">删除联系人</button>
+			<div id="middlePopover" class="mui-popover">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view mui-text-center">
+							<li class="mui-table-view-cell" @tap="popChose('')">主号 {{mobile}}</li>
+							<li class="mui-table-view-cell" @tap="popChose(item)" v-for="item in virtual_numberArr">
+								副号 {{item}}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript" src="js/vue.min.js"></script>
 	<script type="text/javascript" src="js/vue-html5plus.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
+	<script type="text/javascript" src="js/md5.js"></script>
+	<script type="text/javascript" src="js/des/crypto-js.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
+			var isMain = true;
 			App({
 				el: '#app',
 				data: {
-					callList:[],//通话记录
+					callList: [], //通话记录
 					number: '', //号码
 					selected: '1',
-					displayName: '',
+					displayName: '未知',
+					remark: '主号',
 					address: '未知地',
 					company: '未知',
 					job: '未知',
-					isS: true,//是否是陌生人,
-					contact:{}//联系人对象
+					isS: true, //是否是陌生人,
+					contact: {}, //联系人对象
+					mobile: '', //主号
+					virtual_numberArr: [], //副号数组
+					virtual_number: '' //被选小号
+
 				},
 				plusReady: {
 					init: function() {
 						self = this;
+						self.mobile = w.getItem("mobile");
+						self.virtual_numberArr = (w.getItem('virtual_number') || '').split('-');
 						w.addEventListener("event", function(e) {
 							plus.nativeUI.showWaiting();
 							self.number = e.detail.phone;
 							self.callList = e.detail.callList;
-							console.log("self.number ==" + self.number);
+							self.remark = e.detail.remark;
 							//查找通讯录
 							self.getAddressBook();
 						})
@@ -141,7 +145,7 @@
 								if(self.contact) {
 									self.isS = false;
 									self.displayName = self.contact.displayName;
-									self.addresses =self.contact.addresses || '未知地';
+									self.addresses = self.contact.addresses || '未知地';
 									self.company = self.contact.organizations[0] && self.contact.organizations[0].name || '未知';
 									self.job = self.contact.organizations[0] && self.contact.organizations[0].department || '未知';
 								} else {
@@ -154,7 +158,7 @@
 								plus.nativeUI.closeWaiting();
 							}, function(e) {
 								plus.nativeUI.closeWaiting();
-								_.toast("获取电话簿失败 ");
+								_.toast("获取联系人失败 ");
 							}, {
 								filter: [{
 									logic: "or",
@@ -165,14 +169,61 @@
 							});
 						}, function(e) {
 							plus.nativeUI.closeWaiting();
-							_.toast("获取电话簿失败 " + e.message);
+							_.toast("获取联系人失败 " + e.message);
 						});
+					},
+					popChose: function(number) {
+						_('#middlePopover').popover('toggle');
+						console.log("number" + number);
+						if(!number || u.isNull(number)) {
+							isMain = true;
+						} else {
+							isMain = false;
+							self.virtual_number = number;
+						}
+						self.uploadCall(self.number);
+					},
+					uploadCall: function(called_number) { //上传拨打电话
+						if(isMain) { //主号正常拨打
+							plus.device.dial(called_number, false);
+						} else {
+							var nonce_str = u.mathRand();
+							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+							var identifier = w.getItem("identifier"),
+								user_token = w.getItem("user_token");
+							var pdata = {
+								app: "Member",
+								class: "UploadCall",
+								nonce_str: nonce_str,
+								timestamp: timestamp,
+								identifier: identifier,
+								client: "web",
+								user_token: user_token,
+								virtual_number: self.virtual_number,
+								called_number: called_number
+							}
+							var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" +
+								identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp +
+								"&user_token=" + user_token +
+								"&virtual_number=" + pdata.virtual_number +
+								"&";
+							u.mypost(pdata, stringSignTemp, true, function(data) {
+								if(data.status == 0) {
+									plus.device.dial(pdata.virtual_number, false);
+								} else {
+									_.toast(data.msg || '请求异常');
+								}
+							}, myerror);
+						}
+					},
+					toTel: function() {
+						_('#middlePopover').popover('toggle');
 					},
 					toDel: function() {
 						//删除通话记录
 						plus.nativeUI.confirm("确定删除所选联系人吗?", function(e) {
 							if(e.index == 1) {
-								self.contact.remove( function () {
+								self.contact.remove(function() {
 									_.toast("已删除");
 									_.back();
 								});
@@ -183,7 +234,9 @@
 						})
 					},
 					toSave: function() {
-						w.openView("addContact.html",{number:self.number})
+						w.openView("addContact.html", {
+							number: self.number
+						})
 					},
 					toMsg: function() {
 						w.openView("sendMsg.html")

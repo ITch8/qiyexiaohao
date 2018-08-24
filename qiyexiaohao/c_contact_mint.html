@@ -102,13 +102,13 @@
 								plus.nativeUI.closeWaiting(); 
 							}, function() {
 								plus.nativeUI.closeWaiting(); 
-								_.toast("获取电话簿失败 ");
+								_.toast("获取联系人失败 ");
 							}, {
 								multiple: true
 							});
 						}, function(e) {
 							plus.nativeUI.closeWaiting(); 
-							_.toast("获取电话簿失败 " + e.message);
+							_.toast("获取联系人失败 " + e.message);
 						});
 					},
 					unique: function(arr) {

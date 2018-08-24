@@ -1256,7 +1256,7 @@
 .mint-popup {
 	position: fixed;
 	background: #fff;
-	top: 46px;
+	top: 2.37rem;
 	left: 50%;
 	width: 100%;
 	-webkit-transform: translate3d(-50%, -50%, 0);

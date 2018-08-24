@@ -3013,7 +3013,7 @@ select:focus {
 	position: absolute;
 	z-index: 999;
 	display: none;
-	width: 280px;
+	width: 15.62rem;
 	-webkit-transition: opacity .3s;
 	transition: opacity .3s;
 	-webkit-transition-property: opacity;
@@ -3021,8 +3021,8 @@ select:focus {
 	-webkit-transform: none;
 	transform: none;
 	opacity: 0;
-	border-radius: 7px;
-	background-color: #f7f7f7;
+	border-radius: 6px;
+	background-color: #fff;
 	-webkit-box-shadow: 0 0 15px rgba(0, 0, 0, .1);
 	box-shadow: 0 0 15px rgba(0, 0, 0, .1)
 }
@@ -3182,7 +3182,7 @@ select:focus {
 	max-height: 300px;
 	margin-bottom: 0;
 	border-radius: 0;
-	background-color: #f7f7f7;
+	background-color: #fff;
 	background-image: none;
 	-webkit-overflow-scrolling: touch
 }
@@ -3198,11 +3198,11 @@ select:focus {
 	border-top-right-radius: 12px
 }*/
 
-.mui-popover .mui-table-view .mui-table-view-cell:last-child,
+/*.mui-popover .mui-table-view .mui-table-view-cell:last-child,
 .mui-popover .mui-table-view .mui-table-view-cell:last-child>a:not(.mui-btn) {
 	border-bottom-right-radius: 12px;
 	border-bottom-left-radius: 12px
-}
+}*/
 
 .mui-popover.mui-bar-popover .mui-table-view {
 	width: 106px

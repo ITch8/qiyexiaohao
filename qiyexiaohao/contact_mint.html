@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="css/common.css" />
 		<link rel="stylesheet" href="js/component/indexList-style.css" />
 		<link rel="stylesheet" href="css/iconfont.css" />
+		<link rel="stylesheet" href="css/style/numbersPopover.css" />
 		<style>
 			.mui-bar .mui-icon {
 				font-size: 12px;
@@ -33,8 +34,8 @@
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
-					<form class="mui-input-group" @submit.prevent="search" @blur="showAllC">
-						<mt-search v-model="value" cancel-text="取消" placeholder="搜索"></mt-search>
+					<form action="" class="mui-input-group" @submit.prevent="search">
+						<mt-search v-model="value" @keyup.enter.native="search" @keyup.delete.native="dSearch" @blur.native.capture="showAllC" cancel-text="取消" placeholder="搜索"></mt-search>
 					</form>
 					<mt-index-list>
 						<mt-index-section v-for="item in contactsData" :index="item.ufirst">
@@ -51,13 +52,14 @@
 	<script type="text/javascript" src="js/vue-tap.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/ChinesePY.js"></script>
-	<script type="text/javascript" src="js/md5.js" ></script>
+	<script type="text/javascript" src="js/md5.js"></script>
 	<script type="text/javascript" src="js/des/crypto-js.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script>
 		var app = null;
 		(function(_, w, u) {
-			var self = null;
+			var self = null,
+				isMain = true;
 			app = new App({
 				el: '#app',
 				data: {
@@ -66,11 +68,17 @@
 					contactsData: [],
 					value: '',
 					popupVisible: true,
-					allContacts: []
+					allContacts: [],
+					virtual_numberArr: [], //副号
+					mobile: '',
+					virtual_number: '', //被选小号
+					called_number: '' //被叫电话
 				},
 				plusReady: {
 					init: function() {
 						self = this;
+						self.mobile = w.getItem("mobile");
+						self.virtual_numberArr = (w.getItem('virtual_number') || '').split('-');
 						plus.nativeUI.showWaiting();
 						_.later(function() {
 							self.getAddressBook();
@@ -78,7 +86,7 @@
 					}
 				},
 				methods: {
-					getAddressBook: function() {
+					getAddressBook: function(filter = {},isSearch = false) {
 						if(plus.os.name == 'Android') {
 							var Context = plus.android.runtimeMainActivity();
 							//检测是否打开了此权限
@@ -89,8 +97,9 @@
 							}
 						}
 						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
-							addressbook.find([], function(contacts) {
+							addressbook.find(["displayName","phoneNumbers","organizations"], function(contacts) {
 								self.arrContacts = [];
+								self.arrUfirst = [];
 								for(var i = 0, len = contacts.length; i < len; i++) {
 									contact = {};
 									contact.displayName = contacts[i].displayName;
@@ -121,97 +130,79 @@
 									contactsDataTmp.push(obj);
 								})
 								self.contactsData = contactsDataTmp; //赋值
-								self.allContacts = contactsDataTmp; //缓存所有的通讯录
+								if(!isSearch){
+									self.allContacts = contactsDataTmp; //缓存所有的通讯录
+								}
 								if(self.allContacts.length == 0) {
-									_.toast("暂无联系人 ");
+									_.toast("无相关联系人 ");
 								}
 								plus.nativeUI.closeWaiting();
-								console.log("contacts====" + JSON.stringify(self.contactsData));
 							}, function() {
-								_.toast("获取电话簿失败 ");
+								_.toast("获取联系人失败 ");
 								plus.nativeUI.closeWaiting();
 							}, {
-								filter: {},
+								filter: filter,
 								multiple: true
 							});
 						}, function(e) {
 							plus.nativeUI.closeWaiting();
-							_.toast("获取电话簿失败 " + e.message);
+							_.toast("获取联系人失败 " + e.message);
 						});
 					},
 					search: function() { //搜索
-						var filterResult = self.filterResult(self.value);
-						console.log("filterResult==" + JSON.stringify(filterResult));
-						var arrContacts = [],
-							arrUfirst = [];
-						for(var i = 0, len = filterResult.length; i < len; i++) {
-							contact = {};
-							contact.ufirst = filterResult[i].ufirst;
-							contact.displayName = filterResult[i].displayName;
-							contact.wordsCode = filterResult[i].wordsCode;
-							contact.phoneNumber = filterResult[i].phoneNumber;
-							contact.tellNumber = filterResult[i].tellNumber;
-							arrContacts.push(contact);
-							arrUfirst.push(contact.ufirst); //存放首字母
-							arrUfirst.sort();
+						var filter = [{logic:"or",field:"displayName",value:"*"+self.value+"*"},{logic:"or",field:"nickname",value:"*"+self.value+"*"},{logic:"or",field:"phoneNumbers",value:"*"+self.value+"*"}];
+						self.getAddressBook(filter,true);
+					},
+					dSearch:function(){
+						if(u.isNull(self.value)){
+							self.contactsData = self.allContacts;
 						}
-						arrUfirst = self.unique(arrUfirst);
-						var obj = {},
-							contactsDataTmp = [];
-						arrUfirst.forEach(function(item, index) {
-							obj = {
-								ufirst: "A",
-								dataArr: []
-							};
-							arrContacts.forEach(function(o, i) {
-								if(item == o.ufirst) {
-									obj.ufirst = item;
-									obj.dataArr.push(o)
-								}
-							})
-							contactsDataTmp.push(obj);
-						})
-						self.contactsData = contactsDataTmp;
 					},
 					toTel: function(param) {
 						var obj = param.obj;
 						if(!u.isNull(obj.phoneNumber)) {
-							self.uploadCall('' + obj.phoneNumber.replace(/\s/g, ""));
+							self.called_number = '' + obj.phoneNumber.replace(/\s/g, "");
 						} else if(!u.isNull(obj.tellNumber)) {
-							self.uploadCall('' + obj.tellNumber.replace(/\s/g, ""));
+							self.called_number = '' + obj.tellNumber.replace(/\s/g, "");
 						}
+						w.openView("contactDetail.html", {
+							phone: self.called_number,
+							callList: [],
+							remark:'主号'
+						})
 					},
 					uploadCall: function(called_number) { //上传拨打电话
-						var nonce_str = u.mathRand();
-						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
-						var identifier = w.getItem("identifier"),
-							user_token = w.getItem("user_token"),virtual_number = w.getItem('virtual_number');
-						console.log("virtual_number=====" + virtual_number);
-						console.log("called_number=====" + called_number);
-						var pdata = {
-							app: "Member",
-							class: "UploadCall",
-							nonce_str: nonce_str,
-							timestamp: timestamp,
-							identifier: identifier,
-							client: "web",
-							user_token: user_token,
-							virtual_number: virtual_number,
-							called_number: called_number
-						}
-						console.log("pdata=====" + JSON.stringify(pdata));
-						var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" 
-							+ identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp 
-							+ "&user_token=" + user_token
-							+ "&virtual_number="+ pdata.virtual_number
-							+ "&";
-						u.mypost(pdata, stringSignTemp, true, function(data) {
-							if(data.status == 0) {
-								plus.device.dial(called_number, false);
-							} else {
-								_.toast(data.msg || '请求异常');
+						if(isMain) {
+							plus.device.dial(called_number, false);
+						} else {
+							var nonce_str = u.mathRand();
+							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+							var identifier = w.getItem("identifier"),
+								user_token = w.getItem("user_token");
+							var pdata = {
+								app: "Member",
+								class: "UploadCall",
+								nonce_str: nonce_str,
+								timestamp: timestamp,
+								identifier: identifier,
+								client: "web",
+								user_token: user_token,
+								virtual_number: self.virtual_number,
+								called_number: called_number
 							}
-						}, myerror);
+							var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" +
+								identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp +
+								"&user_token=" + user_token +
+								"&virtual_number=" + pdata.virtual_number +
+								"&";
+							u.mypost(pdata, stringSignTemp, true, function(data) {
+								if(data.status == 0) {
+									plus.device.dial(pdata.virtual_number, false);
+								} else {
+									_.toast(data.msg || '请求异常');
+								}
+							}, myerror);
+						}
 					},
 					toAddContact: function() {
 						w.openView('addContact.html')
@@ -225,23 +216,6 @@
 							}
 						}
 						return tmp;
-					},
-					filterResult: function(value) {
-						var searchRegex = new RegExp(value, 'i');
-						var arr = [];
-						console.log("searchRegex===" + searchRegex);
-						self.allContacts.forEach(function(item, index) {
-							if(searchRegex.test(item.ufirst)) {
-								arr = arr.concat(item.dataArr);
-							} else {
-								item.dataArr.forEach(function(obj, i) {
-									if(searchRegex.test(obj.phoneNumber) || searchRegex.test(obj.displayName) || searchRegex.test(obj.wordsCode)) {
-										arr = arr.concat(item.dataArr);
-									}
-								})
-							}
-						})
-						return arr;
 					},
 					showAllC: function() {
 						self.contactsData = self.allContacts;
