@@ -22,22 +22,19 @@
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
-				<a v-if="isToDel" @tap="toggleTopP()" class="mui-icon iconfont icon-dianjihoudesanheng mui-pull-left"></a>
-				<a v-else @tap="chooseAll()" class="mui-btn-link  mui-pull-left">{{chooseText}}</a>
+				<a @tap="toggleTopP()" class="mui-icon iconfont icon-dianjihoudesanheng mui-pull-left"></a>
 				<h1 class="mui-title">{{title}}</h1>
-				<!--<a v-if="isToDel" @tap="toggleDel()" class="mui-icon iconfont icon-shanchu mui-pull-right"></a>-->
-				<!--<a v-else @tap="cancelDel()" class="mui-btn-link mui-pull-right">取消</a>-->
 			</header>
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
 					<ul class="mui-table-view">
-						<li @tap="toTelDetail(item)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in callList" v-bind:class="{'mui-left': !isToDel }">
+						<li @tap="toTel(item)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in callList">
 							<div class="mui-media-body">
-								<span class="color_333">{{item.c_number}}</span>
-								<span class="i_flag">{{item.remark}}</span>
+								<span v-if="item.user_name != '' " class="color_333">{{item.user_name}}</span>
+								<span v-else="" class="color_333">{{item.c_number}}</span>
+								<span class="font-size-12 color_666">{{item.relationship}}</span>
 								<p><span class="mui-icon iconfont" v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 							</div>
-							<input v-if="!isToDel" type="checkbox" value="1" v-model="checkedArr" />
 						</li>
 					</ul>
 					<mt-popup v-model="popupVisible" popup-transition="popup-fade">
@@ -47,11 +44,6 @@
 						</ul>
 					</mt-popup>
 				</div>
-				<!--
-		            	时间：2018-04-13
-		            	描述：底部删除按钮
-		            -->
-				<button @tap="toDel()" v-show="!isToDel" type="button" class="bottom_del_div color_red mui-btn mui-btn-block">删除({{checkedArr.length}})</button>
 			</div>
 			<!--
             	时间：2018-04-13
@@ -63,10 +55,11 @@
 						<div class="back" @tap="backAll()">
 							<a class="mui-icon iconfont icon-jiantou"></a><span class="font-size-12">返回全部</span></div>
 						<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed">
-							<li @tap="toTelDetail(item.c_number)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in f_callList" v-bind:class="{'mui-left': !isToDel }">
+							<li @tap="toTel(item)" class="mui-table-view-cell mui-media mui-checkbox" v-for="item in f_callList">
 								<div class="mui-media-body">
-									<span class="color_333">{{item.c_number}}</span>
-									<span class="i_flag">{{item.remark}}</span>
+									<span v-if="item.user_name != '' " class="color_333">{{item.user_name}}</span>
+								    <span v-else="" class="color_333">{{item.c_number}}</span>
+									<span class="font-size-12 color_666">{{item.relationship}}</span>
 									<p><span class="mui-icon iconfont" v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span>{{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}<span class="mui-icon iconfont icon-tongxunluyuanjiajiantou mui-pull-right span_right"></span></p>
 								</div>
 							</li>
@@ -179,7 +172,7 @@
 		var app = null,
 			bottom = 0,
 			self = null,
-			isMain=true;
+			isMain=true,user_name = '';
 
 		//改变键盘的显示
 		function toggleShow() {
@@ -197,32 +190,95 @@
 					callList: [],
 					f_callList: [], //手机查找结果
 					title: '全部通话',
-					chooseText: '全选',
 					list: [],
 					inputKey: '',
 					popupVisible: false, //顶部popup显示
 					filter_resultShow: false, //筛选结果显示
 					bottom_handle: false,
 					allLoaded: false,
-					isToDel: true, //是否显示取消
-					delNumber: 0, //删除数量
-					checkedArr: [],
 					isShowDelInput: false,
-					numbersPopup: true,
 					mobile:'',//主号
 					virtual_numberArr:[],//副号数组
-					virtual_number:''//被选小号
+					virtual_number:'',//被选小号
+					called_number:''
 				},
 				plusReady: {
 					init: function() {
 						self = this;
 						self.getCallLog();
 						self.mobile = w.getItem("mobile");
-						self.virtual_numberArr = (w.getItem('virtual_number') || '').split('-');
+//						self.getMyNumber();
 					}
 				},
 				methods: {
-					getCallLog: function() {
+					getMyNumber: function() {//获取小号列表
+						var nonce_str = u.mathRand();
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						var identifier = w.getItem("identifier"); //设备标识号
+						var user_token = w.getItem("user_token");
+						var pdata = {
+							app: "Member",
+							class: "getMyNumber",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token
+						}
+						var stringSignTemp = "app=Member&class=getMyNumber&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp + "&user_token="+user_token+"&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								var arr = data.data || [];
+								var numbers = [];
+								for (var i = 0; i < arr.length; i++) {
+									numbers.push(arr[i].number);
+								}
+								self.virtual_numberArr = numbers;
+								console.log("virtual_numberArr====" + JSON.stringify(self.virtual_numberArr));
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
+					getAddressBook: function(number) {//读取通讯录
+						if(plus.os.name == 'Android') {
+							var Context = plus.android.runtimeMainActivity();
+							//检测是否打开了此权限
+							var res = plus.android.invoke(Context, "checkSelfPermission", "android.permission.READ_CONTACTS");
+							if(res != 0) {
+								_.alert("请从系统设置中设置\n开启通讯录访问\n后重试", "权限不足");
+								return;
+							}
+						}
+						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
+							addressbook.find(["displayName", "phoneNumbers", "organizations"], function(contacts) {
+								self.contact = contacts[0];
+								if(self.contact){
+									user_name = self.contact.displayName || '';
+								}else{
+									user_name = '';
+								}
+								plus.nativeUI.closeWaiting();
+								_('#middlePopover').popover('toggle');
+							}, function(e) {
+								plus.nativeUI.closeWaiting();
+								user_name = '';
+								_('#middlePopover').popover('toggle');
+							}, {
+								filter: [{
+									logic: "or",
+									field: "phoneNumbers",
+									value: number
+								}],
+								multiple: false
+							});
+						}, function(e) {
+							plus.nativeUI.closeWaiting();
+							user_name = '';
+							_('#middlePopover').popover('toggle');
+						});
+					},
+					getCallLog: function() {//获取通话记录
 						if(w.getItem("user_token")) {
 							var nonce_str = u.mathRand();
 							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
@@ -253,6 +309,20 @@
 							}, myerror);
 						}
 					},
+					toTel:function(item){//点击列表元素
+						//在小号为空情况下 获取所有小号
+						self.called_number = item.c_number;//赋值给被拨号
+						if(self.virtual_numberArr && self.virtual_numberArr.length == 0){
+							self.getMyNumber();
+						}
+						//通过号码获取通讯录姓名
+						if(u.isNull(item.user_name)){
+							self.getAddressBook(self.called_number);
+						}else{
+							_('#middlePopover').popover('toggle');
+							user_name = item.user_name;
+						}
+					},
 					uploadCall: function(called_number) { //上传拨打电话
 						if(isMain){//主号正常拨打
 							plus.device.dial(called_number, false);
@@ -270,17 +340,21 @@
 								client: "web",
 								user_token: user_token,
 								virtual_number: self.virtual_number,
-								called_number: called_number
+								called_number: called_number,
+								user_name:user_name
 							}
 							var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" +
 								identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp +
+								"&user_name=" + pdata.user_name +
 								"&user_token=" + user_token +
 								"&virtual_number=" + pdata.virtual_number +
 								"&";
 							u.mypost(pdata, stringSignTemp, true, function(data) {
 								if(data.status == 0) {
-									self.getCallLog();
 									plus.device.dial(pdata.virtual_number, false);
+									_.later(function(){
+										self.getCallLog();
+									},500)
 								} else {
 									_.toast(data.msg || '请求异常');
 								}
@@ -322,24 +396,6 @@
 							}, myerror);
 						}
 					},
-					toggleDel: function() { //控制删除
-						self.isToDel = false;
-					},
-					toTelDetail: function(item) {
-						//选择出该手机号下的通话记录
-						var callList = [];
-						console.log("self.callList==" + JSON.stringify(self.callList));
-						for(var i = 0; i < self.callList.length; i++) {
-							if(item.c_number == self.callList[i].c_number) {
-								callList.push(self.callList[i]);
-							}
-						}
-						w.openView("contactDetail.html", {
-							phone: item.c_number,
-							callList: callList,
-							remark:item.remark
-						})
-					},
 					input_key: function(key) { //输入
 						if(self.inputKey.length >= 0) {
 							self.filter_resultShow = true;
@@ -356,7 +412,9 @@
 							_('#keyborde_div').popover('hide');
 							self.filter_resultShow = false;
 						} else if('change' == key) { //切换
-							_("#keyborde_div").popover('show');
+							if(self.virtual_numberArr && self.virtual_numberArr.length == 0){
+								self.getMyNumber();
+							}
 							_('#middlePopover').popover('toggle');
 						} else if('del' == key) { //删除输入号码
 							self.inputKey = self.inputKey.substr(0, self.inputKey.length - 1);
@@ -365,58 +423,39 @@
 								self.bottom_handle = false;
 								self.isShowDelInput = false;
 							}
-						} else if('tel' == key) { //打电话
-							if(!u.isNull(self.inputKey) && u.checkPhone(self.inputKey)) {
-								_('#middlePopover').popover('toggle');
+						} else if('tel' == key) { //电话按键
+							self.called_number = self.inputKey;//赋值给被拨号
+							if(self.virtual_numberArr && self.virtual_numberArr.length == 0){
+								self.getMyNumber();
+							}
+							if(!u.isNull(self.called_number)) {
+								//查找通讯录
+								self.getAddressBook(self.called_number);
 							} else {
 								_.toast("请正确输入手机号")
 							}
 						} else {
 							self.inputKey += key && key.substr(0, 1);
 						}
-						if('tel' !== key && self.inputKey.length == 11 && u.checkPhone(self.inputKey)) { //查找该手机号通话记录
+						if('tel' !== key && self.inputKey.length == 11) { //查找该手机号通话记录
 							self.getCallLogByNumber(self.inputKey, 0);
 						}
 					},
-					filterList: function(type, title) {
+					filterList: function(type, title) {//0 == type 全部
 						self.title = title;
 						self.popupVisible = false;
-						if(0 == type) { //全部
-							self.callList = all;
-						} else { //副号
-							var virtual_number = (w.getItem("virtual_number") || '-').split('-')[0];
-							if(u.isNull(virtual_number)) {
-								_.toast("请重新登录");
-							} else {
-								self.getCallLogByNumber(virtual_number, 1);
-							}
-						}
+						self.getCallLog(); //现在全部通话都是副号通话
 					},
 					toggleTopP: function() {
 						self.popupVisible = !self.popupVisible;
 					},
-					cancelDel: function() { //取消删除
-						self.isToDel = true;
-					},
-					toDel: function() {
-						//删除通话记录
-						plus.nativeUI.confirm("确定删除所选号码的通话记录?", function(e) {
-							if(e.index == 1) {
-								_.toast("已删除");
-								console.log("value===" + self.checkedArr)
-							}
-						}, {
-							"title": "删除通话记录",
-							"buttons": ["取消", "删除"]
-						})
-					},
 					backAll: function() {
 						self.filter_resultShow = false;
-						self.getCallLog();
+//						self.getCallLog();
 					},
-					popChose: function(number) {
+					popChose: function(number) {//选择小号之后的拨号
 						_('#middlePopover').popover('toggle');
-						_("#keyborde_div").popover('show');
+//						_("#keyborde_div").popover('show');
 						console.log("number" +  number);
 						if(!number || u.isNull(number)){
 							isMain = true;
@@ -424,7 +463,7 @@
 							isMain = false;
 							self.virtual_number = number;
 						}
-						self.uploadCall(self.inputKey);
+						self.uploadCall(self.called_number);
 					}
 				},
 				domReady: function() {
@@ -455,12 +494,14 @@
 			items.forEach(function(item, index) {
 				newItems.push({
 					c_number: item.type == 2 ? item.called_number : item.calling_number,
+					user_name:item.user_name,
 					virtual_number: item.virtual_number,
 					type: item.type,
 					typeName: item.type == 2 ? '呼出' : '呼入',
 					talk_time: util.formatTime(item.talk_time),
 					create_time: item.create_time,
-					remark: item.remark
+					remark: item.remark,
+					relationship:item.relationship
 				});
 			});
 			return newItems;

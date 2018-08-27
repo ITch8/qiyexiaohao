@@ -69,31 +69,15 @@
 	 * */
 	u.mypost = function(pdata, stringSignTemp, show, success, error) {
 		var jmSign_key = "O8tImgCcf*XgObVqLSbg2DoH4XM6$0to";
-		//		var nonce_str = u.mathRand();
-		//		console.log("nonce_str====" + nonce_str);
-		//		var timestamp = Date.parse(new Date()).substr(0,8);
-		//		console.log("timestamp====" + timestamp);
-		//		var client="web";//固定
-		//		var identifier = w.getItem("identifier");//设备标识号
-
-		//业务参数
-		//		var app = "";//可变
-		//		var _class ="";//可变 class
-		//		var stringSignTemp = "app=Base&class=Test&client=web&identifier=6541345641546&mobile=13012345678&name=小王&nonce_str=562936×tamp=1510816253&"+jmSign_key;
 		var stringSignTemp = stringSignTemp + jmSign_key;
-		console.log('===stringSignTemp========' + stringSignTemp);
 		var signValue = hex_md5(stringSignTemp); //进行md5加密得到sign
-		console.log('===signValue========' + signValue);
 		_.extend(true, pdata, { //组合必需参数
 			'sign': signValue
 		});
-		console.log('===pdata========' + JSON.stringify(pdata));
 		var  EncryptString = u.encryptByDESModeCBC(JSON.stringify(pdata),"MXHKEY17","12345678");
-		console.log("EncryptString====" + EncryptString);
 		if(show) {
 			plus.nativeUI.showWaiting();
 		}
-		console.log('===EncryptString========' + EncryptString);
 		setTimeout(function() {
 			_.ajax({
 				url: ASKURL,
@@ -104,7 +88,6 @@
 				timeout: 60000,
 				success: function(data) {
 					plus.nativeUI.closeWaiting();
-					console.log('data====' + JSON.stringify(data));
 					_.isFunction(success) ? success(data) : '';
 				},
 				error: function(xhr) {

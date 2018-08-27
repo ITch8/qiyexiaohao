@@ -101,6 +101,7 @@
 								w.removeItem("account");
 								w.removeItem("password");
 								w.removeItem("company_id");
+								plus.webview.getWebviewById("index").close();
 								_.later(function(){
 									w.openView("login.html");
 								},500)
@@ -109,6 +110,7 @@
 								w.removeItem("account");
 								w.removeItem("password");
 								w.removeItem("company_id");
+								plus.webview.getWebviewById("index").close();
 								_.later(function(){
 									w.openView("login.html");
 								},500)

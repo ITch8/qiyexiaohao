@@ -7,7 +7,7 @@
 	"id": "H52338B4E",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "企业小号",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.0.2",/*应用版本名称*/
+		"name": "1.0.4",/*应用版本名称*/
 		"code": "1"
 	},
 	"description": "",/*应用描述信息*/
@@ -297,12 +297,12 @@
 					"js/mui.min.js",
 					"main.html",
 					"css/iconfont.css",
-					"fonts/iconfont.ttf"
+					"fonts/iconfont.ttf",
+					"my.html",
+					"contact_mint.html"
 				],
 				"refer": [
-					"my.html",
 					"sendMsg.html",
-					"contact_mint.html",
 					"msg.html",
 					"msg1.html",
 					"contactDetail.html",

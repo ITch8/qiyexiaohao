@@ -53,10 +53,11 @@
 							</ul>
 						</mt-tab-container-item>
 						<mt-tab-container-item id="2">
-							<ul id="listData" class="mui-table-view">
+							<ul id="listData" class="mui-table-view" style="margin-bottom: 3.12rem;">
 								<li class="mui-table-view-cell mui-media" v-for="item in callList" @tap="toTel()">
 									<div class="mui-media-body">
-										<span class="color_333 font_16">{{item.c_number}}</span>
+										<span v-if="item.user_name != '' " class="color_333">{{item.user_name}}</span>
+								        <span v-else="" class="color_333">{{item.c_number}}</span>
 										<span class="i_flag">{{item.remark}}</span>
 										<p>
 											<span class="mui-icon iconfont" v-bind:class="{'icon-hurujiantou': item.type == 2,'icon-huchujiantou':item.type==1}"></span> {{item.create_time}}&ensp;{{item.typeName}}{{item.talk_time}}
@@ -93,7 +94,7 @@
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
-			var isMain = true;
+			var isMain = true,user_name = '';//联系人姓名
 			App({
 				el: '#app',
 				data: {
@@ -110,24 +111,84 @@
 					mobile: '', //主号
 					virtual_numberArr: [], //副号数组
 					virtual_number: '' //被选小号
-
 				},
 				plusReady: {
 					init: function() {
 						self = this;
 						self.mobile = w.getItem("mobile");
-						self.virtual_numberArr = (w.getItem('virtual_number') || '').split('-');
 						w.addEventListener("event", function(e) {
 							plus.nativeUI.showWaiting();
 							self.number = e.detail.phone;
-							self.callList = e.detail.callList;
-							self.remark = e.detail.remark;
+							self.displayName =  e.detail.displayName;
+							console.log("self.displayName==" + self.displayName);
 							//查找通讯录
+							_.later(function(){
+								self.getCallLogByNumber(self.number);
+							},500);
 							self.getAddressBook();
 						})
 					}
 				},
 				methods: {
+					getCallLogByNumber: function(number) { //搜索指定号码的通话记录
+						if(w.getItem("user_token")) {
+							var nonce_str = u.mathRand();
+							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+							var identifier = w.getItem("identifier"); //设备标识号
+							var user_token = w.getItem("user_token");
+							var pdata = {
+								app: "Member",
+								class: "getCallLog",
+								nonce_str: nonce_str,
+								timestamp: timestamp,
+								identifier: identifier,
+								client: "web",
+								user_token: user_token,
+								number: number
+							}
+							var stringSignTemp = "app=Member&class=getCallLog&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&number=" + number + "&timestamp=" + timestamp + "&user_token=" + user_token + "&";
+							u.mypost(pdata, stringSignTemp, false, function(data) {
+								if(data.status == 0) {
+									data = data.data;
+									if(data && data.length > 0) {
+										self.callList = comConvert(data);
+									}
+								} else {
+									_.toast(data.msg || '请求异常');
+								}
+							}, myerror);
+						}
+					},
+					getMyNumber: function() {
+						var nonce_str = u.mathRand();
+						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+						var identifier = w.getItem("identifier"); //设备标识号
+						var user_token = w.getItem("user_token");
+						var pdata = {
+							app: "Member",
+							class: "getMyNumber",
+							nonce_str: nonce_str,
+							timestamp: timestamp,
+							identifier: identifier,
+							client: "web",
+							user_token: user_token
+						}
+						var stringSignTemp = "app=Member&class=getMyNumber&client=web&identifier=" + identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp + "&user_token="+user_token+"&";
+						u.mypost(pdata, stringSignTemp, true, function(data) {
+							if(data.status == 0) {
+								var arr = data.data || [];
+								var numbers = [];
+								for (var i = 0; i < arr.length; i++) {
+									numbers.push(arr[i].number);
+								}
+								self.virtual_numberArr = numbers;
+								_('#middlePopover').popover('toggle');
+								console.log("virtual_numberArr====" + JSON.stringify(self.virtual_numberArr));
+							} else {
+								_.toast(data.msg || '请求异常');
+							}
+						}, myerror);
+					},
 					getAddressBook: function() {
 						if(plus.os.name == 'Android') {
 							var Context = plus.android.runtimeMainActivity();
@@ -141,17 +202,17 @@
 						plus.contacts.getAddressBook(plus.contacts.ADDRESSBOOK_PHONE, function(addressbook) {
 							addressbook.find(["displayName", "phoneNumbers", "organizations"], function(contacts) {
 								self.contact = contacts[0];
-								console.log("getAddressBook======" + JSON.stringify(self.contact));
 								if(self.contact) {
 									self.isS = false;
 									self.displayName = self.contact.displayName;
-									self.addresses = self.contact.addresses || '未知地';
+									user_name = self.contact.displayName || '';
+//									self.address = self.contact.addresses || '未知地';
 									self.company = self.contact.organizations[0] && self.contact.organizations[0].name || '未知';
 									self.job = self.contact.organizations[0] && self.contact.organizations[0].department || '未知';
 								} else {
 									self.isS = true;
 									self.displayName = self.number;
-									self.addresses = '未知地';
+//									self.address = '未知地';
 									self.company = '未知';
 									self.job = '未知';
 								}
@@ -174,7 +235,7 @@
 					},
 					popChose: function(number) {
 						_('#middlePopover').popover('toggle');
-						console.log("number" + number);
+						console.log("number" + self.number);
 						if(!number || u.isNull(number)) {
 							isMain = true;
 						} else {
@@ -187,40 +248,51 @@
 						if(isMain) { //主号正常拨打
 							plus.device.dial(called_number, false);
 						} else {
-							var nonce_str = u.mathRand();
-							var timestamp = Date.parse(new Date()).toString().substr(0, 8);
-							var identifier = w.getItem("identifier"),
-								user_token = w.getItem("user_token");
-							var pdata = {
-								app: "Member",
-								class: "UploadCall",
-								nonce_str: nonce_str,
-								timestamp: timestamp,
-								identifier: identifier,
-								client: "web",
-								user_token: user_token,
-								virtual_number: self.virtual_number,
-								called_number: called_number
-							}
-							var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" +
-								identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp +
-								"&user_token=" + user_token +
-								"&virtual_number=" + pdata.virtual_number +
-								"&";
-							u.mypost(pdata, stringSignTemp, true, function(data) {
-								if(data.status == 0) {
-									plus.device.dial(pdata.virtual_number, false);
-								} else {
-									_.toast(data.msg || '请求异常');
+							if(u.isNull(called_number) || !u.checkPhone(called_number)){
+								_.toast("只支持11位手机号");
+							}else{
+								var nonce_str = u.mathRand();
+								var timestamp = Date.parse(new Date()).toString().substr(0, 8);
+								var identifier = w.getItem("identifier"),
+									user_token = w.getItem("user_token");
+								var pdata = {
+									app: "Member",
+									class: "UploadCall",
+									nonce_str: nonce_str,
+									timestamp: timestamp,
+									identifier: identifier,
+									client: "web",
+									user_token: user_token,
+									virtual_number: self.virtual_number,
+									called_number: called_number,
+									user_name:user_name
 								}
-							}, myerror);
+								var stringSignTemp = "app=Member&called_number=" + pdata.called_number + "&class=UploadCall&client=web&identifier=" +
+									identifier + "&nonce_str=" + nonce_str + "&timestamp=" + timestamp +
+									"&user_name=" + pdata.user_name +
+									"&user_token=" + user_token +
+									"&virtual_number=" + pdata.virtual_number +
+									"&";
+									console.log("pdata==" +  JSON.stringify(pdata));
+								u.mypost(pdata, stringSignTemp, true, function(data) {
+									if(data.status == 0) {
+										plus.device.dial(pdata.virtual_number, false);
+									} else {
+										_.toast(data.msg || '请求异常');
+									}
+								}, myerror);
+							}
 						}
 					},
 					toTel: function() {
-						_('#middlePopover').popover('toggle');
+						if(self.virtual_numberArr && self.virtual_numberArr.length == 0){
+							self.getMyNumber();
+						}else{
+							_('#middlePopover').popover('toggle');
+						}
 					},
 					toDel: function() {
-						//删除通话记录
+						//删除
 						plus.nativeUI.confirm("确定删除所选联系人吗?", function(e) {
 							if(e.index == 1) {
 								self.contact.remove(function() {
@@ -243,9 +315,28 @@
 					}
 				},
 				domReady: function() {
-					_.init();
+					_.init(),_(".mui-scroll-wrapper").scroll();
 				}
 			})
+			
+			//转换
+			function comConvert(items) {
+				var newItems = [];
+				items.forEach(function(item, index) {
+					newItems.push({
+						c_number: item.type == 2 ? item.called_number : item.calling_number,
+						user_name:item.user_name,
+						virtual_number: item.virtual_number,
+						type: item.type,
+						typeName: item.type == 2 ? '呼出' : '呼入',
+						talk_time: util.formatTime(item.talk_time),
+						create_time: item.create_time,
+						remark: item.remark,
+						relationship:item.relationship
+					});
+				});
+				return newItems;
+			}
 		})(mui, window, util)
 	</script>
 

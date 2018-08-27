@@ -1,1 +1,17 @@
-#middlePopover{top:0;left:0;right:0;bottom:0;margin:auto;height:4.62rem;max-height:8.12rem;border:1px solid #dedede}#middlePopover .mui-table-view-cell{padding:0.5rem 0.93rem}.mui-popover .mui-scroll-wrapper{margin:0}
+#middlePopover {
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	max-height: 8.12rem;
+	border: 1px solid #dedede
+}
+
+#middlePopover .mui-table-view-cell {
+	padding: 0.5rem 0.93rem
+}
+
+.mui-popover .mui-scroll-wrapper {
+	margin: 0
+}

@@ -35,7 +35,7 @@
 			<div class="mui-content mui-scroll-wrapper mui-fullscreen">
 				<div class="mui-scroll">
 					<form action="" class="mui-input-group" @submit.prevent="search">
-						<mt-search v-model="value" @keyup.enter.native="search" @keyup.delete.native="dSearch" @blur.native.capture="showAllC" cancel-text="取消" placeholder="搜索"></mt-search>
+						<mt-search v-model="value" @keyup.enter.native="search" @keyup.delete.native="dSearch" v-on:input="input" cancel-text="取消" placeholder="搜索"></mt-search>
 					</form>
 					<mt-index-list>
 						<mt-index-section v-for="item in contactsData" :index="item.ufirst">
@@ -69,7 +69,6 @@
 					value: '',
 					popupVisible: true,
 					allContacts: [],
-					virtual_numberArr: [], //副号
 					mobile: '',
 					virtual_number: '', //被选小号
 					called_number: '' //被叫电话
@@ -78,7 +77,6 @@
 					init: function() {
 						self = this;
 						self.mobile = w.getItem("mobile");
-						self.virtual_numberArr = (w.getItem('virtual_number') || '').split('-');
 						plus.nativeUI.showWaiting();
 						_.later(function() {
 							self.getAddressBook();
@@ -130,6 +128,7 @@
 									contactsDataTmp.push(obj);
 								})
 								self.contactsData = contactsDataTmp; //赋值
+								console.log("self.contactsData==" + JSON.stringify(self.contactsData));
 								if(!isSearch){
 									self.allContacts = contactsDataTmp; //缓存所有的通讯录
 								}
@@ -150,8 +149,14 @@
 						});
 					},
 					search: function() { //搜索
+						document.activeElement.blur();
 						var filter = [{logic:"or",field:"displayName",value:"*"+self.value+"*"},{logic:"or",field:"nickname",value:"*"+self.value+"*"},{logic:"or",field:"phoneNumbers",value:"*"+self.value+"*"}];
 						self.getAddressBook(filter,true);
+					},
+					input:function(){
+						if(self.value == ''){
+							self.contactsData = self.allContacts;
+						}
 					},
 					dSearch:function(){
 						if(u.isNull(self.value)){
@@ -167,8 +172,7 @@
 						}
 						w.openView("contactDetail.html", {
 							phone: self.called_number,
-							callList: [],
-							remark:'主号'
+							displayName:obj.displayName
 						})
 					},
 					uploadCall: function(called_number) { //上传拨打电话
@@ -216,9 +220,6 @@
 							}
 						}
 						return tmp;
-					},
-					showAllC: function() {
-						self.contactsData = self.allContacts;
 					}
 				},
 				domReady: function() {
