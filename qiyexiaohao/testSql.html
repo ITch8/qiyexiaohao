@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div class="mui-content">
+		    <button type="button" class="mui-btn mui-btn-blue" id="query">取数据</button>
+		    
+		    <button type="button" class="mui-btn mui-btn-blue" id="modify">更新数据</button>
+		    
+		    
+		    <button type="button" class="mui-btn mui-btn-red" id="delete">删除数据</button>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/websql.js" ></script>
+		<script type="text/javascript">
+			mui.init()
+			
+			CreateDataBase('contactDB');
+			CreateTable('Contacts');
+			
+			var dataArr = [{"ufirst":"1","dataArr":[{"displayName":"1","wordsCode":"1","ufirst":"1","phoneNumber":"13006614405","tellNumber":""}]},{"ufirst":"6","dataArr":[{"displayName":"678","wordsCode":"678","ufirst":"6","phoneNumber":"13565656565","tellNumber":""}]},{"ufirst":"C","dataArr":[{"displayName":"CC","wordsCode":"c","ufirst":"C","phoneNumber":"13006614405","tellNumber":""},{"displayName":"测试","wordsCode":"cs","ufirst":"C","phoneNumber":"12223335880","tellNumber":""},{"displayName":"测试123456","wordsCode":"cs123456","ufirst":"C","phoneNumber":"13530706801","tellNumber":""}]},{"ufirst":"L","dataArr":[{"displayName":"李浩","wordsCode":"lh","ufirst":"L","phoneNumber":"13510792830","tellNumber":""},{"displayName":"练习","wordsCode":"lx","ufirst":"L","phoneNumber":"13418542473","tellNumber":""},{"displayName":"李恩","wordsCode":"le","ufirst":"L","phoneNumber":"13530706801","tellNumber":""},{"displayName":"李丹","wordsCode":"ld","ufirst":"L","phoneNumber":"1356892356","tellNumber":""}]},{"ufirst":"W","dataArr":[{"displayName":"维沃","wordsCode":"ww","ufirst":"W","phoneNumber":"13006614405","tellNumber":"13510792830"},{"displayName":"王者荣耀","wordsCode":"wzry","ufirst":"W","phoneNumber":"13510792866","tellNumber":""}]},{"ufirst":"X","dataArr":[{"displayName":"侠","wordsCode":"x","ufirst":"X","phoneNumber":"13530706802","tellNumber":""}]}];
+			var dataString  = JSON.stringify(dataArr);
+			var sqlSave = "INSERT INTO Contacts (namestr, contact) VALUES ('contact', '"+dataString+"')";
+			console.log(sqlSave);
+			ExeSql(sqlSave, [], function(tx, results){
+					var len = results.rows.length, i;
+					console.log('results len is '+len)
+				})
+			document.getElementById("query").addEventListener('tap',function(){
+				var sql = "select * from Contacts";
+				ExeSql(sql, [], function(tx, results){
+					var len = results.rows.length, i;
+					console.log('results len is '+len)
+				})
+			})
+			document.getElementById("modify").addEventListener('tap',function(){
+				var sql = "update Contacts set contact='"+dataString+"' where namestr = contact";
+				ExeSql(sql, [], function(tx, results){
+					var len = results.rows.length, i;
+					console.log('results len is '+len)
+				})
+			})
+			
+			document.getElementById("delete").addEventListener('tap',function(){
+				var sql = "delete from Contacts";
+				ExeSql(sql, [], function(tx, results){
+					var len = results.rows.length, i;
+					console.log('results len is '+len)
+				})
+			})
+		</script>
+	</body>
+
+</html>

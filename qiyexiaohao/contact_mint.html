@@ -39,7 +39,7 @@
 					</form>
 					<mt-index-list>
 						<mt-index-section v-for="item in contactsData" :index="item.ufirst">
-							<mt-cell v-for="obj in item.dataArr" :title="obj.displayName" v-tap="{methods: toTel , obj : obj}"></mt-cell>
+							<div v-for="obj in item.dataArr"  @tap="toTel(obj)"><mt-cell  :title="obj.displayName"></mt-cell></div>
 						</mt-index-section>
 					</mt-index-list>
 				</div>
@@ -54,13 +54,13 @@
 	<script type="text/javascript" src="js/ChinesePY.js"></script>
 	<script type="text/javascript" src="js/md5.js"></script>
 	<script type="text/javascript" src="js/des/crypto-js.js"></script>
+	<script type="text/javascript" src="js/websql.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script>
-		var app = null;
+		var self = null;
 		(function(_, w, u) {
-			var self = null,
-				isMain = true;
-			app = new App({
+			var isMain = true;
+			new App({
 				el: '#app',
 				data: {
 					arrContacts: [],
@@ -78,9 +78,19 @@
 						self = this;
 						self.mobile = w.getItem("mobile");
 						plus.nativeUI.showWaiting();
-						_.later(function() {
-							self.getAddressBook();
-						}, 300)
+						//从缓存里面读取 没有数据从系统取
+						queryData(function(tx, results){
+							var len = results.rows.length;
+							if(len > 0 ){
+								var arr = JSON.parse(results.rows.item(0).contact || '');
+								self.allContacts = arr;
+								self.contactsData = arr;
+								plus.nativeUI.closeWaiting();
+								console.log("缓存取得-----");
+							}else{
+								self.getAddressBook();
+							}
+						});
 					}
 				},
 				methods: {
@@ -128,12 +138,29 @@
 									contactsDataTmp.push(obj);
 								})
 								self.contactsData = contactsDataTmp; //赋值
-								console.log("self.contactsData==" + JSON.stringify(self.contactsData));
+								console.log("系统取得-----");
 								if(!isSearch){
 									self.allContacts = contactsDataTmp; //缓存所有的通讯录
 								}
 								if(self.allContacts.length == 0) {
 									_.toast("无相关联系人 ");
+								}else{
+									if(!isSearch){
+										//在非搜索情况下离线缓存 先清除
+										deleteData(function(tx,results){
+											var len = results.rows.length;
+											if(len == 0){
+												var ss = JSON.stringify(self.contactsData);
+												insertData(ss,function(tx,results){
+													var len = results.rows.length;
+													console.log("len===" + len);
+													if(len > 0){
+														console.log("缓存成功");
+													}
+												});
+											}
+										});
+									}
 								}
 								plus.nativeUI.closeWaiting();
 							}, function() {
@@ -163,8 +190,8 @@
 							self.contactsData = self.allContacts;
 						}
 					},
-					toTel: function(param) {
-						var obj = param.obj;
+					toTel: function(obj) {
+						console.log("obj====" + JSON.stringify(obj));
 						if(!u.isNull(obj.phoneNumber)) {
 							self.called_number = '' + obj.phoneNumber.replace(/\s/g, "");
 						} else if(!u.isNull(obj.tellNumber)) {
@@ -224,12 +251,15 @@
 				},
 				domReady: function() {
 					_.init();
+					//创建数据库和表
+					CreateDataBase('contactDB');
+					CreateTable('Contacts');
 				}
 			})
 		})(mui, window, util)
 
 		function getData() {
-			window.location.reload();
+			self.getAddressBook();//更新数据
 		}
 	</script>
 

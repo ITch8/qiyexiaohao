@@ -54,6 +54,11 @@
 								关于企业小号
 							</a>
 						</li>
+						<li class="mui-table-view-cell" @tap="clear()">
+							<a class="mui-navigate-right">
+								清除缓存
+							</a>
+						</li>
 					</ul>
 					<button type="button" class="mui-btn mui-btn-blue mui-btn-block" @tap="loginout()">退出登录</button>
 				</div>
@@ -66,6 +71,7 @@
 	<script type="text/javascript" src="js/md5.js" ></script>
 	<script type="text/javascript" src="js/des/crypto-js.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/websql.js" ></script>
 	<script type="text/javascript">
 		(function(_, w, u) {
 			App({
@@ -121,6 +127,27 @@
 					},
 					openView: function(url) {
 						w.openView(url);
+					},
+					clear:function(){//清除系统缓存 -通讯录缓存
+						plus.nativeUI.showWaiting();
+						//创建数据库和表
+						CreateDataBase('contactDB');
+						CreateTable('Contacts');
+						_.later(function(){
+							deleteData(function(tx,results){
+								var len = results.rows.length;
+								if(len == 0){
+									_.toast('清除成功');
+									var web = plus.webview.getWebviewById("contact_mint.html");
+									if(web){
+										web.evalJS("getData()");
+									}
+								}else{
+									_.toast('操作异常，请重新');
+								}
+								plus.nativeUI.closeWaiting();
+							});
+						},500)
 					}
 				},
 				domReady: function() {

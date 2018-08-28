@@ -101,7 +101,7 @@
 								_.later(function(){
 									var web = plus.webview.getWebviewById("contact_mint.html");
 									if(web){
-										plus.webview.getWebviewById("contact_mint.html").evalJS("getData()");
+										web.evalJS("getData()");
 									}
 									_.back();
 								},500)

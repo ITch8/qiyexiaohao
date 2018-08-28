@@ -117,9 +117,11 @@
 						self = this;
 						self.mobile = w.getItem("mobile");
 						w.addEventListener("event", function(e) {
+							self.selected = '1';
 							plus.nativeUI.showWaiting();
 							self.number = e.detail.phone;
 							self.displayName =  e.detail.displayName;
+							console.log("self.number==" + self.number);
 							console.log("self.displayName==" + self.displayName);
 							//查找通讯录
 							_.later(function(){
@@ -204,14 +206,12 @@
 								self.contact = contacts[0];
 								if(self.contact) {
 									self.isS = false;
-									self.displayName = self.contact.displayName;
 									user_name = self.contact.displayName || '';
 //									self.address = self.contact.addresses || '未知地';
 									self.company = self.contact.organizations[0] && self.contact.organizations[0].name || '未知';
 									self.job = self.contact.organizations[0] && self.contact.organizations[0].department || '未知';
 								} else {
 									self.isS = true;
-									self.displayName = self.number;
 //									self.address = '未知地';
 									self.company = '未知';
 									self.job = '未知';
@@ -248,8 +248,8 @@
 						if(isMain) { //主号正常拨打
 							plus.device.dial(called_number, false);
 						} else {
-							if(u.isNull(called_number) || !u.checkPhone(called_number)){
-								_.toast("只支持11位手机号");
+							if(u.isNull(called_number)){
+								_.toast("号码不可为空");
 							}else{
 								var nonce_str = u.mathRand();
 								var timestamp = Date.parse(new Date()).toString().substr(0, 8);
@@ -297,7 +297,13 @@
 							if(e.index == 1) {
 								self.contact.remove(function() {
 									_.toast("已删除");
-									_.back();
+									var web = plus.webview.getWebviewById("contact_mint.html");
+									if(web){
+										web.evalJS("getData()");
+									}
+									_.later(function(){
+										_.back();
+									},500)
 								});
 							}
 						}, {
