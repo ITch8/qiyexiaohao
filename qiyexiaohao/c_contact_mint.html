@@ -33,6 +33,7 @@
 	<script type="text/javascript" src="js/vue-tap.js"></script>
 	<script type="text/javascript" src="js/mint-ui.min.js"></script>
 	<script type="text/javascript" src="js/ChinesePY.js"></script>
+	<script type="text/javascript" src="js/websql.js" ></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script>
 		var app = null;
@@ -51,9 +52,18 @@
 					init: function() {
 						self = this;
 						plus.nativeUI.showWaiting();
-						_.later(function(){
-							self.getAddressBook();
-						},500)
+						//从缓存里面读取 没有数据从系统取
+						queryData(function(tx, results){
+							var len = results.rows.length;
+							if(len > 0 ){
+								var arr = JSON.parse(results.rows.item(0).contact || '');
+								self.contactsData = arr;
+								plus.nativeUI.closeWaiting();
+								console.log("缓存取得-----");
+							}else{
+								self.getAddressBook();
+							}
+						});
 					}
 				},
 				methods: {
@@ -135,6 +145,9 @@
 				},
 				domReady: function() {
 					_.init();
+					//创建数据库和表
+					CreateDataBase('contactDB');
+					CreateTable('Contacts');
 				}
 			})
 		})(mui, window, util)

@@ -121,8 +121,6 @@
 							plus.nativeUI.showWaiting();
 							self.number = e.detail.phone;
 							self.displayName =  e.detail.displayName;
-							console.log("self.number==" + self.number);
-							console.log("self.displayName==" + self.displayName);
 							//查找通讯录
 							_.later(function(){
 								self.getCallLogByNumber(self.number);
@@ -290,6 +288,9 @@
 						}else{
 							_('#middlePopover').popover('toggle');
 						}
+					},
+					getCall:function(){
+						self.getAddressBook();
 					},
 					toDel: function() {
 						//删除

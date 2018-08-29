@@ -11,14 +11,7 @@
 		<link rel="stylesheet" href="css/iconfont.css" />
 		<link rel="stylesheet" href="css/style/main.css" />
 		<link rel="stylesheet" href="css/style/numbersPopover.css" />
-
-		<style>
-			.v-modal {
-				top: 0;
-			}
-		</style>
 	</head>
-
 	<body>
 		<div id="app">
 			<header class="mui-bar mui-bar-nav">
@@ -74,7 +67,7 @@
 			<div id="keyborde_div" class="mui-popover mui-popover-action mui-popover-bottom">
 				<form class="mui-input-group">
 					<div class="mui-input-row">
-						<label v-if="isShowDelInput" @tap="input_key('del')"><span class="mui-icon mui-icon-closeempty"></span></label>
+						<label v-if="isShowDelInput" @tap="input_key('del')"><img src="img/delete.png" /></label>
 						<input type="text" placeholder="请输入号码搜索" maxlength="11" readonly="readonly" v-model="inputKey">
 					</div>
 				</form>
@@ -127,19 +120,9 @@
 						<span>#</span>
 						<div class="mui-media-body">.</div>
 					</li>
-					<div v-show="bottom_handle">
-						<li @tap="input_key('close')" class="mui-table-view-cell mui-media mui-col-xs-4">
-							<span class="mui-icon mui-icon-closeempty"></span>
-							<div class="mui-media-body">收起</div>
-						</li>
-						<li @tap="input_key('tel')" class="mui-table-view-cell mui-media mui-col-xs-4" style="padding-top: 11px;">
-							<span class="mui-icon mui-icon-phone-filled" style="font-size: 35px;"></span>
-						</li>
-						<li @tap="input_key('change')" class="mui-table-view-cell mui-media mui-col-xs-4">
-							<span class="mui-icon mui-icon-loop"></span>
-							<div class="mui-media-body">切换</div>
-						</li>
-					</div>
+					<li @tap="input_key('tel')" class="mui-table-view-cell mui-col-xs-12">
+						<button class="tel_btn"><span class="mui-icon mui-icon-phone-filled"></span></button>
+					</li>
 				</ul>
 			</div>
 
@@ -194,7 +177,6 @@
 					inputKey: '',
 					popupVisible: false, //顶部popup显示
 					filter_resultShow: false, //筛选结果显示
-					bottom_handle: false,
 					allLoaded: false,
 					isShowDelInput: false,
 					mobile:'',//主号
@@ -233,7 +215,6 @@
 									numbers.push(arr[i].number);
 								}
 								self.virtual_numberArr = numbers;
-								console.log("virtual_numberArr====" + JSON.stringify(self.virtual_numberArr));
 							} else {
 								_.toast(data.msg || '请求异常');
 							}
@@ -398,28 +379,15 @@
 					input_key: function(key) { //输入
 						if(self.inputKey.length >= 0) {
 							self.filter_resultShow = true;
-							self.bottom_handle = true;
 							self.isShowDelInput = true;
 						} else {
 							self.filter_resultShow = false;
-							self.bottom_handle = false;
 							self.isShowDelInput = false;
 						}
-
-						if('close' == key) {
-							self.bottom_handle = false;
-							_('#keyborde_div').popover('hide');
-							self.filter_resultShow = false;
-						} else if('change' == key) { //切换
-							if(self.virtual_numberArr && self.virtual_numberArr.length == 0){
-								self.getMyNumber();
-							}
-							_('#middlePopover').popover('toggle');
-						} else if('del' == key) { //删除输入号码
+						if('del' == key) { //删除输入号码
 							self.inputKey = self.inputKey.substr(0, self.inputKey.length - 1);
 							if(self.inputKey.length == 0) {
 								self.filter_resultShow = false;
-								self.bottom_handle = false;
 								self.isShowDelInput = false;
 							}
 						} else if('tel' == key) { //电话按键
@@ -453,8 +421,6 @@
 					},
 					popChose: function(number) {//选择小号之后的拨号
 						_('#middlePopover').popover('toggle');
-//						_("#keyborde_div").popover('show');
-						console.log("number" +  number);
 						if(!number || u.isNull(number)){
 							isMain = true;
 						}else{

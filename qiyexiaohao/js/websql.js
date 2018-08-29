@@ -27,7 +27,6 @@ function ExeSql(sql, arg, callback){
 	
 	DB.transaction(function (tx) {
 		tx.executeSql(sql, arg, succ_cb, err_cb);
-		console.log("executeSql: "+sql)
 	})
 }
 
