@@ -201,11 +201,11 @@
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-	font-size: 16px;
+	font-size: 1rem;
 	line-height: 1;
 	min-height: inherit;
 	overflow: hidden;
-	padding: 0 10px;
+	padding: 0.93rem 10px;
 	width: 100%
 }
 
@@ -1998,8 +1998,8 @@
 }
 
 .mint-indexlist-navitem {
-	padding: 2px 6px;
-	font-size: 12px;
+	padding: 0.31rem 0.62rem;
+	font-size: 0.75rem;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;

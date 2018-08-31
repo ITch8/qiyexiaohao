@@ -86,7 +86,6 @@
 								self.allContacts = arr;
 								self.contactsData = arr;
 								plus.nativeUI.closeWaiting();
-								console.log("缓存取得-----");
 							}else{
 								self.getAddressBook();
 							}
@@ -138,7 +137,6 @@
 									contactsDataTmp.push(obj);
 								})
 								self.contactsData = contactsDataTmp; //赋值
-								console.log("系统取得-----");
 								if(!isSearch){
 									self.allContacts = contactsDataTmp; //缓存所有的通讯录
 								}
@@ -153,7 +151,6 @@
 												var ss = JSON.stringify(self.contactsData);
 												insertData(ss,function(tx,results){
 													var len = results.rows.length;
-													console.log("len===" + len);
 													if(len > 0){
 														console.log("缓存成功");
 													}
@@ -191,7 +188,6 @@
 						}
 					},
 					toTel: function(obj) {
-						console.log("obj====" + JSON.stringify(obj));
 						if(!u.isNull(obj.phoneNumber)) {
 							self.called_number = '' + obj.phoneNumber.replace(/\s/g, "");
 						} else if(!u.isNull(obj.tellNumber)) {

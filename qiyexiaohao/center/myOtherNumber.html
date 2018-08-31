@@ -21,11 +21,11 @@
 				<div class="mui-scroll">
 					<div class="mui-card">
 						<ul class="mui-table-view">
-							<li class="mui-table-view-cell mui-collapse" v-for="item in dataList">
-								<a class="mui-navigate-right" href="#">
+							<li class="mui-table-view-cell" v-for="item in dataList">
+								<!--<a class="mui-navigate-right" href="#">-->
 									<div class="font_16 _h">{{item.number}}<span class="i_flag">{{item.remark}}</span></div>
-								</a>
-								<div class="mui-collapse-content">
+								<!--</a>-->
+								<!--<div class="mui-collapse-content">
 									<ul class="mui-table-view color_666">
 										<li class="mui-table-view-cell">
 											<div class="color_333 font_15">
@@ -75,7 +75,7 @@
 											</div>
 										</li>
 									</ul>
-								</div>
+								</div>-->
 							</li>
 							
 							<!--<li class="mui-table-view-cell mui-collapse">
@@ -168,9 +168,7 @@
 				methods: {
 					getMyNumber: function() {
 						var nonce_str = u.mathRand();
-						console.log("nonce_str====" + nonce_str);
 						var timestamp = Date.parse(new Date()).toString().substr(0, 8);
-						console.log("timestamp====" + timestamp);
 						var identifier = w.getItem("identifier"); //设备标识号
 						var user_token = w.getItem("user_token");
 						var pdata = {
@@ -191,7 +189,6 @@
 								for (var i = 0; i < arr.length; i++) {
 									numbers.push(arr[i].number);
 								}
-								console.log("numbers====data" +  JSON.stringify(numbers));
 								var numbers = numbers.join('-');
 								w.setItem("virtual_number",numbers);//缓存小号
 							} else {

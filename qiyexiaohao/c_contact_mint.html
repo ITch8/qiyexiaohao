@@ -59,7 +59,6 @@
 								var arr = JSON.parse(results.rows.item(0).contact || '');
 								self.contactsData = arr;
 								plus.nativeUI.closeWaiting();
-								console.log("缓存取得-----");
 							}else{
 								self.getAddressBook();
 							}
